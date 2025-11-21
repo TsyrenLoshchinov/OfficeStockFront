@@ -1,0 +1,66 @@
+:root {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: #C22918;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.left-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: fixed;
+    left: 0; top: 0;
+    width: 91px;
+    height: 100vh;
+    border-right: 1px solid #DBDCE4;
+    background: transparent;
+    padding-bottom: 21px ;
+  }
+
+.menu-button--default{  
+    width: 91px;
+    height: 211px;
+    border: none;
+    background: transparent;
+    border-bottom: 1px solid #DBDCE4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 124px 32px 25px 36px;
+    cursor: pointer;
+    color: inherit;
+    letter-spacing: 0.08em;
+    transition: background-color 0.3s ease, border-bottom-color 0.3s ease, transform 0.3s ease;
+}
+
+.menu-button__label {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    font-size: 16px;
+}
+
+.menu-button--default:hover {
+    border-bottom-color: #C22918;
+}
+
+.exitIcon {
+    margin-left: 21px;
+    cursor: pointer;
+}
+
+.exitIcon svg path{
+    transition: stroke 0.6s linear;
+}
+
+.exitIcon svg:hover path{
+    stroke: #C22918;
+}

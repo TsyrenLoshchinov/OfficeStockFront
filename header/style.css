@@ -1,0 +1,80 @@
+:root {
+    font-family: 'Inter', sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #f5f5f8;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 88px;
+    background: #F1F1F6;
+    margin: 0 auto;
+    padding-left: 26px;
+}
+
+.headers__btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 55px;
+}
+
+.header__menu-button {
+    width: 39px;
+    height: 39px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.header__logo {
+    width: 290px;
+    height: 48px;
+    text-decoration: none;
+}
+
+.header__links {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.header__notification-icon {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.header__notification-icon svg path{
+    transition: stroke 0.6s linear;
+}
+
+.header__notification-icon svg:hover path{
+    stroke: #C22918;
+}
+
+.header__profile{
+    width: 92px;
+    text-decoration: none;
+}
+
+.header__text-button-label{
+    font-size: 15px;
+    font-weight: 400;
+    color: #535353;
+    
+}

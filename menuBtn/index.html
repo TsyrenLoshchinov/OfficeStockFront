@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Button States</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="menu-buttons" aria-label="Состояния кнопки меню">
+        <button class="menu-button menu-button--default" type="button" aria-pressed="false">
+            <span class="menu-button__icon" aria-hidden="true">
+                <img  class="hiddenIcon" src="../icons/closeMenu.svg" alt="">
+            </span>
+            <span class="menu-button__label">МЕНЮ</span>
+        </button>
+
+        <button class="menu-button menu-button--active" type="button" aria-pressed="true">
+            <span class="menu-button__icon" aria-hidden="true">
+                <img src="../icons/closeMenu.svg" alt="">
+            </span>
+            <span class="menu-button__label">МЕНЮ</span>
+        </button>
+    </main>
+</body>
+</html>
+

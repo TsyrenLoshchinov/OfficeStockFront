@@ -1,0 +1,118 @@
+:root {
+    font-family: 'Inter', sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: #f3f3f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.language-switcher-demo {
+    padding: 40px;
+}
+
+.language-switcher {
+    width: 48px;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1.414em;
+    text-transform: uppercase;
+    color: #535353;
+}
+
+.language-switcher__details {
+    display: block;
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.language-switcher__details summary {
+    list-style: none;
+}
+
+.language-switcher__details summary::marker,
+.language-switcher__details summary::-webkit-details-marker {
+    display: none;
+}
+
+.language-switcher__current {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 0 3px;
+    height: 22px;
+    user-select: none;
+}
+
+.language-switcher__code {
+    letter-spacing: -0.04em;
+    transition: color 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.language-switcher__icon {
+    width: 12px;
+    height: 6px;
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), color 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.language-switcher__dropdown {
+    list-style: none;
+    margin-top: 6px;
+    padding: 6px 10px;
+    width: 48px;
+    background-color: #ffffff;
+    box-shadow: 0px 5px 6px rgba(0, 0, 0, 0.25);
+    border-radius: 2px;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.language-switcher__list-item {
+    margin: 0;
+    padding: 0;
+}
+
+.language-switcher__option {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: #535353;
+    cursor: pointer;
+}
+
+.language-switcher__code--option {
+    color: #535353;
+}
+
+.language-switcher__details[open] .language-switcher__current {
+    color: #C22918;
+}
+
+.language-switcher__details[open] .language-switcher__icon {
+    transform: rotate(180deg);
+}
+
+.language-switcher__details[open] .language-switcher__dropdown {
+    opacity: 1;
+    transform: translateY(8px);
+    pointer-events: auto;
+}
+
+.language-switcher__details[open] .language-switcher__code--option {
+    color: #535353;
+}

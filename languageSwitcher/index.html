@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Switcher</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="language-switcher-demo">
+        <section class="language-switcher" aria-label="Выбор языка интерфейса">
+            <details class="language-switcher__details">
+                <summary class="language-switcher__current">
+                    <span class="language-switcher__code">RU</span>
+                    <svg class="language-switcher__icon" width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M1 1L6 5L11 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </summary>
+
+                <ul class="language-switcher__dropdown" role="list">
+                    <li class="language-switcher__list-item">
+                        <button class="language-switcher__option" type="button">
+                            <span class="language-switcher__code language-switcher__code--option">EN</span>
+                        </button>
+                    </li>
+                </ul>
+            </details>
+        </section>
+    </main>
+</body>
+</html>
+

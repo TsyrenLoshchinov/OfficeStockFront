@@ -1,0 +1,60 @@
+.button {
+    /* Layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    
+    /* Размеры */
+    width: 174px;
+    height: 57px;
+    padding: 11px 47px;
+    box-sizing: border-box;
+    
+    /* Стили */
+    background-color: transparent;
+    border: 1px solid rgba(88, 88, 88, 0.5);
+    
+    /* Типография */
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 3.15em;
+    text-align: center;
+    color: #9A0E10;
+    
+    /* Интерактивность */
+    cursor: pointer;
+    transition: border-color 0.6s ease-in-out, color 0.6s ease-in-out, background-color 0.6s ease-in-out;
+    position: relative;
+}
+
+.button__text {
+    transition: opacity 0.6s ease-in-out;
+}
+
+.button__icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-150%, -50%);
+    opacity: 0;
+    transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
+}
+
+.button:hover {
+    background-color: #C22918;
+    border-color: #C22918;
+    color: #FFFFFF;
+}
+
+.button:hover .button__text {
+    opacity: 0;
+}
+
+.button:hover .button__icon {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+}
+

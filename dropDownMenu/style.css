@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  background: #121212;
+  font-family: 'Inter', sans-serif;
+  padding: 100px;
+  margin: 0;
+}
+
+/* Главный контейнер */
+.dropdown {
+  position: relative;
+  width: 328px;
+  height: 62px; /* 44px кнопка + отступы */
+}
+
+/* Скрытый триггер */
+.dropdown__checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Кнопка — всегда видимая часть */
+.dropdown__button {
+  position: absolute;
+  width: 328px;
+  height: 62px;
+  left: 0;
+  top: 0;
+  padding: 10px 10px 0 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Иконка-гамбургер слева */
+.dropdown__icon {
+  position: relative;
+  width: 38px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.dropdown__icon span {
+  position: absolute;
+  left: 5px;
+  height: 1px;
+  background: #535353;
+  border-radius: 5px;
+  transition: background 0.2s;
+}
+.dropdown__icon span:nth-child(1) { width: 30px; top: 6px; }
+.dropdown__icon span:nth-child(2) { width: 20px; top: 13.5px; }
+.dropdown__icon span:nth-child(3) { width: 10px; top: 21px; }
+
+/* Текст выбранного пункта */
+.dropdown__label {
+  flex-grow: 1;
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 20px;
+  color: #535353;
+  padding: 5px 11px; /* точно как в Figma */
+  transition: color 0.2s;
+}
+
+/* Стрелка */
+.dropdown__arrow {
+  width: 12px;
+  height: 12px;
+  margin-top: 9px;
+  margin-right: 11px;
+  border: solid #535353;
+  border-width: 0 1px 1px 0;
+  transform: rotate(45deg);
+  transition: all 0.3s;
+}
+
+/* ===================== АКТИВНОЕ СОСТОЯНИЕ ===================== */
+.dropdown__checkbox:checked ~ .dropdown__button .dropdown__icon span,
+.dropdown:hover .dropdown__icon span {
+  background: #C22918;
+}
+
+.dropdown__checkbox:checked ~ .dropdown__button .dropdown__label,
+.dropdown:hover .dropdown__label {
+  color: #C22918;
+}
+
+.dropdown__checkbox:checked ~ .dropdown__button .dropdown__arrow,
+.dropdown:hover .dropdown__arrow {
+  border-color: #C22918;
+  transform: rotate(-135deg);
+}
+
+/* ===================== ВЫПАДАЮЩЕЕ МЕНЮ ===================== */
+.dropdown__menu {
+  position: absolute;
+  left: 73px;
+  top: 52px;
+  width: 212px;
+  background: #FFFFFF;
+  border-radius: 5px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.25s ease;
+  pointer-events: none;
+}
+
+.dropdown__checkbox:checked ~ .dropdown__menu {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.dropdown__item {
+  height: 40px;
+  padding: 10px 11px 10px 11px;
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 20px;
+  color: #535353;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.dropdown__item:first-child {
+  border-radius: 5px 5px 0 0;
+}
+.dropdown__item:last-child {
+  border-radius: 0 0 5px 5px;
+}
+
+.dropdown__item:hover {
+  background: #DD8D76;
+  color: #FFFFFF;
+}
+
+/* Чтобы при открытом меню кнопка оставалась красной */
+.dropdown__checkbox:checked ~ .dropdown__button .dropdown__label {
+  color: #C22918;
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alert States</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="alerts" aria-labelledby="alerts-title">
+        <h1 id="alerts-title" class="alerts__title">Сообщение об ошибке</h1>
+
+        <section class="alerts__list" aria-label="Состояния сообщения">
+            <article class="alert alert--soft" role="status">
+                <p class="alert__text">Неверный логин или пароль, попробуйте заново</p>
+            </article>
+
+            <article class="alert alert--medium" role="status">
+                <p class="alert__text">Неверный логин или пароль, попробуйте заново</p>
+            </article>
+
+            <article class="alert alert--strong" role="status">
+                <p class="alert__text">Неверный логин или пароль, попробуйте заново</p>
+            </article>
+        </section>
+    </main>
+</body>
+</html>
+
