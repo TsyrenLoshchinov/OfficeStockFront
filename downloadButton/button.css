@@ -1,0 +1,140 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    padding: 20px;
+    background: #f5f5f5;
+}
+
+.container {
+    position: relative;
+    width: 490px;
+    min-height: 300px;
+}
+
+/* Базовые стили кнопки */
+.btn {
+    position: absolute;
+    width: 450px;
+    height: 62px;
+    left: 20px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    isolation: isolate;
+}
+
+/* Default состояние */
+.btn-default {
+    top: 20px;
+    background: linear-gradient(90deg, #C22918 -79%, #D1614D 54.61%, #C22918 189.67%);
+}
+
+/* Hover состояние */
+.btn-hover {
+    top: 103px;
+    background: linear-gradient(90deg, rgba(194, 41, 24, 0.85) -79%, rgba(209, 97, 77, 0.85) 54.61%, rgba(194, 41, 24, 0.85) 189.67%);
+}
+
+/* Unavailable состояние */
+.btn-unavailable {
+    top: 186px;
+    background: linear-gradient(90deg, rgba(194, 41, 24, 0.6) -79%, rgba(209, 97, 77, 0.6) 54.61%, rgba(194, 41, 24, 0.6) 189.67%);
+    cursor: not-allowed;
+}
+
+/* Frame 4 - внутренний контейнер */
+.frame-4 {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    isolation: isolate;
+    position: absolute;
+    height: 43px;
+    top: calc(50% - 43px/2 - 0.5px);
+    left: calc(50% - 226px/2);
+    width: 226px;
+}
+
+.btn-hover .frame-4,
+.btn-unavailable .frame-4 {
+    width: 166px;
+    left: calc(50% - 166px/2);
+    top: calc(50% - 43px/2 + 0.5px);
+}
+
+/* Frame 5 - контейнер текста */
+.frame-5 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    gap: 10px;
+    position: absolute;
+    width: 207px;
+    height: 23px;
+    left: calc(50% - 207px/2 + 0.5px);
+    top: calc(50% - 23px/2);
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    z-index: 0;
+}
+
+.btn-hover .frame-5,
+.btn-unavailable .frame-5 {
+    width: 146px;
+    height: 23px;
+    left: 10px;
+    top: 10px;
+}
+
+/* Текст кнопки */
+.btn-text {
+    margin: 0 auto;
+    width: 146px;
+    height: 23px;
+    font-family: 'Montserrat', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #FFFFFF;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.btn-unavailable .btn-text {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Интерактивное поведение для Default кнопки */
+.btn-default:hover {
+    background: linear-gradient(90deg, rgba(194, 41, 24, 0.85) -79%, rgba(209, 97, 77, 0.85) 54.61%, rgba(194, 41, 24, 0.85) 189.67%);
+}
+
+.btn-default:hover .frame-4 {
+    width: 166px;
+    left: calc(50% - 166px/2);
+    top: calc(50% - 43px/2 + 0.5px);
+}
+
+.btn-default:hover .frame-5 {
+    width: 146px;
+    height: 23px;
+    left: 10px;
+    top: 10px;
+}
+

@@ -342,3 +342,291 @@ body {
     opacity: 1;
     pointer-events: all;
 }
+
+/* Add Receipt Window */
+.add-receipt {
+    box-sizing: border-box;
+    position: absolute;
+    width: 956px;
+    height: 261px;
+    left: calc(91px + (100vw - 91px - 956px) / 2);
+    top: 155px;
+    background: rgba(221, 141, 118, 0.5);
+    border-radius: 0px;
+    z-index: 1;
+}
+
+.download-button {
+    position: absolute;
+    width: 450px;
+    height: 62px;
+    left: 253px;
+    top: 69px;
+    background: linear-gradient(90deg, #C22918 -79%, #D1614D 54.61%, #C22918 189.67%);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border: none;
+    cursor: pointer;
+    isolation: isolate;
+}
+
+.frame-4 {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    isolation: isolate;
+    position: absolute;
+    width: 226px;
+    height: 43px;
+    left: calc(50% - 226px/2);
+    top: calc(50% - 43px/2 - 0.5px);
+}
+
+.frame-5 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    gap: 10px;
+    position: absolute;
+    width: 207px;
+    height: 23px;
+    left: calc(50% - 207px/2 + 0.5px);
+    top: calc(50% - 23px/2);
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    z-index: 0;
+}
+
+.btn-text {
+    margin: 0 auto;
+    width: 151px;
+    height: 23px;
+    font-family: 'Montserrat', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #FFFFFF;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.format-text {
+    position: absolute;
+    width: 478px;
+    height: 116px;
+    left: calc(50% - 478px/2);
+    top: 145px;
+    font-family: 'Montserrat', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    text-align: center;
+    font-variant: small-caps;
+    color: rgba(154, 14, 16, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.file-info {
+    position: absolute;
+    width: 478px;
+    left: calc(50% - 478px/2);
+    top: 145px;
+    font-family: 'Montserrat', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    color: rgba(154, 14, 16, 0.85);
+    z-index: 2;
+}
+
+/* Last Receipts Section */
+.last-receipts {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    position: absolute;
+    width: 956px;
+    height: 151px;
+    left: calc(91px + (100vw - 91px - 956px) / 2);
+    top: 444px;
+    z-index: 1;
+}
+
+.last-receipts__title {
+    width: 956px;
+    height: 26px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    color: #9A0E10;
+    margin: 0;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.last-receipts__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0px;
+    gap: 50px;
+    width: 199px;
+    height: 21px;
+    margin-top: 0;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.receipt-header__name {
+    width: 80px;
+    height: 23px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 10px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    color: #535353;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.receipt-header__date {
+    width: 69px;
+    height: 23px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 10px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    text-align: right;
+    color: #535353;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.last-receipts__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 0;
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+}
+
+.receipt-line {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0px;
+    gap: 20px;
+    width: 191px;
+    height: 26px;
+    flex: none;
+    flex-grow: 0;
+}
+
+.receipt-line:nth-child(1) {
+    order: 0;
+}
+
+.receipt-line:nth-child(2) {
+    order: 1;
+}
+
+.receipt-line:nth-child(3) {
+    width: 193px;
+    order: 2;
+}
+
+.receipt-line:nth-child(4) {
+    width: 193px;
+    order: 3;
+}
+
+.text-button {
+    width: 119px;
+    height: 41px;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.text-button span {
+    position: absolute;
+    left: 0%;
+    right: 0%;
+    top: 0%;
+    bottom: 0%;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+    color: #535353;
+}
+
+.receipt-line:nth-child(3) .text-button span {
+    text-transform: lowercase;
+}
+
+.receipt-line__date-value {
+    width: 52px;
+    height: 23px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 10px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    text-align: right;
+    color: #535353;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.last-receipts__list .receipt-line:nth-child(3) .receipt-line__date-value,
+.last-receipts__list .receipt-line:nth-child(4) .receipt-line__date-value {
+    width: 54px;
+}
