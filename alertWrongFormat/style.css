@@ -1,0 +1,46 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #ECEDF1;
+    min-height: 100vh;
+    position: relative;
+}
+
+.error-message {
+    position: absolute;
+    width: 504px;
+    height: 30px;
+    left: calc(50% - 504px/2);
+    top: 100px;
+}
+
+.error-message__content {
+    box-sizing: border-box;
+    position: absolute;
+    left: 0%;
+    right: 0%;
+    top: 0%;
+    bottom: 0%;
+    background: rgba(194, 41, 24, 0.04);
+    border: 1px solid rgba(194, 41, 24, 0.6);
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: rgba(194, 41, 24, 0.6);
+    overflow: visible;
+    padding: 0 3px;
+}

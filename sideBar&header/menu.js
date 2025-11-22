@@ -1,5 +1,6 @@
 const sidebar = document.querySelector('.sidebar');
 const toggleButton = document.querySelector('.menu-button');
+const headerMenuButton = document.querySelector('.header__menu-button');
 const overlay = document.querySelector('.app__overlay');
 const panel = document.getElementById('sidebar-panel');
 
@@ -44,6 +45,7 @@ const toggleSidebar = () => {
 };
 
 toggleButton?.addEventListener('click', toggleSidebar);
+headerMenuButton?.addEventListener('click', toggleSidebar);
 overlay?.addEventListener('click', closeSidebar);
 
 document.addEventListener('keydown', (event) => {

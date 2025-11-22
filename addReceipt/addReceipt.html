@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Окно добавления чека</title>
+    <link rel="stylesheet" href="addReceipt.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Inter:wght@300&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Состояние 1: Default -->
+        <div class="receipt-window receipt-default">
+            <button class="download-button btn-default">
+                <div class="frame-4">
+                    <div class="frame-5">
+                        <span class="btn-text">Загрузить чек</span>
+                    </div>
+                </div>
+            </button>
+            <div class="format-text">
+                Допустимые форматы: JPG, JPEG, PNG, PDF<br>Максимальный размер файла: 10 МБ
+            </div>
+        </div>
+
+        <!-- Состояние 2: Receipt Added -->
+        <div class="receipt-window receipt-added">
+            <div class="image-placeholder"></div>
+            <button class="download-button btn-added">
+                <div class="frame-4">
+                    <div class="frame-5">
+                        <span class="btn-text">Добавить чек</span>
+                    </div>
+                </div>
+            </button>
+            <div class="frame-6">
+                <span class="success-text">Файл 47594_PN0hg.jpg успешно загружен</span>
+            </div>
+            <button class="text-button"><span>Отмена</span></button>
+        </div>
+
+        <!-- Состояние 3: Download Process -->
+        <div class="receipt-window receipt-process">
+            <div class="image-placeholder process-image"></div>
+            <button class="download-button btn-process" disabled>
+                <div class="frame-4 frame-4-process">
+                    <div class="frame-5 frame-5-process">
+                        <span class="btn-text btn-text-process">Добавить чек</span>
+                    </div>
+                </div>
+            </button>
+            <div class="frame-6 process-frame-6">
+                <div class="progress-line"></div>
+                <span class="progress-text">37%</span>
+            </div>
+            <button class="text-button process-text-button"><span>Отмена</span></button>
+        </div>
+    </div>
+</body>
+</html>
+
