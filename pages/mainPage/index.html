@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Главная страница</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,29 +14,27 @@
             <div class="scene" aria-hidden="true">
                 <div class="background">
                     <div class="background__overlay"></div>
-                    <img src="../icons/bgFigure.png" alt="" class="background__diagonal">
+                    <img src="../../icons/bgFigure.png" alt="" class="background__diagonal">
                 </div>
             </div>
     
         <header class="header">
             <div class="headers__btn">
                 <button class="header__menu-button" type="button" aria-label="Открыть меню">
-                    <img src="../icons/burgerDefault.svg" alt="" class="header__menu-icon">
+                    <img src="../../icons/burgerDefault.svg" alt="" class="header__menu-icon">
                 </button>
                 
-                <a href="/" class="header__logo">
-                    <img src="../icons/logoHeader.png" alt="Логотип" class="header__logo-image">
+                <a href="../mainPage/index.html" class="header__logo">
+                    <img src="../../icons/logoHeader.png" alt="Логотип" class="header__logo-image">
                 </a>
             </div>
             
             
             <div class="header__links">
-                <a href="!#" class="header__notification-icon">
-                    <svg viewBox="0 0 120 119" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M77.438 11.5593C72.112 7.52908 66.0886 5.20879 55.938 3.55933C37.0521 7.53319 29.2208 13.296 21.438 31.5593V71.0593L5.93799 99.0593H39.438M91.438 49.5593V71.0593L106.438 99.0593H72.938M72.938 99.0593C70.4987 109.307 66.4256 112.349 55.938 114.559C44.8975 112.273 41.9787 108.311 39.438 99.0593M72.938 99.0593H39.438" stroke="#535353" stroke-width="7"/>
-                        <rect x="66.438" y="5.05933" width="50" height="47" rx="23.5" stroke="#C22918" stroke-width="7"/>
-                        <path d="M82.2223 41.5593V37.5707L91.5419 28.9414C92.3345 28.1744 92.9992 27.484 93.5362 26.8704C94.0816 26.2568 94.495 25.6559 94.7762 25.0678C95.0575 24.4713 95.1981 23.8278 95.1981 23.1375C95.1981 22.3704 95.0234 21.7099 94.674 21.1559C94.3245 20.5934 93.8473 20.163 93.2421 19.8647C92.637 19.5579 91.951 19.4045 91.1839 19.4045C90.3828 19.4045 89.6839 19.5664 89.0873 19.8903C88.4907 20.2142 88.0305 20.6786 87.7066 21.2838C87.3828 21.8889 87.2208 22.609 87.2208 23.4443H81.9666C81.9666 21.7312 82.3544 20.244 83.1299 18.9826C83.9055 17.7213 84.9921 16.7454 86.3899 16.0551C87.7876 15.3647 89.3984 15.0196 91.2223 15.0196C93.0973 15.0196 94.7294 15.3519 96.1186 16.0167C97.5163 16.673 98.6029 17.5849 99.3785 18.7525C100.154 19.9201 100.542 21.2582 100.542 22.7667C100.542 23.7553 100.346 24.7312 99.9538 25.6943C99.5703 26.6573 98.8842 27.7269 97.8956 28.9031C96.9069 30.0707 95.5135 31.4727 93.7152 33.109L89.8927 36.8548V37.0338H100.887V41.5593H82.2223Z" fill="#C22918"/>
-                        </svg>
+                <a href="../Notification/index.html" class="header__notification-icon">
+                    <?xml version="1.0" encoding="utf-8"?>
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#535353" stroke-width="1" stroke-linecap="round" stroke-linejoin="miter"><path d="M19,14l2,4H3l2-4V9.29A7.2,7.2,0,0,1,11.78,2,7,7,0,0,1,19,9Z"></path><path d="M16,18a4,4,0,1,1-8,0"></path></svg>
+                    <span class="header__notification-badge">0</span>
                 </a>
     
                 <a href="/" class="header__profile" type="button">
@@ -48,23 +47,23 @@
             <div class="left-bar">
                 <button class="menu-button menu-button--default" type="button" aria-pressed="false" aria-controls="sidebar-panel">
                     <span class="menu-button__icon" aria-hidden="true">
-                        <img src="../icons/closeMenu.svg" alt="">
+                        <img src="../../icons/closeMenu.svg" alt="">
                     </span>
                     <span class="menu-button__label">МЕНЮ</span>
                 </button>
 
                 <div class="sidebar__logo-collapsed" aria-hidden="true">
-                    <img src="../icons/logoMenu.png" alt="" width="34" height="45">
+                    <img src="../../icons/logoMenu.png" alt="" width="34" height="45">
                 </div>
 
-                <div class="exitIcon" aria-hidden="true">
+                <a class="exitIcon" href="../Authorization/index.html">
                     <svg width="40" height="39" viewBox="0 0 40 39" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M14.1936 26.1087V37.846H38.7353V0.5H14.1936V12.2373" stroke="#DBDCE4"/>
                         <path d="M14.1936 26.1087V37.846H38.7353V0.5H14.1936V12.2373" stroke="black" stroke-opacity="0.2"/>
                         <path d="M26.0687 18.8333H0.735352M0.735352 18.8333L8.12424 26.2222M0.735352 18.8333L8.12424 12.5" stroke="#DBDCE4"/>
                         <path d="M26.0687 18.8333H0.735352M0.735352 18.8333L8.12424 26.2222M0.735352 18.8333L8.12424 12.5" stroke="black" stroke-opacity="0.2"/>
                         </svg>
-                </div>
+                </a>
             </div>
 
             <div class="sidebar__panel" id="sidebar-panel" aria-hidden="true">
@@ -73,24 +72,24 @@
                 </div>
 
                 <nav class="sidebar__nav" aria-label="Главное меню">
-                    <button class="sidebar__nav-item" type="button">
+                    <a href="../mainPage/index.html" class="sidebar__nav-item" type="button">
                         <span class="sidebar__nav-title">Главная</span>
-                    </button>
-                    <button class="sidebar__nav-item" type="button">
+                    </a>
+                    <a class="sidebar__nav-item" type="button">
                         <span class="sidebar__nav-title">Профиль</span>
-                    </button>
-                    <button class="sidebar__nav-item" type="button">
+                    </a>
+                    <a href="../Notification/index.html" class="sidebar__nav-item" type="button">
                         <span class="sidebar__nav-title">Уведомления</span>
-                    </button>
-                    <button class="sidebar__nav-item" type="button">
+                    </a>
+                    <a class="sidebar__nav-item" type="button">
                         <span class="sidebar__nav-title">Чеки</span>
-                    </button>
-                    <button class="sidebar__nav-item" type="button">
+                    </a>
+                    <a class="sidebar__nav-item" type="button">
                         <span class="sidebar__nav-title">Склад</span>
-                    </button>
-                    <button class="sidebar__nav-item" type="button">
+                    </a>
+                    <a class="sidebar__nav-item" type="button">
                         <span class="sidebar__nav-title">Отчёты</span>
-                    </button>
+                    </a>
                 </nav>
             </div> 
         </aside>
@@ -151,7 +150,7 @@
         <div class="app__overlay" data-visible="false"></div>
     </div>
 
-    <script src="../sideBar&header/menu.js"></script>
+    <script src="../../UI/sideBar&header/menu.js"></script>
     <script src="upload.js"></script>
 </body>
 </html>

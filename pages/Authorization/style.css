@@ -265,7 +265,7 @@ body {
 .input-field__input:focus + .input-field__label,
 .input-field__input:not(:placeholder-shown) + .input-field__label {
     top: 0;
-    font-size: 8px;
+    font-size: 6px;
     line-height: 6.3em;
 }
 
