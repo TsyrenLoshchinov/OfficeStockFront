@@ -5,6 +5,10 @@
     margin: 0;
 }
 
+a{
+    text-decoration: none;
+}
+
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
@@ -29,7 +33,7 @@ body {
     margin: 0 auto;
     padding-left: 26px;
     padding-right: 26px;
-    z-index: 100;
+    z-index: 3;
 }
 
 .headers__btn {
@@ -178,7 +182,7 @@ body {
     justify-content: space-between;
     border-right: 1px solid #DBDCE4;
     transition: width 0.4s ease, background 0.3s ease, box-shadow 0.3s ease;
-    z-index: 3;
+    z-index: 4;
     overflow: hidden;
 }
 
@@ -350,6 +354,23 @@ body {
 .sidebar__nav-item--active {
     color: #18181D;
     font-weight: 500;
+}
+
+.app__overlay {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 3;
+}
+
+.app__overlay[data-visible="true"] {
+    opacity: 1;
+    pointer-events: all;
 }
 
 .main {
