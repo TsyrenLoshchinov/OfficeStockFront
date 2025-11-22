@@ -117,6 +117,7 @@ body {
   transform: translateY(-10px);
   transition: all 0.25s ease;
   pointer-events: none;
+  z-index: 10;
 }
 
 .dropdown__checkbox:checked ~ .dropdown__menu {

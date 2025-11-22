@@ -23,8 +23,8 @@ body {
     box-sizing: border-box;
     position: relative;
     gap: 10px;
-    width: 1081px;
     height: 100px;
+    margin-left: 83px;
     border-radius: 10px;
     padding: 10px 60px 10px 10px;
     background: transparent;
