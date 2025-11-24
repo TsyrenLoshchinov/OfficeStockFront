@@ -1,0 +1,53 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin-top: 100px;
+    margin-left: 100px;
+}
+
+.check-card {
+    width: 1018px;
+    height: 121px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 24px;
+    padding-right: 18px;
+    padding-top: 5px;
+}
+
+.leftElemnts {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.check-card-img {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.check-img-info {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    gap: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
