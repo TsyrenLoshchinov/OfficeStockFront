@@ -10,14 +10,14 @@ body {
 }
 
 .check-card {
+    position: relative;
     width: 1018px;
     height: 121px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-left: 24px;
-    padding-right: 18px;
-    padding-top: 5px;
+    padding: 5px 18px 8px 24px;
+    border-bottom: 0.5px solid #989898;
 }
 
 .leftElemnts {
@@ -30,7 +30,7 @@ body {
 .check-card-img {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: left;
     gap: 10px;
 }
 
@@ -41,6 +41,73 @@ body {
     gap: 5px;
 }
 
+.cross {
+    position: absolute;
+    width: 39px;
+    height: 39px;
+    right: 4px;
+    top: 4px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cross::before,
+.cross::after {
+    content: "";
+    position: relative;
+    width: 31px;
+    height: 1px;
+    background: #C22918;
+}
+
+.cross::before {
+    transform: rotate(45deg);
+}
+
+.cross::after {
+    transform: rotate(-45deg);
+    margin-left: -31px;
+}
+
+.check-card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    color: #9A0E10;
+}
+
+.check-card-img img {
+    width: 41px;
+    height: 76px;
+}
+
+.check-img-info h2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 17px;
+    color: #DD8D76;
+}
+
+.check-img-info p {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 9px;
+    color: #535353;
+}
+
+.more-btn {
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+    font-size: 24px;
+    color: #C22918;
+    background: none;
+    border: none;
+    margin-top: 61px;
+}
 
 
 
