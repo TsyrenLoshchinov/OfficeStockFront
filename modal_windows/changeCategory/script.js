@@ -2,6 +2,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('search-input');
     const dropdownList = document.getElementById('dropdown-list');
     const dropdownItems = dropdownList.querySelectorAll('.dropdown-list__item');
+    const selectButton = document.getElementById('select-button');
+    
+    // Функция для проверки и обновления состояния кнопки
+    function updateButtonState() {
+        const searchValue = searchInput.value.trim();
+        if (searchValue.length > 0) {
+            selectButton.disabled = false;
+        } else {
+            selectButton.disabled = true;
+        }
+    }
+    
+    // Инициализация состояния кнопки при загрузке
+    updateButtonState();
     
     // Данные для поиска (можно заменить на реальные данные)
     const allItems = Array.from(dropdownItems).map(item => item.textContent.trim());
@@ -9,6 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Показываем/скрываем выпадающий список при вводе
     searchInput.addEventListener('input', function() {
         const searchValue = this.value.trim().toLowerCase();
+        
+        // Обновляем состояние кнопки
+        updateButtonState();
         
         if (searchValue.length > 0) {
             // Фильтруем элементы
@@ -63,6 +80,8 @@ document.addEventListener('DOMContentLoaded', function() {
             searchInput.value = this.textContent.trim();
             dropdownList.classList.remove('dropdown-list--visible');
             searchInput.focus();
+            // Обновляем состояние кнопки после выбора
+            updateButtonState();
         });
         
         // Подсветка при наведении
@@ -102,6 +121,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 searchInput.value = visibleItems[selectedIndex].textContent.trim();
                 dropdownList.classList.remove('dropdown-list--visible');
                 selectedIndex = -1;
+                // Обновляем состояние кнопки после выбора
+                updateButtonState();
             }
         } else if (e.key === 'Escape') {
             dropdownList.classList.remove('dropdown-list--visible');
