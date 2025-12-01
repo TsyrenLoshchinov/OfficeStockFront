@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Главная страница</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <title>Checks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
+    <link rel="stylesheet" href="style.css">
 <body>
     <div class="app">
         <div class="layout">
@@ -51,12 +50,12 @@
                     </span>
                     <span class="menu-button__label">МЕНЮ</span>
                 </button>
-
+    
                 <div class="sidebar__logo-collapsed" aria-hidden="true">
                     <img src="../../icons/logoMenu.png" alt="" width="34" height="45">
                 </div>
-
-                <a class="exitIcon" href="../Authorization/index.html">
+    
+                <a class="exitIcon" href="../Authorization/index.html" aria-hidden="true">
                     <svg width="40" height="39" viewBox="0 0 40 39" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M14.1936 26.1087V37.846H38.7353V0.5H14.1936V12.2373" stroke="#DBDCE4"/>
                         <path d="M14.1936 26.1087V37.846H38.7353V0.5H14.1936V12.2373" stroke="black" stroke-opacity="0.2"/>
@@ -65,12 +64,12 @@
                         </svg>
                 </a>
             </div>
-
+    
             <div class="sidebar__panel" id="sidebar-panel" aria-hidden="true">
                 <div class="sidebar__logo">
                     <span>Навигация</span>
                 </div>
-
+    
                 <nav class="sidebar__nav" aria-label="Главное меню">
                     <a href="../mainPage/index.html" class="sidebar__nav-item" type="button">
                         <span class="sidebar__nav-title">Главная</span>
@@ -94,63 +93,35 @@
             </div> 
         </aside>
 
-        <!-- Add Receipt Window -->
-        <div class="add-receipt">
-            <input type="file" id="file-input" accept=".jpg,.jpeg,.png,.pdf" style="display: none;">
-            <button class="download-button" id="upload-button">
-                <div class="frame-4">
-                    <div class="frame-5">
-                        <span class="btn-text">Загрузить чек</span>
+        <main class="main">
+            <div class="main__container">
+                <h1 class="main__title">Профиль</h1>
+
+                <div class="fio">
+                    <p>Иванов Иван Иванович</p>
+                </div>
+
+                <div class="profile-info">
+                    <div class="column first">
+                        <p class="job title">Долджность:</p>
+                        <p class="mail title">Электорнная почта:</p>
+                    </div>
+
+                    <div class="column second">
+                        <p class="title">HR-менеджер</p>
+                        <p class="mail">iiivanov@pochta.com</p>
                     </div>
                 </div>
-            </button>
-            <div class="format-text">
-                Допустимые форматы: JPG, JPEG, PNG, PDF<br>Максимальный размер файла: 10 МБ
             </div>
-            <div class="file-info" id="file-info" style="display: none;"></div>
-        </div>
 
-        <!-- Last Receipts Section -->
-        <div class="last-receipts">
-            <h2 class="last-receipts__title">Последние чеки</h2>
-            
-            <div class="last-receipts__header">
-                <span class="receipt-header__name">Название файла</span>
-                <span class="receipt-header__date">Дата загрузки</span>
-            </div>
-            
-            <div class="last-receipts__list">
-                <div class="receipt-line">
-                    <button class="text-button">
-                        <span>Чеки</span>
-                    </button>
-                    <span class="receipt-line__date-value">14.09.2025</span>
-                </div>
-                <div class="receipt-line">
-                    <button class="text-button">
-                        <span>Чеки</span>
-                    </button>
-                    <span class="receipt-line__date-value">14.09.2025</span>
-                </div>
-                <div class="receipt-line">
-                    <button class="text-button">
-                        <span>чеки</span>
-                    </button>
-                    <span class="receipt-line__date-value">08.09.2025</span>
-                </div>
-                <div class="receipt-line">
-                    <button class="text-button">
-                        <span>Чеки</span>
-                    </button>
-                    <span class="receipt-line__date-value">02.09.2025</span>
-                </div>
-            </div>
-        </div>
+
+
+
+        </main>
 
         <div class="app__overlay" data-visible="false"></div>
     </div>
 
-    <script src="../../UI/sideBar&header/menu.js"></script>
-    <script src="upload.js"></script>
+    <script src="./menu.js"></script>
 </body>
 </html>
