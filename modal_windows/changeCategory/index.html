@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="conteiner"> 
+
+        <button class="CheckInfo__close" aria-label="Закрыть информацию о чеке"></button>
+
+        <h1 class="modal-title">Выбор категории</h1>
+
+        <div class="content">
+            <div class="input-field">
+                <input type="text" class="input-field__input" id="search-input" placeholder=" " autocomplete="off">
+                <label for="search-input" class="input-field__label">Поиск</label>
+                <div class="input-field__line"></div>
+                <div class="dropdown-list" id="dropdown-list">
+                    <div class="dropdown-list__item">Печенье</div>
+                    <div class="dropdown-list__item">Пончики</div>
+                    <div class="dropdown-list__item">Сок</div>
+                    <div class="dropdown-list__item">Вода</div>
+                    <div class="dropdown-list__item">Чай</div>
+                    
+                </div>
+            </div>
+    
+            <p class="subtitles">Не нашли нужную категорию?</p>
+    
+            <button class="addCategory">Добавьте её</button>
+        </div>
+
+
+        <div class="btnModel">
+            <button class="button" id="select-button" disabled>
+                <span class="button__text">Выбрать</span>   
+            </button>
+        </div>
+
+    </div>
+    <script src="./script.js"></script>
+</body>
+</html>

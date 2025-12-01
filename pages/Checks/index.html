@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+<body>
+    <div class="app">
+        <div class="layout">
+            <div class="scene" aria-hidden="true">
+                <div class="background">
+                    <div class="background__overlay"></div>
+                    <img src="../../icons/bgFigure.png" alt="" class="background__diagonal">
+                </div>
+            </div>
+    
+        <header class="header">
+            <div class="headers__btn">
+                <button class="header__menu-button" type="button" aria-label="Открыть меню">
+                    <img src="../../icons/burgerDefault.svg" alt="" class="header__menu-icon">
+                </button>
+                
+                <a href="../mainPage/index.html" class="header__logo">
+                    <img src="../../icons/logoHeader.png" alt="Логотип" class="header__logo-image">
+                </a>
+            </div>
+            
+            
+            <div class="header__links">
+                <a href="../Notification/index.html" class="header__notification-icon">
+                    <?xml version="1.0" encoding="utf-8"?>
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#535353" stroke-width="1" stroke-linecap="round" stroke-linejoin="miter"><path d="M19,14l2,4H3l2-4V9.29A7.2,7.2,0,0,1,11.78,2,7,7,0,0,1,19,9Z"></path><path d="M16,18a4,4,0,1,1-8,0"></path></svg>
+                    <span class="header__notification-badge">0</span>
+                </a>
+    
+                <a href="/" class="header__profile" type="button">
+                    <span class="header__text-button-label">Профиль</span>
+                </a>
+            </div>
+        </header>
+    
+        <aside class="sidebar" data-open="false">
+            <div class="left-bar">
+                <button class="menu-button menu-button--default" type="button" aria-pressed="false" aria-controls="sidebar-panel">
+                    <span class="menu-button__icon" aria-hidden="true">
+                        <img src="../../icons/closeMenu.svg" alt="">
+                    </span>
+                    <span class="menu-button__label">МЕНЮ</span>
+                </button>
+    
+                <div class="sidebar__logo-collapsed" aria-hidden="true">
+                    <img src="../../icons/logoMenu.png" alt="" width="34" height="45">
+                </div>
+    
+                <a class="exitIcon" href="../Authorization/index.html" aria-hidden="true">
+                    <svg width="40" height="39" viewBox="0 0 40 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14.1936 26.1087V37.846H38.7353V0.5H14.1936V12.2373" stroke="#DBDCE4"/>
+                        <path d="M14.1936 26.1087V37.846H38.7353V0.5H14.1936V12.2373" stroke="black" stroke-opacity="0.2"/>
+                        <path d="M26.0687 18.8333H0.735352M0.735352 18.8333L8.12424 26.2222M0.735352 18.8333L8.12424 12.5" stroke="#DBDCE4"/>
+                        <path d="M26.0687 18.8333H0.735352M0.735352 18.8333L8.12424 26.2222M0.735352 18.8333L8.12424 12.5" stroke="black" stroke-opacity="0.2"/>
+                        </svg>
+                </a>
+            </div>
+    
+            <div class="sidebar__panel" id="sidebar-panel" aria-hidden="true">
+                <div class="sidebar__logo">
+                    <span>Навигация</span>
+                </div>
+    
+                <nav class="sidebar__nav" aria-label="Главное меню">
+                    <a href="../mainPage/index.html" class="sidebar__nav-item" type="button">
+                        <span class="sidebar__nav-title">Главная</span>
+                    </a>
+                    <a class="sidebar__nav-item" type="button">
+                        <span class="sidebar__nav-title">Профиль</span>
+                    </a>
+                    <a href="../Notification/index.html" class="sidebar__nav-item" type="button">
+                        <span class="sidebar__nav-title">Уведомления</span>
+                    </a>
+                    <a class="sidebar__nav-item" type="button">
+                        <span class="sidebar__nav-title">Чеки</span>
+                    </a>
+                    <a class="sidebar__nav-item" type="button">
+                        <span class="sidebar__nav-title">Склад</span>
+                    </a>
+                    <a class="sidebar__nav-item" type="button">
+                        <span class="sidebar__nav-title">Отчёты</span>
+                    </a>
+                </nav>
+            </div> 
+        </aside>
+
+        <main class="main">
+            <div class="main__container">
+                <h1 class="main__title">Чеки</h1>
+
+                <div class="actions">
+
+
+                    <div class="dropdown">
+                        <select class="dropdown__select" aria-label="Фильтр сообщений">
+                          <option value="all" selected>Сначала новые</option>
+                          <option value="unread">Сначала старые</option>
+                        </select>
+                        
+                        <div class="dropdown__custom-ui" aria-hidden="true">
+                          <div class="dropdown__icon">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                          </div>
+                          <div class="dropdown__label">Сначала новые</div>
+                          <div class="dropdown__arrow"></div>
+                        </div>
+                        
+                        <div class="dropdown__menu">
+                          <div class="dropdown__item" data-value="all">Сначала новые</div>
+                          <div class="dropdown__item" data-value="unread">Сначала старые</div>
+                        </div>
+                      </div>
+
+                      <button class="clear-all" type="button">Очистить всё</button>
+                </div>
+
+                  <div class="checks">
+                    <div class="check-card">
+                        <div class="leftElemnts">
+                            <h2 class="check-card-title">Чек №001 от 24.11.2024</h2>
+                            <div class="check-card-img">
+                                <img src="../../icons/check.png" alt="Чек">
+                                <div class="check-img-info">
+                                    <h2>Файл: Gklro_87r7.jpg</h2>
+                                    <p>Загружен: 20.11.2025</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="RightsBts">
+                            <button class="cross" aria-label="Закрыть чек"></button>
+                            <button class="more-btn">Подробнее</button>
+                        </div>
+                    </div>
+                    <div class="check-card">
+                        <div class="leftElemnts">
+                            <h2 class="check-card-title">Чек №001 от 19.06.2025</h2>
+                            <div class="check-card-img">
+                                <img src="../../icons/check.png" alt="Чек">
+                                <div class="check-img-info">
+                                    <h2>Файл: Gklro_87r7.jpg</h2>
+                                    <p>Загружен: 20.11.2025</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="RightsBts">
+                            <button class="cross" aria-label="Закрыть чек"></button>
+                            <button class="more-btn">Подробнее</button>
+                        </div>
+                    </div>
+                    <div class="check-card">
+                        <div class="leftElemnts">
+                            <h2 class="check-card-title">Чек №001 от 10.01.2025</h2>
+                            <div class="check-card-img">
+                                <img src="../../icons/check.png" alt="Чек">
+                                <div class="check-img-info">
+                                    <h2>Файл: Gklro_87r7.jpg</h2>
+                                    <p>Загружен: 20.11.2025</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="RightsBts">
+                            <button class="cross" aria-label="Закрыть чек"></button>
+                            <button class="more-btn">Подробнее</button>
+                        </div>
+                    </div>
+                    <div class="check-card">
+                        <div class="leftElemnts">
+                            <h2 class="check-card-title">Чек №001 от 23.09.2024</h2>
+                            <div class="check-card-img">
+                                <img src="../../icons/check.png" alt="Чек">
+                                <div class="check-img-info">
+                                    <h2>Файл: Gklro_87r7.jpg</h2>
+                                    <p>Загружен: 20.11.2025</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="RightsBts">
+                            <button class="cross" aria-label="Закрыть чек"></button>
+                            <button class="more-btn">Подробнее</button>
+                        </div>
+                    </div>
+                    <div class="check-card">
+                        <div class="leftElemnts">
+                            <h2 class="check-card-title">Чек №001 от 02.02.2024</h2>
+                            <div class="check-card-img">
+                                <img src="../../icons/check.png" alt="Чек">
+                                <div class="check-img-info">
+                                    <h2>Файл: Gklro_87r7.jpg</h2>
+                                    <p>Загружен: 20.11.2025</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="RightsBts">
+                            <button class="cross" aria-label="Закрыть чек"></button>
+                            <button class="more-btn">Подробнее</button>
+                        </div>
+                    </div>
+
+                      
+                  </div>
+            </div>
+        </main>
+
+        <div class="app__overlay" data-visible="false"></div>
+    </div>
+
+    <script src="./menu.js"></script>
+</body>
+</html>

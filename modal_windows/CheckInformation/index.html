@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="conteiner">
+        <div class="checkName">
+            <div class="title">
+                <h1>Информация о чеке</h1>
+            </div>
+            <h2>Чек №004 от 22.11.2025</h2>
+        </div>
+
+        <div class="basicInformation">
+            <h5>Основная информация</h5>
+            <p class="organization">Организация: ПАО «Магнит»</p>
+            <p class="date">Дата покупки: 12.10.2025</p>
+            <p class="sum">Общая сумма: 485.00</p>
+        </div>
+
+        <div class="productList">
+            <h5>Список товаров</h5>
+            <div class="table-row header">
+                <div class="grid-name">Название</div>
+                <div class="grid-category">Категория</div>
+                <div class="grid-price">Стоимость</div>
+                <div class="grid-count">Количество</div>
+                <div class="grid-total">Итог</div>
+            </div>
+
+            <div class="table-row">
+                <div class="grid-name">Пластырь прозрачный 3 шт.</div>
+                <button class="grid-category">Аптека</button>
+                <div class="grid-price">126.00</div>
+                <div class="grid-count">2</div>
+                <div class="grid-total">252.00</div>
+            </div>
+
+            <div class="table-row">
+                <div class="grid-name">Вафли «Яшкино»</div>
+                <button class="grid-category">Не определёно</button>
+                <div class="grid-price">89.00</div>
+                <div class="grid-count">1</div>
+                <div class="grid-total">89.00</div>
+            </div>
+
+            <div class="table-row">
+                <div class="grid-name">Чай зеленый «Fantasy Peach»</div>
+                <button class="grid-category">Чай</button>
+                <div class="grid-price">163.00</div>
+                <div class="grid-count">1</div>
+                <div class="grid-total">163.00</div>
+            </div>
+
+
+        </div>
+
+        <div class="btnModel">
+            <button class="button">
+                <span class="button__text">Подтвердить</span>   
+            </button>
+        </div>
+
+        <button class="CheckInfo__close" aria-label="Закрыть информацию о чеке"></button>
+    </div>
+</body>
+</html>
