@@ -18,7 +18,7 @@ export class ReceiptsService {
     formData.append('file', file);
     
     return this.http.post<ReceiptUploadResponse>(
-      `${this.apiService.getBaseUrl()}/receipts/upload`,
+      `${this.apiService.getBaseUrl()}/receipts/upload`, // отправляем файл на сервер
       formData
     );
   }
@@ -26,7 +26,7 @@ export class ReceiptsService {
   confirmReceipt(receiptData: Receipt): Observable<void> {
     const payload: ReceiptConfirmPayload = { receiptData };
     return this.http.post<void>(
-      `${this.apiService.getBaseUrl()}/receipts/confirm`,
+      `${this.apiService.getBaseUrl()}/receipts/confirm`, // отправляем подтвержденные данные чека на сервер
       payload
     );
   }
