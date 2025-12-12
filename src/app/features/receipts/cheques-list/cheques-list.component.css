@@ -8,13 +8,14 @@
 .main {
   position: relative;
   z-index: 2;
-  margin-left: 126px;
+  margin-left: 32px;
 }
 
 .main__container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  margin-right: 137px;
 }
 
 .main__title {
@@ -31,7 +32,6 @@
 .actions {
   display: flex;
   justify-content: space-between;
-  margin-right: 92px;
   width: 100%;
   margin-bottom: 20px;
 }
@@ -209,7 +209,6 @@
 .check-card {
   position: relative;
   height: 121px;
-  margin-right: 137px;
   display: flex;
   align-items: center;
   justify-content: space-between;
