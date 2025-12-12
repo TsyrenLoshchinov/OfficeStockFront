@@ -57,7 +57,7 @@ export class LoginComponent {
   private redirectByRole(role: string): void {
     switch (role) {
       case 'hr-manager':
-        this.router.navigate(['/app/receipts']);
+        this.router.navigate(['/app']); // Главная - страница загрузки чека
         break;
       case 'economist':
         this.router.navigate(['/app/analytics']);
@@ -69,7 +69,7 @@ export class LoginComponent {
         this.router.navigate(['/app/admin/users']);
         break;
       default:
-        this.router.navigate(['/app/receipts']);
+        this.router.navigate(['/app']);
     }
   }
 }

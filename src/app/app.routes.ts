@@ -15,12 +15,19 @@ export const routes: Routes = [
     loadComponent: () => import('./core/layouts/main-layout/main-layout.component').then(m => m.MainLayoutComponent),
     canActivate: [authGuard],
     children: [
-      // Receipts (HR-менеджер)
+      // Главная страница - Загрузка чека (HR-менеджер)
       {
-        path: 'receipts',
+        path: '',
         loadComponent: () => import('./features/receipts/receipts-page/receipts-page.component').then(m => m.ReceiptsPageComponent),
         canActivate: [roleGuard],
         data: { roles: ['hr-manager'] }
+      },
+      // Receipts List - Список чеков (HR-менеджер, Админ)
+      {
+        path: 'receipts',
+        loadComponent: () => import('./features/receipts/cheques-list/cheques-list.component').then(m => m.ChequesListComponent),
+        canActivate: [roleGuard],
+        data: { roles: ['hr-manager', 'admin'] }
       },
       
       // Analytics (Экономист, Директор)
@@ -71,12 +78,6 @@ export const routes: Routes = [
         data: { roles: ['admin'] }
       },
       
-      // Redirect по умолчанию
-      {
-        path: '',
-        redirectTo: 'receipts',
-        pathMatch: 'full'
-      }
     ]
   },
   

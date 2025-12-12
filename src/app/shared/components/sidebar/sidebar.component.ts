@@ -23,7 +23,7 @@ export class SidebarComponent implements OnInit {
   currentRole: UserRole | null = null;
 
   menuItems: MenuItem[] = [
-    { label: 'Главная', route: '/app/receipts', roles: ['hr-manager'] },
+    { label: 'Главная', route: '/app', roles: ['hr-manager'] },
     { label: 'Профиль', route: '/app/profile', roles: ['hr-manager', 'economist', 'director', 'admin'] },
     { label: 'Уведомления', route: '/app/notifications', roles: ['hr-manager', 'economist', 'director', 'admin'] },
     { label: 'Чеки', route: '/app/receipts', roles: ['hr-manager', 'admin'] },

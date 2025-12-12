@@ -1,0 +1,70 @@
+<main class="main">
+  <div class="main__container">
+    <h1 class="main__title">Чеки</h1>
+
+    <div class="actions">
+      <div class="dropdown">
+        <select
+          class="dropdown__select"
+          aria-label="Фильтр сообщений"
+          (change)="onSortChange($any($event.target).value)"
+        >
+          <option value="newest" [selected]="sortOrder() === 'newest'">Сначала новые</option>
+          <option value="oldest" [selected]="sortOrder() === 'oldest'">Сначала старые</option>
+        </select>
+        <div class="dropdown__custom-ui" aria-hidden="true">
+          <div class="dropdown__icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="dropdown__label">{{ sortOrder() === 'newest' ? 'Сначала новые' : 'Сначала старые' }}</div>
+          <div class="dropdown__arrow"></div>
+        </div>
+        <div class="dropdown__menu">
+          <div class="dropdown__item" data-value="newest" (click)="onSortChange('newest')">Сначала новые</div>
+          <div class="dropdown__item" data-value="oldest" (click)="onSortChange('oldest')">Сначала старые</div>
+        </div>
+      </div>
+      <button class="clear-all" type="button" (click)="clearAll()">Очистить всё</button>
+    </div>
+
+    <div class="checks" *ngIf="!isLoading(); else loadingTemplate">
+      <div class="check-card" *ngFor="let cheque of sortedCheques()">
+        <div class="leftElemnts">
+          <h2 class="check-card-title">Чек №{{ cheque.number }} от {{ formatDate(cheque.date) }}</h2>
+          <div class="check-card-img">
+            <img src="assets/icons/check.png" alt="Чек" />
+            <div class="check-img-info">
+              <h2>Файл: {{ cheque.fileName }}</h2>
+              <p>Загружен: {{ formatDate(cheque.uploadedAt) }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="RightsBts">
+          <button class="cross" aria-label="Закрыть чек" (click)="deleteCheque(cheque.id)"></button>
+          <button class="more-btn" (click)="viewDetails(cheque.id)">Подробнее</button>
+        </div>
+      </div>
+
+      <div *ngIf="sortedCheques().length === 0" class="empty-state">
+        <p>Нет загруженных чеков</p>
+      </div>
+    </div>
+
+    <ng-template #loadingTemplate>
+      <div class="loading-state">
+        <p>Загрузка чеков...</p>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Модальное окно с информацией о чеке -->
+  <app-receipt-modal
+    *ngIf="showModal() && selectedCheque"
+    [receiptData]="selectedCheque"
+    [isReadOnly]="true"
+    (closed)="closeModal()">
+  </app-receipt-modal>
+</main>
+
