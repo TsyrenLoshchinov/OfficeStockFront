@@ -1,0 +1,22 @@
+<main class="main">
+  <div class="main__container">
+    <h1 class="main__title">Профиль</h1>
+
+    <div class="fio" *ngIf="user() as currentUser">
+      <p>{{ currentUser.name }}</p>
+    </div>
+
+    <div class="profile-info" *ngIf="user() as currentUser">
+      <div class="column first">
+        <p class="job title">Должность:</p>
+        <p class="mail title">Электронная почта:</p>
+      </div>
+
+      <div class="column second">
+        <p class="title">{{ currentUser.position }}</p>
+        <p class="mail">{{ currentUser.email }}</p>
+      </div>
+    </div>
+  </div>
+</main>
+

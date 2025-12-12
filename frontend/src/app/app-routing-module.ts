@@ -13,6 +13,9 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', loadChildren: () => import('./features/main/main-module').then(m => m.MainModule) },
+      { path: 'profile', loadChildren: () => import('./features/profile/profile-module').then(m => m.ProfileModule) },
+      { path: 'checks', loadChildren: () => import('./features/checks/checks-module').then(m => m.ChecksModule) },
+      { path: 'notifications', loadChildren: () => import('./features/notifications/notifications-module').then(m => m.NotificationsModule) },
       { path: 'receipts', loadChildren: () => import('./features/receipts/receipts-module').then(m => m.ReceiptsModule) },
       { path: 'recognition', loadChildren: () => import('./features/recognition/recognition-module').then(m => m.RecognitionModule) },
       { path: 'warehouse', loadChildren: () => import('./features/warehouse/warehouse-module').then(m => m.WarehouseModule) },

@@ -36,8 +36,11 @@
         <aside class="sidebar" [attr.data-open]="sidebarOpen()">
             <div class="left-bar">
                 <button class="menu-button" [class.menu-button--default]="!sidebarOpen()" [class.menu-button--active]="sidebarOpen()" type="button" [attr.aria-pressed]="sidebarOpen()" (click)="toggleSidebar()">
-                    <span class="menu-button__icon" aria-hidden="true">
+                    <span class="menu-button__icon menu-button__icon--close" aria-hidden="true" *ngIf="sidebarOpen()">
                         <img src="assets/icons/closeMenu.svg" alt="">
+                    </span>
+                    <span class="menu-button__icon menu-button__icon--burger" aria-hidden="true" *ngIf="!sidebarOpen()">
+                        <img src="assets/icons/burgerDefault.svg" alt="">
                     </span>
                     <span class="menu-button__label">МЕНЮ</span>
                 </button>

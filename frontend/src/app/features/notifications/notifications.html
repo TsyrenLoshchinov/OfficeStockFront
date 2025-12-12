@@ -1,0 +1,58 @@
+<main class="main">
+  <div class="main__container">
+    <h1 class="main__title">Уведомления</h1>
+
+    <div class="actions">
+      <div class="dropdown">
+        <select
+          class="dropdown__select"
+          aria-label="Фильтр сообщений"
+          (change)="onFilterChange($any($event.target).value)"
+        >
+          <option value="all" [selected]="filter() === 'all'">Показать все</option>
+          <option value="unread" [selected]="filter() === 'unread'">Непрочитанные</option>
+          <option value="read" [selected]="filter() === 'read'">Прочитанные</option>
+        </select>
+
+        <div class="dropdown__custom-ui" aria-hidden="true">
+          <div class="dropdown__icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="dropdown__label">
+            {{ filter() === 'all' ? 'Показать все' : filter() === 'unread' ? 'Непрочитанные' : 'Прочитанные' }}
+          </div>
+          <div class="dropdown__arrow"></div>
+        </div>
+
+        <div class="dropdown__menu">
+          <div class="dropdown__item" data-value="all" (click)="onFilterChange('all')">Показать все</div>
+          <div class="dropdown__item" data-value="unread" (click)="onFilterChange('unread')">Непрочитанные</div>
+          <div class="dropdown__item" data-value="read" (click)="onFilterChange('read')">Прочитанные</div>
+        </div>
+      </div>
+      <button class="clear-all" type="button" (click)="clearAll()">Очистить всё</button>
+    </div>
+
+    <div class="notifications">
+      <article
+        class="notification-card"
+        [class.unread]="!notification.read"
+        *ngFor="let notification of filteredNotifications()"
+      >
+        <div class="notification-card__title">{{ notification.title }}</div>
+        <p class="notification-card__text" [class.unread]="!notification.read">{{ notification.text }}</p>
+        <time class="notification-card__date" [attr.datetime]="notification.date.toISOString()">
+          {{ formatDate(notification.date) }}
+        </time>
+        <button
+          class="notification-card__close"
+          aria-label="Закрыть уведомление"
+          (click)="deleteNotification(notification.id)"
+        ></button>
+      </article>
+    </div>
+  </div>
+</main>
+

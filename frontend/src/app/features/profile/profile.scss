@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@300;400;600&display=swap');
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.main {
+  position: relative;
+  z-index: 2;
+  margin-left: 126px;
+}
+
+.main__container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.main__title {
+  width: 310px;
+  height: 123px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 36px;
+  color: #9A0E10;
+  align-content: center;
+  margin: 0;
+}
+
+.fio p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 36px;
+  font-weight: 300;
+  color: #C22918;
+  margin-bottom: 34px;
+  margin-top: 0;
+}
+
+.profile-info {
+  display: grid;
+  grid-template-columns: 234px auto;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.profile-info p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 300;
+  color: #535353;
+  margin: 0;
+}
+
+.column.second p {
+  color: #C22918;
+}
+

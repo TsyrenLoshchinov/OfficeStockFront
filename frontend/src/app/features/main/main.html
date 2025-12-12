@@ -26,7 +26,7 @@
   <div class="last-receipts__list">
     <div class="receipt-line" *ngFor="let item of uploads()">
       <button class="text-button" type="button">
-        <span>{{ item.fileName }}</span>
+        <span>{{ item.name }}</span>
       </button>
       <span class="receipt-line__date-value">{{ item.uploadedAt | date:'dd.MM.yyyy' }}</span>
     </div>
