@@ -1,0 +1,22 @@
+<header class="header">
+  <div class="headers__btn">
+    <a routerLink="/app/receipts" class="header__logo">
+      <img src="assets/icons/logoHeader.png" alt="Логотип" class="header__logo-image">
+    </a>
+  </div>
+  
+  <div class="header__links">
+    <a routerLink="/app/notifications" class="header__notification-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#535353" stroke-width="1" stroke-linecap="round" stroke-linejoin="miter">
+        <path d="M19,14l2,4H3l2-4V9.29A7.2,7.2,0,0,1,11.78,2,7,7,0,0,1,19,9Z"></path>
+        <path d="M16,18a4,4,0,1,1-8,0"></path>
+      </svg>
+      <span class="header__notification-badge" *ngIf="notificationCount > 0">{{ notificationCount }}</span>
+    </a>
+
+    <a routerLink="/app/profile" class="header__profile">
+      <span class="header__text-button-label">{{ getUsername() }}</span>
+    </a>
+  </div>
+</header>
+

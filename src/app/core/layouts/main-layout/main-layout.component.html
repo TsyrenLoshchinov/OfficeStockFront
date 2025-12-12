@@ -1,0 +1,22 @@
+<div class="app-container">
+  <div class="layout">
+    <div class="scene" aria-hidden="true">
+      <div class="background">
+        <div class="background__overlay"></div>
+        <img src="assets/icons/bgFigure.png" alt="" class="background__diagonal">
+      </div>
+    </div>
+
+    <app-sidebar></app-sidebar>
+
+    <div class="app-content">
+      <app-header></app-header>
+      <main class="main-content">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+
+    <div class="app__overlay" [attr.data-visible]="false"></div>
+  </div>
+</div>
+

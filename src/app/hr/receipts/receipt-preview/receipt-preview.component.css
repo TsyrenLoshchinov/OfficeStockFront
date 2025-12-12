@@ -1,0 +1,263 @@
+.conteiner {
+    display: flex;
+    flex-direction: column;
+    width: 429px;
+    height: auto;
+    position: relative;
+    background: #FFFFFF;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.checkName {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 28px;
+    margin-bottom: 24px;
+}
+
+.title {
+    border-bottom: 0.5px solid #C22918;
+}
+
+.title h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 24px;
+    font-weight: 200;
+    color: #C22918;
+}
+
+.checkName h2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    color: #C22918;
+}
+
+.basicInformation {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    margin-left: 20px;
+    margin-bottom: 16px;
+}
+
+.basicInformation h5 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 9px;
+    color: #9A0E10;
+}
+
+.basicInformation p {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 11px;
+    color: #535353;
+}
+
+.productList {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 2px;
+    margin-left: 20px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+}
+
+.productList h5 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 9px;
+    color: #9A0E10;
+}
+
+.table-row {
+    display: grid;
+    grid-template-columns: 120px 70px 45px 47px 28px;
+    gap: 20px;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    font-weight: 200;
+    font-size: 8px;
+    color: #535353;
+    padding-top: 8px;
+    padding-bottom: 5px;
+    align-items: start;
+}
+
+.grid-name,
+.grid-category,
+.grid-price,
+.grid-count,
+.grid-total {
+    overflow: hidden;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.grid-name {
+    text-align: left;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-height: 36px;
+}
+
+.table-row.header {
+    color: #58585880;
+}
+
+.grid-category {
+    border: none;
+    background: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 8px;
+    color: #535353;
+    transition: all 0.6s;
+}
+
+.grid-category:hover {
+    border: 0.5px solid #C22918;
+    border-radius: 2px;
+    color: #9A0E10;
+}
+
+.grid-name-input,
+.grid-count-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+    font-size: 8px;
+    color: #535353;
+    text-align: left;
+    padding: 2px;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s;
+}
+
+.grid-name-input:focus,
+.grid-count-input:focus {
+    outline: none;
+    border-bottom-color: #C22918;
+}
+
+.grid-count-input {
+    text-align: center;
+}
+
+.grid-category-select {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 8px;
+    color: #535353;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 2px;
+    transition: all 0.6s;
+}
+
+.grid-category-select:hover {
+    border: 0.5px solid #C22918;
+    color: #9A0E10;
+}
+
+.grid-category-select:focus {
+    outline: none;
+    border: 0.5px solid #C22918;
+    color: #9A0E10;
+}
+
+.btnModel {
+    display: flex;
+    justify-content: center;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 174px;
+    height: 57px;
+    padding: 11px 47px;
+    box-sizing: border-box;
+    background-color: transparent;
+    border: 1px solid rgba(88, 88, 88, 0.5);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: #9A0E10;
+    cursor: pointer;
+    transition: border-color 0.6s ease-in-out, color 0.6s ease-in-out, background-color 0.6s ease-in-out;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.button__text {
+    transition: opacity 0.6s ease-in-out;
+}
+
+.button:hover:not(:disabled) {
+    background-color: #C22918;
+    border-color: #C22918;
+    color: #FFFFFF;
+}
+
+.CheckInfo__close {
+    position: absolute;
+    width: 39px;
+    height: 39px;
+    right: 4px;
+    top: 4px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.CheckInfo__close::before,
+.CheckInfo__close::after {
+    content: "";
+    position: absolute;
+    right: 4px;
+    top: 18px;
+    width: 31px;
+    height: 1px;
+    background: #C22918;
+}
+
+.CheckInfo__close::before {
+    transform: rotate(45deg);
+}
+
+.CheckInfo__close::after {
+    transform: rotate(-45deg);
+}
+
+.error-message {
+    color: #C22918;
+    font-size: 12px;
+    text-align: center;
+    margin-bottom: 10px;
+    font-family: 'Inter', sans-serif;
+}
+

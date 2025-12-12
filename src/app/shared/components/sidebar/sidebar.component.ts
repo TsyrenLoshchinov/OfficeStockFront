@@ -1,0 +1,74 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
+import { UserRole } from '../../../core/models/user.model';
+
+interface MenuItem {
+  label: string;
+  route: string;
+  roles: UserRole[];
+  icon?: string;
+}
+
+@Component({
+  selector: 'app-sidebar',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  templateUrl: './sidebar.component.html',
+  styleUrls: ['./sidebar.component.css']
+})
+export class SidebarComponent implements OnInit {
+  isOpen = false;
+  currentRole: UserRole | null = null;
+
+  menuItems: MenuItem[] = [
+    { label: 'Главная', route: '/app/receipts', roles: ['hr-manager'] },
+    { label: 'Чеки', route: '/app/receipts', roles: ['hr-manager', 'admin'] },
+    { label: 'Склад', route: '/app/warehouse', roles: ['hr-manager', 'economist', 'admin'] },
+    { label: 'Аналитика', route: '/app/analytics', roles: ['economist', 'director', 'admin'] },
+    { label: 'Отчёты', route: '/app/reports', roles: ['director', 'admin'] },
+    { label: 'Уведомления', route: '/app/notifications', roles: ['hr-manager', 'economist', 'director', 'admin'] },
+    { label: 'Управление пользователями', route: '/app/admin/users', roles: ['admin'] }
+  ];
+
+  filteredMenuItems: MenuItem[] = [];
+
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.currentRole = this.authService.getRole();
+    this.filterMenuItems();
+  }
+
+  toggleSidebar(): void {
+    this.isOpen = !this.isOpen;
+  }
+
+  closeSidebar(): void {
+    this.isOpen = false;
+  }
+
+  logout(): void {
+    this.authService.logout();
+  }
+
+  private filterMenuItems(): void {
+    if (!this.currentRole) {
+      this.filteredMenuItems = [];
+      return;
+    }
+
+    this.filteredMenuItems = this.menuItems.filter(item =>
+      item.roles.includes(this.currentRole!)
+    );
+  }
+
+  isActiveRoute(route: string): boolean {
+    return this.router.url === route || this.router.url.startsWith(route + '/');
+  }
+}
+
