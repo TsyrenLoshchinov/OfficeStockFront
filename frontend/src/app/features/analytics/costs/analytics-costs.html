@@ -1,0 +1,13 @@
+<div class="card">
+  <div class="card-title">Структура затрат</div>
+  <div class="list">
+    <div class="item" *ngFor="let part of structure()">
+      <span>{{ part.category }}</span>
+      <div class="bar">
+        <div class="fill" [style.width.%]="part.percent"></div>
+      </div>
+      <span>{{ part.percent }}%</span>
+    </div>
+  </div>
+</div>
+

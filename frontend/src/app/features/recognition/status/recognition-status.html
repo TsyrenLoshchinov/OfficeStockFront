@@ -1,0 +1,18 @@
+<div class="card">
+  <div class="card-title">Статус распознавания</div>
+  <div class="table">
+    <div class="table-head">
+      <span>Чек</span>
+      <span>Прогресс</span>
+      <span>Статус</span>
+      <span>Обновлено</span>
+    </div>
+    <div class="table-row" *ngFor="let item of statuses()">
+      <span>{{ item.receiptId }}</span>
+      <span>{{ item.progress }}%</span>
+      <span class="state">{{ item.state }}</span>
+      <span>{{ item.updatedAt | date: 'short' }}</span>
+    </div>
+  </div>
+</div>
+

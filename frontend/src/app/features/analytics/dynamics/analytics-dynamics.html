@@ -1,0 +1,10 @@
+<div class="card">
+  <div class="card-title">Динамика расходов</div>
+  <div class="list">
+    <div class="item" *ngFor="let row of dynamics()">
+      <span>{{ row.period }}</span>
+      <span>{{ row.amount | number: '1.0-0' }} ₽</span>
+    </div>
+  </div>
+</div>
+

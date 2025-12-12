@@ -1,0 +1,16 @@
+<div class="card">
+  <div class="card-title">Остатки</div>
+  <div class="table">
+    <div class="table-head">
+      <span>Товар</span>
+      <span>Количество</span>
+      <span>Порог</span>
+    </div>
+    <div class="table-row" *ngFor="let item of stock()">
+      <span>{{ productName(item.productId) }}</span>
+      <span>{{ item.quantity }}</span>
+      <span [class.low]="item.quantity <= item.threshold">{{ item.threshold }}</span>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,26 @@
+.recognition {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tabs {
+  display: inline-flex;
+  gap: 8px;
+}
+
+.tabs a {
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #1f1f1f;
+  background: #ffffff;
+  border: 1px solid #e3e4e8;
+}
+
+.tabs a.active {
+  background: #c22918;
+  color: #ffffff;
+  border-color: #c22918;
+}
+

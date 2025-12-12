@@ -1,0 +1,20 @@
+<div class="card">
+  <div class="card-title">Заказы</div>
+  <div class="table">
+    <div class="table-head">
+      <span>ID</span>
+      <span>Инициатор</span>
+      <span>Статус</span>
+      <span>Сумма</span>
+      <span>Создан</span>
+    </div>
+    <a class="table-row" *ngFor="let order of orders()" [routerLink]="['/orders', order.id]">
+      <span>{{ order.id }}</span>
+      <span>{{ order.requester }}</span>
+      <span>{{ order.status }}</span>
+      <span>{{ order.total | number: '1.0-0' }} ₽</span>
+      <span>{{ order.createdAt | date: 'short' }}</span>
+    </a>
+  </div>
+</div>
+

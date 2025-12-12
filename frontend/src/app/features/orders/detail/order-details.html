@@ -1,0 +1,25 @@
+<div class="card" *ngIf="order() as current">
+  <div class="card-title">Заказ {{ current.id }}</div>
+  <div class="info">
+    <span>Инициатор: {{ current.requester }}</span>
+    <span>Статус: {{ current.status }}</span>
+    <span>Создан: {{ current.createdAt | date: 'short' }}</span>
+    <span>Сумма: {{ current.total | number: '1.0-0' }} ₽</span>
+  </div>
+
+  <div class="table">
+    <div class="table-head">
+      <span>Товар</span>
+      <span>Кол-во</span>
+      <span>Цена</span>
+    </div>
+    <div class="table-row" *ngFor="let item of items()">
+      <span>{{ item.name }}</span>
+      <span>{{ item.qty }}</span>
+      <span>{{ item.price | number: '1.0-0' }} ₽</span>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!order()">Заказ не найден</div>
+

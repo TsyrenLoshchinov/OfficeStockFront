@@ -1,0 +1,16 @@
+<div class="card">
+  <div class="card-title">Прогноз</div>
+  <div class="table">
+    <div class="table-head">
+      <span>Товар</span>
+      <span>Период</span>
+      <span>Нужен</span>
+    </div>
+    <div class="table-row" *ngFor="let item of forecast()">
+      <span>{{ productName(item.productId) }}</span>
+      <span>{{ item.period }}</span>
+      <span>{{ item.expectedNeed }}</span>
+    </div>
+  </div>
+</div>
+

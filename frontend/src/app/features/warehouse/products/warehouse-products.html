@@ -1,0 +1,16 @@
+<div class="card">
+  <div class="card-title">Товары</div>
+  <div class="table">
+    <div class="table-head">
+      <span>Название</span>
+      <span>Категория</span>
+      <span>Ед.</span>
+    </div>
+    <div class="table-row" *ngFor="let product of products()">
+      <span>{{ product.name }}</span>
+      <span>{{ categoryName(product.categoryId) }}</span>
+      <span>{{ product.unit }}</span>
+    </div>
+  </div>
+</div>
+

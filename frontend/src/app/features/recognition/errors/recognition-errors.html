@@ -1,0 +1,14 @@
+<div class="card">
+  <div class="card-title">Ошибки распознавания</div>
+  <div class="list">
+    <div class="item" *ngFor="let err of errors()">
+      <div class="message">{{ err.message }}</div>
+      <div class="meta">
+        <span>Чек: {{ err.receiptId }}</span>
+        <span>Код: {{ err.code || '—' }}</span>
+        <span>{{ err.occurredAt | date: 'short' }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+

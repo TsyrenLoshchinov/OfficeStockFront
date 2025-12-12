@@ -1,0 +1,60 @@
+<div class="app">
+  <div class="layout">
+    <div class="scene" aria-hidden="true">
+      <div class="background">
+        <div class="background__overlay"></div>
+        <img src="assets/icons/bgFigure.png" alt="" class="background__diagonal">
+      </div>
+    </div>
+
+    <header class="header">
+      <div class="headers__btn">
+        <img src="assets/icons/logoHeader.png" alt="Логотип" class="header__logo-image">
+      </div>
+
+      <div class="header__links">
+        <section class="language-switcher" aria-label="Выбор языка интерфейса">
+          <details class="language-switcher__details">
+            <summary class="language-switcher__current">
+              <span class="language-switcher__code">RU</span>
+              <svg class="language-switcher__icon" width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M1 1L6 5L11 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </summary>
+
+            <ul class="language-switcher__dropdown" role="list">
+              <li class="language-switcher__list-item">
+                <button class="language-switcher__option" type="button" data-lang="EN">
+                  <span class="language-switcher__code language-switcher__code--option">EN</span>
+                </button>
+              </li>
+            </ul>
+          </details>
+        </section>
+      </div>
+    </header>
+
+    <div class="authorization">
+      <div class="authorization__container">
+        <h1 class="authorization__title">Добро пожаловать</h1>
+        <div class="input-field">
+          <input type="text" class="input-field__input" id="login" placeholder=" " [(ngModel)]="login">
+          <label for="login" class="input-field__label">Логин</label>
+          <div class="input-field__line"></div>
+        </div>
+        <div class="input-field">
+          <input type="password" class="input-field__input" id="password" placeholder=" " [(ngModel)]="password">
+          <label for="password" class="input-field__label">Пароль</label>
+          <div class="input-field__line"></div>
+        </div>
+        <button class="button" type="button" (click)="signIn()">
+          <span class="button__text">Войти</span>
+          <svg class="button__icon" width="67" height="22" viewBox="0 0 67 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 11.8835H65M65 11.8835L45.8824 0.428955M65 11.8835L45.8824 21.429" stroke="white"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

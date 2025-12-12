@@ -1,10 +1,26 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { Layout } from './pages/layout/layout';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'receipts/add', pathMatch: 'full' },
-  { path: 'receipts', loadChildren: () => import('./features/receipts/receipts-module').then(m => m.ReceiptsModule) },
-  { path: '**', redirectTo: 'receipts/add' }
+  {
+    path: 'auth',
+    loadChildren: () => import('./features/auth/auth-module').then(m => m.AuthModule),
+  },
+  {
+    path: '',
+    component: Layout,
+    children: [
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: 'home', loadChildren: () => import('./features/main/main-module').then(m => m.MainModule) },
+      { path: 'receipts', loadChildren: () => import('./features/receipts/receipts-module').then(m => m.ReceiptsModule) },
+      { path: 'recognition', loadChildren: () => import('./features/recognition/recognition-module').then(m => m.RecognitionModule) },
+      { path: 'warehouse', loadChildren: () => import('./features/warehouse/warehouse-module').then(m => m.WarehouseModule) },
+      { path: 'analytics', loadChildren: () => import('./features/analytics/analytics-module').then(m => m.AnalyticsModule) },
+      { path: 'orders', loadChildren: () => import('./features/orders/orders-module').then(m => m.OrdersModule) },
+    ]
+  },
+  { path: '**', redirectTo: 'home' }
 ];
 
 @NgModule({

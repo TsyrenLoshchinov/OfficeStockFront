@@ -1,0 +1,23 @@
+<div class="card">
+  <div class="card-title">Создание заказа</div>
+  <form class="form">
+    <label>
+      Инициатор
+      <input type="text" [(ngModel)]="draft.requester" name="requester" />
+    </label>
+    <label>
+      Комментарий
+      <textarea [(ngModel)]="draft.comment" name="comment"></textarea>
+    </label>
+    <div class="items">
+      <div class="item" *ngFor="let item of draft.items; let i = index">
+        <input type="text" [(ngModel)]="item.name" name="name{{ i }}" />
+        <input type="number" [(ngModel)]="item.qty" name="qty{{ i }}" />
+        <input type="number" [(ngModel)]="item.price" name="price{{ i }}" />
+      </div>
+      <button type="button" class="ghost" (click)="addItem()">+ Добавить позицию</button>
+    </div>
+    <button type="button" class="primary">Сохранить черновик</button>
+  </form>
+</div>
+

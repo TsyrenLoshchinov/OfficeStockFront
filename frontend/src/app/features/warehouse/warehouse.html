@@ -1,0 +1,11 @@
+<div class="warehouse">
+  <div class="tabs">
+    <a routerLink="categories" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Категории</a>
+    <a routerLink="products" routerLinkActive="active">Товары</a>
+    <a routerLink="stock" routerLinkActive="active">Остатки</a>
+    <a routerLink="write-offs" routerLinkActive="active">Списания</a>
+    <a routerLink="forecast" routerLinkActive="active">Прогноз</a>
+  </div>
+  <router-outlet></router-outlet>
+</div>
+

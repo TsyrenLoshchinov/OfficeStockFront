@@ -1,0 +1,10 @@
+<div class="card">
+  <div class="card-title">Графики расходов</div>
+  <div class="chart">
+    <div class="bar" *ngFor="let point of points()" [style.height.%]="point.value / 1500">
+      <span class="label">{{ point.label }}</span>
+      <span class="value">{{ point.value | number: '1.0-0' }} ₽</span>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,18 @@
+<div class="card">
+  <div class="card-title">Списания</div>
+  <div class="table">
+    <div class="table-head">
+      <span>Товар</span>
+      <span>Кол-во</span>
+      <span>Причина</span>
+      <span>Дата</span>
+    </div>
+    <div class="table-row" *ngFor="let item of writeOffs()">
+      <span>{{ productName(item.productId) }}</span>
+      <span>{{ item.quantity }}</span>
+      <span>{{ item.reason }}</span>
+      <span>{{ item.date | date: 'shortDate' }}</span>
+    </div>
+  </div>
+</div>
+

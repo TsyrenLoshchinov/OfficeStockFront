@@ -1,0 +1,37 @@
+.card {
+  background: #ffffff;
+  border: 1px solid #e3e4e8;
+  border-radius: 12px;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.card-title {
+  font-weight: 600;
+}
+
+.list {
+  display: grid;
+  gap: 10px;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 1fr 3fr 60px;
+  gap: 8px;
+  align-items: center;
+}
+
+.bar {
+  background: #f0f0f4;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 12px;
+}
+
+.fill {
+  height: 100%;
+  background: linear-gradient(90deg, #c22918, #f3a699);
+}
+

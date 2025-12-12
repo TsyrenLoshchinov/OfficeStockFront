@@ -1,0 +1,27 @@
+.card {
+  background: #ffffff;
+  border: 1px solid #e3e4e8;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card-title {
+  font-weight: 600;
+}
+
+.items {
+  display: grid;
+  gap: 8px;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  padding: 8px;
+  border-radius: 8px;
+  background: #f9f9fb;
+}
+

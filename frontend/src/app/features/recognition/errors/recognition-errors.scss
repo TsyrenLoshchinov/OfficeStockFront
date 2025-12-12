@@ -1,0 +1,38 @@
+.card {
+  background: #ffffff;
+  border: 1px solid #e3e4e8;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card-title {
+  font-weight: 600;
+}
+
+.list {
+  display: grid;
+  gap: 8px;
+}
+
+.item {
+  padding: 10px;
+  border-radius: 8px;
+  background: #fef2f2;
+  border: 1px solid #f5c2c2;
+}
+
+.message {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.meta {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: #5a5c64;
+}
+

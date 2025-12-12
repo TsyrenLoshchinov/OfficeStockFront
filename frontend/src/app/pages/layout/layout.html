@@ -1,0 +1,93 @@
+<div class="app">
+    <div class="layout">
+        <div class="scene" aria-hidden="true">
+            <div class="background">
+                <div class="background__overlay"></div>
+                <img src="assets/icons/bgFigure.png" alt="" class="background__diagonal">
+            </div>
+        </div>
+
+        <header class="header">
+            <div class="headers__btn">
+                <button class="header__menu-button" type="button" aria-label="Открыть меню" (click)="toggleSidebar()">
+                    <img src="assets/icons/burgerDefault.svg" alt="" class="header__menu-icon">
+                </button>
+                
+                <a routerLink="/home" class="header__logo">
+                    <img src="assets/icons/logoHeader.png" alt="Логотип" class="header__logo-image">
+                </a>
+            </div>
+            
+            <div class="header__links">
+                <a routerLink="/notifications" class="header__notification-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#535353" stroke-width="1" stroke-linecap="round" stroke-linejoin="miter">
+                        <path d="M19,14l2,4H3l2-4V9.29A7.2,7.2,0,0,1,11.78,2,7,7,0,0,1,19,9Z"></path>
+                        <path d="M16,18a4,4,0,1,1-8,0"></path>
+                    </svg>
+                    <span class="header__notification-badge" *ngIf="notificationCount() > 0">{{ notificationCount() }}</span>
+                </a>
+
+                <a routerLink="/profile" class="header__profile" type="button">
+                    <span class="header__text-button-label">Профиль</span>
+                </a>
+            </div>
+        </header>
+
+        <aside class="sidebar" [attr.data-open]="sidebarOpen()">
+            <div class="left-bar">
+                <button class="menu-button" [class.menu-button--default]="!sidebarOpen()" [class.menu-button--active]="sidebarOpen()" type="button" [attr.aria-pressed]="sidebarOpen()" (click)="toggleSidebar()">
+                    <span class="menu-button__icon" aria-hidden="true">
+                        <img src="assets/icons/closeMenu.svg" alt="">
+                    </span>
+                    <span class="menu-button__label">МЕНЮ</span>
+                </button>
+
+                <div class="sidebar__logo-collapsed" aria-hidden="true">
+                    <img src="assets/icons/logoMenu.png" alt="" width="34" height="45">
+                </div>
+
+                <a class="exitIcon" routerLink="/auth" aria-hidden="true">
+                    <svg width="40" height="39" viewBox="0 0 40 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14.1936 26.1087V37.846H38.7353V0.5H14.1936V12.2373" stroke="#DBDCE4"/>
+                        <path d="M14.1936 26.1087V37.846H38.7353V0.5H14.1936V12.2373" stroke="black" stroke-opacity="0.2"/>
+                        <path d="M26.0687 18.8333H0.735352M0.735352 18.8333L8.12424 26.2222M0.735352 18.8333L8.12424 12.5" stroke="#DBDCE4"/>
+                        <path d="M26.0687 18.8333H0.735352M0.735352 18.8333L8.12424 26.2222M0.735352 18.8333L8.12424 12.5" stroke="black" stroke-opacity="0.2"/>
+                    </svg>
+                </a>
+            </div>
+
+            <div class="sidebar__panel" id="sidebar-panel" [attr.aria-hidden]="!sidebarOpen()">
+                <div class="sidebar__logo">
+                    <span>Навигация</span>
+                </div>
+
+                <nav class="sidebar__nav" aria-label="Главное меню">
+                    <a routerLink="/home" routerLinkActive="sidebar__nav-item--active" class="sidebar__nav-item" type="button">
+                        <span class="sidebar__nav-title">Главная</span>
+                    </a>
+                    <a routerLink="/profile" routerLinkActive="sidebar__nav-item--active" class="sidebar__nav-item" type="button">
+                        <span class="sidebar__nav-title">Профиль</span>
+                    </a>
+                    <a routerLink="/notifications" routerLinkActive="sidebar__nav-item--active" class="sidebar__nav-item" type="button">
+                        <span class="sidebar__nav-title">Уведомления</span>
+                    </a>
+                    <a routerLink="/checks" routerLinkActive="sidebar__nav-item--active" class="sidebar__nav-item" type="button">
+                        <span class="sidebar__nav-title">Чеки</span>
+                    </a>
+                    <a routerLink="/warehouse" routerLinkActive="sidebar__nav-item--active" class="sidebar__nav-item" type="button">
+                        <span class="sidebar__nav-title">Склад</span>
+                    </a>
+                    <a routerLink="/analytics" routerLinkActive="sidebar__nav-item--active" class="sidebar__nav-item" type="button">
+                        <span class="sidebar__nav-title">Отчёты</span>
+                    </a>
+                </nav>
+            </div> 
+        </aside>
+
+        <main class="main-content">
+            <router-outlet></router-outlet>
+        </main>
+
+        <div class="app__overlay" [attr.data-visible]="sidebarOpen()" (click)="closeSidebar()"></div>
+    </div>
+</div>

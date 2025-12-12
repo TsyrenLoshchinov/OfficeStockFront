@@ -1,0 +1,11 @@
+<div class="card" *ngFor="let res of results()">
+  <div class="card-title">Чек {{ res.receiptId }} — {{ res.total | number: '1.0-0' }} ₽</div>
+  <div class="items">
+    <div class="item" *ngFor="let item of res.items">
+      <span>{{ item.name }}</span>
+      <span>{{ item.qty }} шт</span>
+      <span>{{ item.price | number: '1.0-0' }} ₽</span>
+    </div>
+  </div>
+</div>
+

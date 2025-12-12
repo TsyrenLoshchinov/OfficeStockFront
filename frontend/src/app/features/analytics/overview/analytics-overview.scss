@@ -1,0 +1,42 @@
+.card {
+  background: #ffffff;
+  border: 1px solid #e3e4e8;
+  border-radius: 12px;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.card-title {
+  font-weight: 600;
+}
+
+.chart {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  min-height: 180px;
+}
+
+.bar {
+  flex: 1;
+  background: linear-gradient(180deg, #c22918, #f5e3df);
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 8px;
+  gap: 6px;
+  color: #1f1f1f;
+}
+
+.label {
+  font-weight: 600;
+}
+
+.value {
+  font-size: 12px;
+  color: #5a5c64;
+}
+

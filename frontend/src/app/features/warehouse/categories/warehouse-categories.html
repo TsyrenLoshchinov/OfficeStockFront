@@ -1,0 +1,10 @@
+<div class="card">
+  <div class="card-title">Категории</div>
+  <div class="list">
+    <div class="item" *ngFor="let category of categories()">
+      <span>{{ category.name }}</span>
+      <span class="muted">{{ category.itemsCount }} товаров</span>
+    </div>
+  </div>
+</div>
+
