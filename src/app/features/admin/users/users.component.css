@@ -1,0 +1,459 @@
+.admin-page {
+  position: relative;
+  padding: 88px 115px 40px;
+  min-height: 100vh;
+}
+
+.admin-page__title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 20px;
+  color: #9A0E10;
+  margin-bottom: 97px;
+  text-transform: capitalize;
+}
+
+.admin-page__controls {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 40px;
+}
+
+.dropdown-menu {
+  position: relative;
+  width: 328px;
+  height: 63px;
+  display: flex;
+  align-items: center;
+  padding: 10px 10px 0;
+  gap: 16px;
+  background: transparent;
+}
+
+.dropdown-menu__icon {
+  width: 38px;
+  height: 30px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.dropdown-menu__line {
+  position: absolute;
+  left: 5px;
+  height: 1px;
+  background: #535353;
+  border-radius: 5px;
+}
+
+.dropdown-menu__line:first-child {
+  width: 30px;
+  top: 6px;
+}
+
+.dropdown-menu__line--short {
+  width: 20px;
+  top: 13.5px;
+}
+
+.dropdown-menu__line--shortest {
+  width: 10px;
+  top: 21px;
+}
+
+.dropdown-menu__select {
+  flex: 1;
+  height: 30px;
+  border: none;
+  background: transparent;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 23px;
+  line-height: 20px;
+  color: #535353;
+  outline: none;
+  cursor: pointer;
+}
+
+.add-button {
+  width: 301px;
+  height: 41px;
+  background: transparent;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 20px;
+  color: #535353;
+  text-align: right;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.add-button:hover {
+  color: #C22918;
+}
+
+.employees-table {
+  width: 1122px;
+}
+
+.employees-table__header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+}
+
+.employees-table__cell {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 20px;
+  text-transform: capitalize;
+  color: #535353;
+}
+
+.employees-table__cell--id {
+  width: 68px;
+}
+
+.employees-table__cell--name {
+  width: 382px;
+}
+
+.employees-table__cell--email {
+  width: 333px;
+  text-align: center;
+}
+
+.employees-table__cell--role {
+  width: 160px;
+  text-align: center;
+}
+
+.employees-table__cell--actions {
+  width: 88px;
+}
+
+.employees-table__body {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.employee-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 18px;
+  height: 65px;
+}
+
+.employee-row__cell {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 200;
+  font-size: 24px;
+  line-height: 20px;
+  text-transform: capitalize;
+  color: #535353;
+}
+
+.employee-row__cell--id {
+  width: 68px;
+}
+
+.employee-row__cell--name {
+  width: 382px;
+  font-weight: 300;
+  color: #C22918;
+}
+
+.employee-row__cell--email {
+  width: 333px;
+  text-align: center;
+}
+
+.employee-row__cell--role {
+  width: 160px;
+  text-align: center;
+}
+
+.employee-row__cell--actions {
+  width: 88px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.action-button {
+  width: 88px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 20px;
+  color: #535353;
+  text-align: right;
+  text-transform: capitalize;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.action-button:hover {
+  color: #C22918;
+}
+
+/* Модальные окна */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  position: relative;
+  background: #FFFFFF;
+  border: 0.5px solid #C22918;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 40px 26px 26px;
+  max-width: 524px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal--delete {
+  width: 448px;
+  max-width: 448px;
+  height: 290px;
+  padding: 8px 26px 26px;
+}
+
+.modal--error {
+  width: 448px;
+  max-width: 448px;
+  height: auto;
+  padding: 8px 26px 26px;
+}
+
+.modal__close {
+  position: absolute;
+  width: 39px;
+  height: 39px;
+  right: 3px;
+  top: 3px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal__close-line {
+  position: absolute;
+  width: 31px;
+  height: 1px;
+  background: #C22918;
+}
+
+.modal__close-line:first-child {
+  transform: rotate(45deg);
+}
+
+.modal__close-line:last-child {
+  transform: rotate(-45deg);
+}
+
+.modal__title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 200;
+  font-size: 24px;
+  line-height: 50px;
+  color: #C22918;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.modal--delete .modal__title {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal__message {
+  font-family: 'Inter', sans-serif;
+  font-weight: 200;
+  font-size: 20px;
+  line-height: 28px;
+  color: #535353;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.modal__message--highlight {
+  color: #C22918;
+  display: block;
+  margin-top: 5px;
+}
+
+.modal__button {
+  width: 174px;
+  height: 57px;
+  margin: 0 auto;
+  padding: 11px 47px;
+  background: transparent;
+  border: 1px solid rgba(88, 88, 88, 0.5);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 50px;
+  color: #9A0E10;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal__button:hover:not(:disabled) {
+  border-color: #C22918;
+  color: #C22918;
+  background: rgba(194, 41, 24, 0.05);
+}
+
+.modal__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Поля ввода */
+.input-field {
+  position: relative;
+  width: 100%;
+  height: 47px;
+  margin-bottom: 15px;
+}
+
+.input-field--select {
+  height: 47px;
+}
+
+.input-field__input,
+.input-field__select {
+  width: 100%;
+  height: 100%;
+  padding: 15px 7px 0;
+  box-sizing: border-box;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 200;
+  font-size: 16px;
+  line-height: 50px;
+  letter-spacing: -0.04em;
+  color: #000000;
+}
+
+.input-field__select {
+  padding-top: 0;
+  padding-bottom: 0;
+  cursor: pointer;
+}
+
+.input-field__label {
+  position: absolute;
+  left: 7px;
+  bottom: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 200;
+  font-size: 16px;
+  line-height: 50px;
+  letter-spacing: -0.04em;
+  color: #989898;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.input-field__input:focus + .input-field__label,
+.input-field__input:not(:placeholder-shown) + .input-field__label,
+.input-field__select:focus + .input-field__label,
+.input-field__select:not([value=""]) + .input-field__label {
+  bottom: 32px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.input-field__line {
+  position: absolute;
+  left: 7px;
+  bottom: 0;
+  width: calc(100% - 14px);
+  height: 0.5px;
+  background-color: rgba(88, 88, 88, 0.5);
+  transition: background-color 0.3s ease;
+}
+
+.input-field:hover .input-field__line,
+.input-field__input:focus ~ .input-field__line,
+.input-field__select:focus ~ .input-field__line {
+  background-color: #C22918;
+}
+
+/* Чекбокс */
+.checkbox-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  margin-left: 28px;
+}
+
+.checkbox-field__input {
+  width: 19px;
+  height: 19px;
+  border: 0.5px solid #C22918;
+  appearance: none;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.checkbox-field__input:checked {
+  background: #C22918;
+}
+
+.checkbox-field__input:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 14px;
+}
+
+.checkbox-field__label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 200;
+  font-size: 15px;
+  line-height: 50px;
+  letter-spacing: -0.04em;
+  color: #535353;
+  cursor: pointer;
+}
+

@@ -166,7 +166,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    min-height: calc(100vh - 188px);
     z-index: 2;
 }
 
@@ -174,8 +175,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
     gap: 30px;
+}
+
+.authorization__container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
 }
 
 .authorization__title {
@@ -282,6 +290,8 @@
     cursor: pointer;
     transition: border-color 0.6s ease-in-out, color 0.6s ease-in-out, background-color 0.6s ease-in-out;
     position: relative;
+    margin-top: 0;
+    align-self: center;
 }
 
 .button:disabled {

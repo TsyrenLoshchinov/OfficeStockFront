@@ -1,0 +1,19 @@
+<div class="main__container">
+  <h1 class="main__title">Профиль</h1>
+
+  <div class="fio">
+    <p>{{ getFullName() }}</p>
+  </div>
+
+  <div class="profile-info">
+    <div class="column first">
+      <p class="job title">Должность:</p>
+      <p class="mail title">Электронная почта:</p>
+    </div>
+
+    <div class="column second">
+      <p class="title">{{ getPosition() }}</p>
+      <p class="mail">{{ getEmail() }}</p>
+    </div>
+  </div>
+</div>

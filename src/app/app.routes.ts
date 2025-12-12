@@ -55,6 +55,14 @@ export const routes: Routes = [
         data: { roles: ['hr-manager', 'economist', 'director', 'admin'] }
       },
       
+      // Profile (Все роли)
+      {
+        path: 'profile',
+        loadComponent: () => import('./features/profile/profile.component').then(m => m.ProfileComponent),
+        canActivate: [roleGuard],
+        data: { roles: ['hr-manager', 'economist', 'director', 'admin'] }
+      },
+      
       // Admin (Только админ)
       {
         path: 'admin/users',

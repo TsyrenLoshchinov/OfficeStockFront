@@ -65,14 +65,14 @@
                     <div *ngIf="errorMessage" class="error-message">
                         {{ errorMessage }}
                     </div>
-                    
-                    <button type="submit" class="button" [disabled]="loginForm.invalid || isLoading">
-                        <span class="button__text">{{ isLoading ? 'Вход...' : 'Войти' }}</span>
-                        <svg class="button__icon" width="67" height="22" viewBox="0 0 67 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M0 11.8835H65M65 11.8835L45.8824 0.428955M65 11.8835L45.8824 21.429" stroke="white"/>
-                        </svg>
-                    </button>
                 </form>
+
+                <button type="button" class="button" [disabled]="loginForm.invalid || isLoading" (click)="onSubmit()">
+                    <span class="button__text">{{ isLoading ? 'Вход...' : 'Войти' }}</span>
+                    <svg class="button__icon" width="67" height="22" viewBox="0 0 67 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 11.8835H65M65 11.8835L45.8824 0.428955M65 11.8835L45.8824 21.429" stroke="white"/>
+                    </svg>
+                </button>
             </div>
         </div>
     </div>

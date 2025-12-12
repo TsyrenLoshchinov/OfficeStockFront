@@ -6,10 +6,13 @@
       [class.menu-button--default]="!isOpen"
       type="button" 
       (click)="toggleSidebar()"
-      aria-pressed="false" 
+      [attr.aria-pressed]="isOpen" 
       aria-controls="sidebar-panel">
-      <span class="menu-button__icon" aria-hidden="true">
-        <img src="assets/icons/closeMenu.svg" alt="">
+      <span class="menu-button__icon menu-button__icon--close" aria-hidden="true">
+        <img src="assets/icons/closeMenu.svg" alt="Закрыть меню">
+      </span>
+      <span class="menu-button__icon menu-button__icon--burger" aria-hidden="true">
+        <img src="assets/icons/burgerDefault.svg" alt="Открыть меню">
       </span>
       <span class="menu-button__label">МЕНЮ</span>
     </button>

@@ -32,6 +32,8 @@
 }
 
 .menu-button {
+    box-sizing: border-box;
+    position: relative;
     width: 91px;
     height: 211px;
     border: none;
@@ -46,7 +48,6 @@
     color: inherit;
     letter-spacing: 0.08em;
     transition: border-color 0.3s ease, transform 0.3s ease, color 0.3s ease;
-    position: relative;
 }
 
 .menu-button--active {
@@ -55,7 +56,7 @@
 }
 
 .menu-button__icon {
-    display: none;
+    position: absolute;
     width: 39px;
     height: 39px;
 }
@@ -66,7 +67,25 @@
     object-fit: contain;
 }
 
-.menu-button--active .menu-button__icon {
+/* Бургер-меню показывается когда сайдбар закрыт */
+.menu-button__icon--burger {
+    display: block;
+    left: 26px;
+    top: 26px;
+}
+
+.menu-button--active .menu-button__icon--burger {
+    display: none;
+}
+
+/* Иконка закрытия показывается когда сайдбар открыт */
+.menu-button__icon--close {
+    display: none;
+    left: 26px;
+    top: 26px;
+}
+
+.menu-button--active .menu-button__icon--close {
     display: block;
 }
 
@@ -75,13 +94,20 @@
 }
 
 .menu-button__label {
+    position: absolute;
+    width: 52px;
+    height: 23px;
+    bottom: 30px;
     writing-mode: vertical-lr;
     transform: rotate(180deg);
     font-family: 'Inter', sans-serif;
     font-weight: 400;
     font-size: 16px;
+    line-height: 22px;
     text-transform: uppercase;
     color: #C22918;
+    display: flex;
+    align-items: center;
 }
 
 .menu-button--default:hover,

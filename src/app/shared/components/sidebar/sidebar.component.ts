@@ -24,12 +24,12 @@ export class SidebarComponent implements OnInit {
 
   menuItems: MenuItem[] = [
     { label: 'Главная', route: '/app/receipts', roles: ['hr-manager'] },
+    { label: 'Профиль', route: '/app/profile', roles: ['hr-manager', 'economist', 'director', 'admin'] },
+    { label: 'Уведомления', route: '/app/notifications', roles: ['hr-manager', 'economist', 'director', 'admin'] },
     { label: 'Чеки', route: '/app/receipts', roles: ['hr-manager', 'admin'] },
     { label: 'Склад', route: '/app/warehouse', roles: ['hr-manager', 'economist', 'admin'] },
-    { label: 'Аналитика', route: '/app/analytics', roles: ['economist', 'director', 'admin'] },
     { label: 'Отчёты', route: '/app/reports', roles: ['director', 'admin'] },
-    { label: 'Уведомления', route: '/app/notifications', roles: ['hr-manager', 'economist', 'director', 'admin'] },
-    { label: 'Управление пользователями', route: '/app/admin/users', roles: ['admin'] }
+    { label: 'Администрирование', route: '/app/admin/users', roles: ['admin'] }
   ];
 
   filteredMenuItems: MenuItem[] = [];

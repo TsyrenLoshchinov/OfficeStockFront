@@ -1,0 +1,207 @@
+<div class="admin-page">
+  <h1 class="admin-page__title">Администрирование</h1>
+
+  <div class="admin-page__controls">
+    <div class="dropdown-menu">
+      <div class="dropdown-menu__icon">
+        <div class="dropdown-menu__line"></div>
+        <div class="dropdown-menu__line dropdown-menu__line--short"></div>
+        <div class="dropdown-menu__line dropdown-menu__line--shortest"></div>
+      </div>
+      <select class="dropdown-menu__select" [value]="filterRole()" (change)="onFilterChange($any($event.target).value)">
+        <option value="all">Все сотрудники</option>
+        <option value="hr-manager">HR-менеджер</option>
+        <option value="economist">Экономист</option>
+        <option value="director">Директор</option>
+        <option value="admin">Администратор</option>
+      </select>
+    </div>
+
+    <button class="add-button" type="button" (click)="openAddModal()">
+      Добавить сотрудника
+    </button>
+  </div>
+
+  <div class="employees-table">
+    <div class="employees-table__header">
+      <div class="employees-table__cell employees-table__cell--id">Id</div>
+      <div class="employees-table__cell employees-table__cell--name">ФИО</div>
+      <div class="employees-table__cell employees-table__cell--email">Почта</div>
+      <div class="employees-table__cell employees-table__cell--role">Роль</div>
+      <div class="employees-table__cell employees-table__cell--actions"></div>
+    </div>
+
+    <div class="employees-table__body">
+      <div class="employee-row" *ngFor="let employee of employees()">
+        <div class="employee-row__cell employee-row__cell--id">{{ employee.id }}</div>
+        <div class="employee-row__cell employee-row__cell--name">{{ getFullName(employee) }}</div>
+        <div class="employee-row__cell employee-row__cell--email">{{ employee.email }}</div>
+        <div class="employee-row__cell employee-row__cell--role">{{ getRoleLabel(employee.role) }}</div>
+        <div class="employee-row__cell employee-row__cell--actions">
+          <button class="action-button" type="button" (click)="openEditModal(employee)">Изменить</button>
+          <button class="action-button" type="button" (click)="openDeleteModal(employee)">Удалить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Модальное окно добавления -->
+<div class="modal-overlay" *ngIf="showAddModal()" (click)="closeAddModal()">
+  <div class="modal modal--add" (click)="$event.stopPropagation()">
+    <button class="modal__close" type="button" (click)="closeAddModal()">
+      <span class="modal__close-line"></span>
+      <span class="modal__close-line"></span>
+    </button>
+    <h2 class="modal__title">Добавление сотрудника</h2>
+    
+    <form [formGroup]="addForm" (ngSubmit)="onAddSubmit()" class="modal__form">
+      <div class="input-field">
+        <input type="text" formControlName="lastName" placeholder=" " class="input-field__input">
+        <label class="input-field__label">Фамилия*</label>
+        <div class="input-field__line"></div>
+      </div>
+
+      <div class="input-field">
+        <input type="text" formControlName="firstName" placeholder=" " class="input-field__input">
+        <label class="input-field__label">Имя*</label>
+        <div class="input-field__line"></div>
+      </div>
+
+      <div class="input-field">
+        <input type="text" formControlName="middleName" placeholder=" " class="input-field__input">
+        <label class="input-field__label">Отчество</label>
+        <div class="input-field__line"></div>
+      </div>
+
+      <div class="input-field">
+        <input type="email" formControlName="email" placeholder=" " class="input-field__input">
+        <label class="input-field__label">Электронная почта*</label>
+        <div class="input-field__line"></div>
+      </div>
+
+      <div class="input-field input-field--select">
+        <select formControlName="role" class="input-field__select">
+          <option value="">Выберите роль</option>
+          <option value="hr-manager">HR-менеджер</option>
+          <option value="economist">Экономист</option>
+          <option value="director">Директор</option>
+          <option value="admin">Администратор</option>
+        </select>
+        <label class="input-field__label">Роль*</label>
+        <div class="input-field__line"></div>
+      </div>
+
+      <div class="input-field">
+        <input type="password" formControlName="password" placeholder=" " class="input-field__input">
+        <label class="input-field__label">Пароль</label>
+        <div class="input-field__line"></div>
+      </div>
+
+      <div class="checkbox-field">
+        <input type="checkbox" formControlName="generatePassword" id="generate-password" class="checkbox-field__input">
+        <label for="generate-password" class="checkbox-field__label">Сгенерировать пароль</label>
+      </div>
+
+      <button type="submit" class="modal__button" [disabled]="addForm.invalid">Добавить</button>
+    </form>
+  </div>
+</div>
+
+<!-- Модальное окно редактирования -->
+<div class="modal-overlay" *ngIf="showEditModal()" (click)="closeEditModal()">
+  <div class="modal modal--edit" (click)="$event.stopPropagation()">
+    <button class="modal__close" type="button" (click)="closeEditModal()">
+      <span class="modal__close-line"></span>
+      <span class="modal__close-line"></span>
+    </button>
+    <h2 class="modal__title">Редактировать информацию</h2>
+    
+    <form [formGroup]="editForm" (ngSubmit)="onEditSubmit()" class="modal__form">
+      <div class="input-field">
+        <input type="text" formControlName="lastName" placeholder=" " class="input-field__input">
+        <label class="input-field__label">Фамилия*</label>
+        <div class="input-field__line"></div>
+      </div>
+
+      <div class="input-field">
+        <input type="text" formControlName="firstName" placeholder=" " class="input-field__input">
+        <label class="input-field__label">Имя*</label>
+        <div class="input-field__line"></div>
+      </div>
+
+      <div class="input-field">
+        <input type="text" formControlName="middleName" placeholder=" " class="input-field__input">
+        <label class="input-field__label">Отчество</label>
+        <div class="input-field__line"></div>
+      </div>
+
+      <div class="input-field">
+        <input type="email" formControlName="email" placeholder=" " class="input-field__input">
+        <label class="input-field__label">Электронная почта*</label>
+        <div class="input-field__line"></div>
+      </div>
+
+      <div class="input-field input-field--select">
+        <select formControlName="role" class="input-field__select">
+          <option value="hr-manager">HR-менеджер</option>
+          <option value="economist">Экономист</option>
+          <option value="director">Директор</option>
+          <option value="admin">Администратор</option>
+        </select>
+        <label class="input-field__label">Роль*</label>
+        <div class="input-field__line"></div>
+      </div>
+
+      <div class="input-field">
+        <input type="password" formControlName="password" placeholder=" " class="input-field__input">
+        <label class="input-field__label">Пароль</label>
+        <div class="input-field__line"></div>
+      </div>
+
+      <div class="checkbox-field">
+        <input type="checkbox" formControlName="generatePassword" id="generate-password-edit" class="checkbox-field__input">
+        <label for="generate-password-edit" class="checkbox-field__label">Сгенерировать новый пароль</label>
+      </div>
+
+      <button type="submit" class="modal__button">Сохранить</button>
+    </form>
+  </div>
+</div>
+
+<!-- Модальное окно удаления -->
+<div class="modal-overlay" *ngIf="showDeleteModal()" (click)="closeDeleteModal()">
+  <div class="modal modal--delete" (click)="$event.stopPropagation()">
+    <button class="modal__close" type="button" (click)="closeDeleteModal()">
+      <span class="modal__close-line"></span>
+      <span class="modal__close-line"></span>
+    </button>
+    <h2 class="modal__title">Удаление сотрудника</h2>
+    
+    <p class="modal__message" *ngIf="selectedEmployee">
+      Вы уверены, что желаете удалить сотрудника<br>
+      <span class="modal__message--highlight">id{{ selectedEmployee.id }} {{ getFullName(selectedEmployee) }}</span>
+    </p>
+
+    <button type="button" class="modal__button" (click)="onDeleteConfirm()">Подтвердить</button>
+  </div>
+</div>
+
+<!-- Модальное окно ошибки -->
+<div class="modal-overlay" *ngIf="showErrorModal()" (click)="closeErrorModal()">
+  <div class="modal modal--error" (click)="$event.stopPropagation()">
+    <button class="modal__close" type="button" (click)="closeErrorModal()">
+      <span class="modal__close-line"></span>
+      <span class="modal__close-line"></span>
+    </button>
+    <h2 class="modal__title">Ошибка</h2>
+    
+    <p class="modal__message">
+      Пользователь с почтой<br>
+      <span class="modal__message--highlight">{{ errorMessage() }}</span>
+    </p>
+
+    <button type="button" class="modal__button" (click)="closeErrorModal()">Ок</button>
+  </div>
+</div>
+
