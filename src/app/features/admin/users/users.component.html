@@ -2,20 +2,16 @@
   <h1 class="admin-page__title">Администрирование</h1>
 
   <div class="admin-page__controls">
-    <div class="dropdown-menu">
-      <div class="dropdown-menu__icon">
-        <div class="dropdown-menu__line"></div>
-        <div class="dropdown-menu__line dropdown-menu__line--short"></div>
-        <div class="dropdown-menu__line dropdown-menu__line--shortest"></div>
-      </div>
-      <select class="dropdown-menu__select" [value]="filterRole()" (change)="onFilterChange($any($event.target).value)">
-        <option value="all">Все сотрудники</option>
-        <option value="hr-manager">HR-менеджер</option>
-        <option value="economist">Экономист</option>
-        <option value="director">Директор</option>
-        <option value="admin">Администратор</option>
-      </select>
-    </div>
+    <app-custom-dropdown
+      [options]="filterOptions"
+      [selectedValue]="filterRole()"
+      [width]="'328px'"
+      [height]="'63px'"
+      [menuLeft]="'73px'"
+      [menuTop]="'73px'"
+      [menuWidth]="'255px'"
+      (valueChange)="onFilterChange($event)">
+    </app-custom-dropdown>
 
     <button class="add-button" type="button" (click)="openAddModal()">
       Добавить сотрудника

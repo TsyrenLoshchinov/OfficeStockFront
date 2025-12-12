@@ -3,29 +3,11 @@
     <h1 class="main__title">Чеки</h1>
 
     <div class="actions">
-      <div class="dropdown">
-        <select
-          class="dropdown__select"
-          aria-label="Фильтр сообщений"
-          (change)="onSortChange($any($event.target).value)"
-        >
-          <option value="newest" [selected]="sortOrder() === 'newest'">Сначала новые</option>
-          <option value="oldest" [selected]="sortOrder() === 'oldest'">Сначала старые</option>
-        </select>
-        <div class="dropdown__custom-ui" aria-hidden="true">
-          <div class="dropdown__icon">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-          <div class="dropdown__label">{{ sortOrder() === 'newest' ? 'Сначала новые' : 'Сначала старые' }}</div>
-          <div class="dropdown__arrow"></div>
-        </div>
-        <div class="dropdown__menu">
-          <div class="dropdown__item" data-value="newest" (click)="onSortChange('newest')">Сначала новые</div>
-          <div class="dropdown__item" data-value="oldest" (click)="onSortChange('oldest')">Сначала старые</div>
-        </div>
-      </div>
+      <app-custom-dropdown
+        [options]="sortOptions"
+        [selectedValue]="sortOrder()"
+        (valueChange)="onSortChange($event)">
+      </app-custom-dropdown>
       <button class="clear-all" type="button" (click)="clearAll()">Очистить всё</button>
     </div>
 

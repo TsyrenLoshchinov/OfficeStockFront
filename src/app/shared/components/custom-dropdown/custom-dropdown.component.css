@@ -1,0 +1,135 @@
+.custom-dropdown {
+  position: relative;
+}
+
+.custom-dropdown__trigger {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.custom-dropdown__icon {
+  position: relative;
+  width: 38px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.custom-dropdown__icon span {
+  position: absolute;
+  left: 5px;
+  height: 1px;
+  background: #535353;
+  border-radius: 5px;
+  transition: background 0.2s;
+}
+
+.custom-dropdown__icon span:nth-child(1) {
+  width: 30px;
+  top: 6px;
+}
+
+.custom-dropdown__icon span:nth-child(2) {
+  width: 20px;
+  top: 13.5px;
+}
+
+.custom-dropdown__icon span:nth-child(3) {
+  width: 10px;
+  top: 21px;
+}
+
+.custom-dropdown__trigger:hover .custom-dropdown__icon span,
+.custom-dropdown--open .custom-dropdown__icon span {
+  background: #C22918;
+}
+
+.custom-dropdown__label {
+  flex-grow: 1;
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 20px;
+  color: #535353;
+  padding: 5px 11px;
+  transition: color 0.2s;
+}
+
+.custom-dropdown__trigger:hover .custom-dropdown__label,
+.custom-dropdown--open .custom-dropdown__label {
+  color: #C22918;
+}
+
+.custom-dropdown__arrow {
+  width: 12px;
+  height: 12px;
+  margin-top: 9px;
+  margin-right: 11px;
+  border: solid #535353;
+  border-width: 0 1px 1px 0;
+  transform: rotate(45deg);
+  transition: all 0.3s;
+}
+
+.custom-dropdown__trigger:hover .custom-dropdown__arrow,
+.custom-dropdown--open .custom-dropdown__arrow {
+  border-color: #C22918;
+}
+
+.custom-dropdown__arrow--open {
+  transform: rotate(-135deg);
+}
+
+.custom-dropdown__menu {
+  position: absolute;
+  background: #FFFFFF;
+  border-radius: 5px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  z-index: 10;
+  animation: dropdownFadeIn 0.25s ease;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.custom-dropdown__item {
+  height: 40px;
+  padding: 10px 11px;
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 20px;
+  color: #535353;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.custom-dropdown__item:first-child {
+  border-radius: 5px 5px 0 0;
+}
+
+.custom-dropdown__item:last-child {
+  border-radius: 0 0 5px 5px;
+}
+
+.custom-dropdown__item:hover {
+  background: #DD8D76;
+  color: #FFFFFF;
+}
+
+.custom-dropdown__item--selected {
+  background: #DD8D76;
+  color: #FFFFFF;
+}
+

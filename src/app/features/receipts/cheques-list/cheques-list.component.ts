@@ -4,11 +4,12 @@ import { ChequesService } from '../services/cheques.service';
 import { Cheque } from '../../../core/models/cheque.model';
 import { ReceiptModalComponent } from '../../../shared/components/receipt-modal/receipt-modal.component';
 import { Receipt } from '../../../core/models/receipt.model';
+import { CustomDropdownComponent, DropdownOption } from '../../../shared/components/custom-dropdown/custom-dropdown.component';
 
 @Component({
   selector: 'app-cheques-list',
   standalone: true,
-  imports: [CommonModule, ReceiptModalComponent],
+  imports: [CommonModule, ReceiptModalComponent, CustomDropdownComponent],
   templateUrl: './cheques-list.component.html',
   styleUrls: ['./cheques-list.component.css']
 })
@@ -18,6 +19,11 @@ export class ChequesListComponent implements OnInit {
   isLoading = signal<boolean>(false);
   selectedCheque: Receipt | null = null;
   showModal = signal<boolean>(false);
+
+  sortOptions: DropdownOption[] = [
+    { value: 'newest', label: 'Сначала новые' },
+    { value: 'oldest', label: 'Сначала старые' }
+  ];
 
   sortedCheques = computed(() => {
     const sorted = [...this.cheques()];

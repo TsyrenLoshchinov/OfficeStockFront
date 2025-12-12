@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UsersService, Employee } from '../../../core/services/users.service';
 import { UserRole } from '../../../core/models/user.model';
+import { CustomDropdownComponent, DropdownOption } from '../../../shared/components/custom-dropdown/custom-dropdown.component';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, CustomDropdownComponent],
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
@@ -31,6 +32,14 @@ export class UsersComponent implements OnInit {
     'economist': 'Экономист',
     'director': 'Директор'
   };
+
+  filterOptions: DropdownOption[] = [
+    { value: 'all', label: 'Все сотрудники' },
+    { value: 'hr-manager', label: 'HR-менеджер' },
+    { value: 'economist', label: 'Экономист' },
+    { value: 'director', label: 'Директор' },
+    { value: 'admin', label: 'Администратор' }
+  ];
 
   constructor(
     private usersService: UsersService,
@@ -75,8 +84,8 @@ export class UsersComponent implements OnInit {
     }
   }
 
-  onFilterChange(role: UserRole | 'all'): void {
-    this.filterRole.set(role);
+  onFilterChange(role: string): void {
+    this.filterRole.set(role as UserRole | 'all');
     this.applyFilter();
   }
 

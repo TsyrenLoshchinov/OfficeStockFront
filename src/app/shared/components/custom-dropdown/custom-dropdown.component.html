@@ -1,0 +1,29 @@
+<div 
+  class="custom-dropdown" 
+  [class.custom-dropdown--open]="isOpen()"
+  [style.width]="width"
+  [style.height]="height">
+  <div class="custom-dropdown__trigger" (click)="toggleDropdown()">
+    <div class="custom-dropdown__icon">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="custom-dropdown__label">{{ selectedLabel }}</div>
+    <div class="custom-dropdown__arrow" [class.custom-dropdown__arrow--open]="isOpen()"></div>
+  </div>
+  <div 
+    class="custom-dropdown__menu" 
+    *ngIf="isOpen()"
+    [style.left]="menuLeft"
+    [style.top]="menuTop"
+    [style.width]="menuWidth">
+    <div 
+      class="custom-dropdown__item" 
+      *ngFor="let option of options"
+      [class.custom-dropdown__item--selected]="option.value === selectedValue"
+      (click)="selectOption(option.value)">
+      {{ option.label }}
+    </div>
+  </div>
+</div>
