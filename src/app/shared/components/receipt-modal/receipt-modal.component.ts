@@ -3,11 +3,23 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Receipt, ReceiptItem } from '../../../core/models/receipt.model';
 import { ReceiptsService } from '../../../features/receipts/services/receipts.service';
+import { CategoriesService } from '../../../features/categories/services/categories.service';
+import { ChangeCategoryModalComponent } from '../change-category-modal/change-category-modal.component';
+import { ConfirmationChangesModalComponent } from '../confirmation-changes-modal/confirmation-changes-modal.component';
+import { AddCategoryModalComponent } from '../add-category-modal/add-category-modal.component';
+import { ConfirmationAddModalComponent } from '../confirmation-add-modal/confirmation-add-modal.component';
 
 @Component({
   selector: 'app-receipt-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ChangeCategoryModalComponent,
+    ConfirmationChangesModalComponent,
+    AddCategoryModalComponent,
+    ConfirmationAddModalComponent
+  ],
   templateUrl: './receipt-modal.component.html',
   styleUrls: ['./receipt-modal.component.css']
 })
@@ -17,12 +29,26 @@ export class ReceiptModalComponent implements OnInit {
   @Output() closed = new EventEmitter<void>();
 
   editedReceipt: Receipt;
-  availableCategories = ['Аптека', 'Чай', 'Офисные принадлежности', 'Продукты', 'Не определёно'];
+  availableCategories: string[] = ['Не определёно']; // Начальное значение
   isSubmitting = false;
   errorMessage = '';
   isVisible = true;
 
-  constructor(private receiptsService: ReceiptsService) {
+  // Модальные окна для изменения категории
+  showChangeCategoryModal = false;
+  showConfirmationChangesModal = false;
+  showAddCategoryModal = false;
+  showConfirmationAddModal = false;
+  
+  currentItemIndex = -1;
+  currentItemCategory = '';
+  selectedNewCategory = '';
+  newCategoryToAdd = '';
+
+  constructor(
+    private receiptsService: ReceiptsService,
+    private categoriesService: CategoriesService
+  ) {
     this.editedReceipt = {
       organization: '',
       purchaseDate: '',
@@ -38,6 +64,18 @@ export class ReceiptModalComponent implements OnInit {
       totalAmount: this.receiptData.totalAmount,
       items: this.receiptData.items.map(item => ({ ...item }))
     };
+    
+    // Загружаем категории из сервиса
+    this.categoriesService.getCategories().subscribe({
+      next: (categories) => {
+        this.availableCategories = ['Не определёно', ...categories.map(c => c.name)];
+      },
+      error: (error) => {
+        console.error('Ошибка загрузки категорий:', error);
+        // Оставляем дефолтные категории при ошибке
+        this.availableCategories = ['Аптека', 'Чай', 'Офисные принадлежности', 'Продукты', 'Не определёно'];
+      }
+    });
   }
 
   updateItemName(item: ReceiptItem, newName: string): void {
@@ -55,6 +93,89 @@ export class ReceiptModalComponent implements OnInit {
   updateItemCategory(item: ReceiptItem, category: string): void {
     if (this.isReadOnly) return;
     item.category = category;
+  }
+
+  openChangeCategoryModal(itemIndex: number): void {
+    if (this.isReadOnly) return;
+    this.currentItemIndex = itemIndex;
+    this.currentItemCategory = this.editedReceipt.items[itemIndex].category || 'Не определёно';
+    this.showChangeCategoryModal = true;
+  }
+
+  onCategorySelected(categoryName: string): void {
+    this.selectedNewCategory = categoryName;
+    this.showChangeCategoryModal = false;
+    this.showConfirmationChangesModal = true;
+  }
+
+  onAddCategoryRequested(): void {
+    this.showChangeCategoryModal = false;
+    this.showAddCategoryModal = true;
+  }
+
+  onCategoryAdded(categoryName: string): void {
+    this.newCategoryToAdd = categoryName;
+    this.showAddCategoryModal = false;
+    this.showConfirmationAddModal = true;
+  }
+
+  onConfirmationChangesConfirmed(): void {
+    if (this.currentItemIndex >= 0 && this.selectedNewCategory) {
+      this.editedReceipt.items[this.currentItemIndex].category = this.selectedNewCategory;
+      this.recalculateTotal();
+    }
+    this.showConfirmationChangesModal = false;
+    this.currentItemIndex = -1;
+    this.selectedNewCategory = '';
+    this.currentItemCategory = '';
+  }
+
+  onConfirmationAddConfirmed(): void {
+    if (this.currentItemIndex >= 0 && this.newCategoryToAdd) {
+      this.editedReceipt.items[this.currentItemIndex].category = this.newCategoryToAdd;
+      // Обновляем список доступных категорий
+      if (!this.availableCategories.includes(this.newCategoryToAdd)) {
+        this.availableCategories.push(this.newCategoryToAdd);
+      }
+      // Перезагружаем категории из сервиса для обновления списка
+      this.categoriesService.getCategories().subscribe({
+        next: (categories) => {
+          this.availableCategories = ['Не определёно', ...categories.map(c => c.name)];
+        },
+        error: (error) => {
+          console.error('Ошибка загрузки категорий:', error);
+        }
+      });
+      this.recalculateTotal();
+    }
+    this.showConfirmationAddModal = false;
+    this.currentItemIndex = -1;
+    this.newCategoryToAdd = '';
+    this.currentItemCategory = '';
+  }
+
+  closeChangeCategoryModal(): void {
+    this.showChangeCategoryModal = false;
+    this.currentItemIndex = -1;
+    this.currentItemCategory = '';
+  }
+
+  closeConfirmationChangesModal(): void {
+    this.showConfirmationChangesModal = false;
+    this.currentItemIndex = -1;
+    this.selectedNewCategory = '';
+    this.currentItemCategory = '';
+  }
+
+  closeAddCategoryModal(): void {
+    this.showAddCategoryModal = false;
+  }
+
+  closeConfirmationAddModal(): void {
+    this.showConfirmationAddModal = false;
+    this.currentItemIndex = -1;
+    this.newCategoryToAdd = '';
+    this.currentItemCategory = '';
   }
 
   recalculateTotal(): void {

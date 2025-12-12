@@ -63,7 +63,7 @@
   <app-receipt-modal
     *ngIf="showModal() && selectedCheque"
     [receiptData]="selectedCheque"
-    [isReadOnly]="true"
+    [isReadOnly]="false"
     (closed)="closeModal()">
   </app-receipt-modal>
 </main>

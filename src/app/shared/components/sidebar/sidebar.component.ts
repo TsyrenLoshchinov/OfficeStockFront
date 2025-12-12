@@ -27,6 +27,7 @@ export class SidebarComponent implements OnInit {
     { label: 'Профиль', route: '/app/profile', roles: ['hr-manager', 'economist', 'director', 'admin'] },
     { label: 'Уведомления', route: '/app/notifications', roles: ['hr-manager', 'economist', 'director', 'admin'] },
     { label: 'Чеки', route: '/app/receipts', roles: ['hr-manager', 'admin'] },
+    { label: 'Категории', route: '/app/categories', roles: ['hr-manager', 'economist', 'admin'] },
     { label: 'Склад', route: '/app/warehouse', roles: ['hr-manager', 'economist', 'admin'] },
     { label: 'Отчёты', route: '/app/reports', roles: ['director', 'admin'] },
     { label: 'Администрирование', route: '/app/admin/users', roles: ['admin'] }

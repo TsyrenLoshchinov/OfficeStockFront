@@ -1,0 +1,18 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="onOverlayClick($event)">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="conteiner">
+      <button class="CheckInfo__close" (click)="close()" aria-label="Закрыть" type="button"></button>
+
+      <h1 class="modal-title">Добавление категории</h1>
+
+      <p class="confirmation-text">Добавить категорию <span class="highlight">«{{ categoryName }}»</span></p>
+
+      <div class="btnModel">
+        <button class="button" (click)="confirm()" type="button">
+          <span class="button__text">Подтвердить</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

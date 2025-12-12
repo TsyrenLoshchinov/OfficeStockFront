@@ -1,0 +1,36 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="onOverlayClick($event)">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="conteiner">
+      <button class="CheckInfo__close" (click)="close()" aria-label="Закрыть" type="button"></button>
+
+      <h1 class="modal-title">Добавление категории</h1>
+
+      <div class="input-field">
+        <input
+          type="text"
+          class="input-field__input"
+          id="category-input"
+          placeholder=" "
+          autocomplete="off"
+          [value]="newCategoryName()"
+          (input)="onCategoryNameChange($any($event.target).value)"
+          (keydown.enter)="addCategory()"
+        />
+        <label for="category-input" class="input-field__label">Название</label>
+        <div class="input-field__line"></div>
+      </div>
+
+      <div class="btnModel">
+        <button
+          class="button"
+          [disabled]="isAddButtonDisabled()"
+          (click)="addCategory()"
+          type="button"
+        >
+          <span class="button__text">{{ isSubmitting() ? 'Добавление...' : 'Добавить' }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

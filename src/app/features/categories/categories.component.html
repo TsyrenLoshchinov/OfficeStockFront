@@ -1,0 +1,66 @@
+<main class="main">
+  <div class="main__container">
+    <h1 class="main__title">Категории</h1>
+
+    <div class="add-category-link" (click)="openAddModal()">
+      Добавить категорию
+    </div>
+
+    <div class="categories-list" *ngIf="!isLoading(); else loadingTemplate">
+      <div class="category-item" *ngFor="let category of sortedCategories()">
+        <span class="category-name">{{ category.name }}</span>
+        <button class="delete-btn" (click)="deleteCategory(category.id)" aria-label="Удалить категорию">
+          Удалить
+        </button>
+      </div>
+
+      <div *ngIf="sortedCategories().length === 0" class="empty-state">
+        <p>Нет категорий</p>
+      </div>
+    </div>
+
+    <ng-template #loadingTemplate>
+      <div class="loading-state">
+        <p>Загрузка категорий...</p>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Модальное окно добавления категории -->
+  <div class="modal-overlay" *ngIf="showAddModal()" (click)="onOverlayClick($event)">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-container">
+        <button class="modal-close" (click)="closeAddModal()" aria-label="Закрыть" type="button"></button>
+
+        <h1 class="modal-title">Добавление категории</h1>
+
+        <div class="input-field">
+          <input
+            type="text"
+            class="input-field__input"
+            id="category-input"
+            placeholder=" "
+            autocomplete="off"
+            [value]="newCategoryName()"
+            (input)="onCategoryNameChange($any($event.target).value)"
+            (keydown.enter)="addCategory()"
+          />
+          <label for="category-input" class="input-field__label">Название</label>
+          <div class="input-field__line"></div>
+        </div>
+
+        <div class="btnModel">
+          <button
+            class="button"
+            [disabled]="isSubmitting() || !newCategoryName().trim()"
+            (click)="addCategory()"
+            type="button"
+          >
+            <span class="button__text">{{ isSubmitting() ? 'Добавление...' : 'Добавить' }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+

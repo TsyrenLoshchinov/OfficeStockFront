@@ -1,0 +1,24 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="onOverlayClick($event)">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="conteiner">
+      <button class="CheckInfo__close" (click)="close()" aria-label="Закрыть" type="button"></button>
+
+      <h1 class="modal-title">Выбор категории</h1>
+
+      <div class="change-notification">
+        <p class="category-change-message">
+          Категория <span class="highlight">«{{ oldCategory || 'Не определено' }}»</span><br>
+          изменится на<br>
+          категорию <span class="highlight">«{{ newCategory }}»</span>
+        </p>
+      </div>
+
+      <div class="btnModel">
+        <button class="button" (click)="confirm()" type="button">
+          <span class="button__text">Подтвердить</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

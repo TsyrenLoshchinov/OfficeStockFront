@@ -34,14 +34,13 @@
             (blur)="recalculateTotal()">
           <div *ngIf="isReadOnly" class="grid-name">{{ item.name }}</div>
           
-          <select 
+          <button
             *ngIf="!isReadOnly"
-            class="grid-category grid-category-select" 
-            [(ngModel)]="item.category">
-            <option *ngFor="let cat of availableCategories" [value]="cat">
-              {{ cat }}
-            </option>
-          </select>
+            type="button"
+            class="grid-category grid-category-button"
+            (click)="openChangeCategoryModal(i)">
+            {{ item.category || 'Не определёно' }}
+          </button>
           <div *ngIf="isReadOnly" class="grid-category">{{ item.category || 'Не определёно' }}</div>
           
           <div class="grid-price">{{ item.price.toFixed(2) }}</div>
@@ -72,5 +71,39 @@
       <button class="CheckInfo__close" (click)="close()" aria-label="Закрыть информацию о чеке" type="button"></button>
     </div>
   </div>
+
+  <!-- Модальное окно выбора категории -->
+  <app-change-category-modal
+    *ngIf="showChangeCategoryModal"
+    [currentCategory]="currentItemCategory"
+    [itemIndex]="currentItemIndex"
+    (categorySelected)="onCategorySelected($event)"
+    (addCategoryRequested)="onAddCategoryRequested()"
+    (closed)="closeChangeCategoryModal()">
+  </app-change-category-modal>
+
+  <!-- Модальное окно подтверждения изменения категории -->
+  <app-confirmation-changes-modal
+    *ngIf="showConfirmationChangesModal"
+    [oldCategory]="currentItemCategory"
+    [newCategory]="selectedNewCategory"
+    (confirmed)="onConfirmationChangesConfirmed()"
+    (closed)="closeConfirmationChangesModal()">
+  </app-confirmation-changes-modal>
+
+  <!-- Модальное окно добавления категории -->
+  <app-add-category-modal
+    *ngIf="showAddCategoryModal"
+    (categoryAdded)="onCategoryAdded($event)"
+    (closed)="closeAddCategoryModal()">
+  </app-add-category-modal>
+
+  <!-- Модальное окно подтверждения добавления категории -->
+  <app-confirmation-add-modal
+    *ngIf="showConfirmationAddModal"
+    [categoryName]="newCategoryToAdd"
+    (confirmed)="onConfirmationAddConfirmed()"
+    (closed)="closeConfirmationAddModal()">
+  </app-confirmation-add-modal>
 </div>
 

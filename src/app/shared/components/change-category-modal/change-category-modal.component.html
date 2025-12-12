@@ -1,0 +1,53 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="onOverlayClick($event)">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="conteiner">
+      <button class="CheckInfo__close" (click)="close()" aria-label="Закрыть" type="button"></button>
+
+      <h1 class="modal-title">Выбор категории</h1>
+
+      <div class="content">
+        <div class="input-field">
+          <input
+            type="text"
+            class="input-field__input"
+            id="search-input"
+            placeholder=" "
+            autocomplete="off"
+            [value]="searchQuery()"
+            (input)="onSearchChange($any($event.target).value)"
+            (focus)="showDropdown.set(true)"
+            (blur)="onInputBlur()"
+          />
+          <label for="search-input" class="input-field__label">Поиск</label>
+          <div class="input-field__line"></div>
+          <div class="dropdown-list" [class.dropdown-list--visible]="showDropdown()">
+            <div
+              class="dropdown-list__item"
+              [class.dropdown-list__item--selected]="selectedCategory() === cat.name"
+              *ngFor="let cat of filteredCategories()"
+              (click)="onCategoryClick(cat.name)"
+            >
+              {{ cat.name }}
+            </div>
+          </div>
+        </div>
+
+        <p class="subtitles">Не нашли нужную категорию?</p>
+
+        <button class="addCategory" (click)="onAddCategoryClick()" type="button">Добавьте её</button>
+      </div>
+
+      <div class="btnModel">
+        <button
+          class="button"
+          [disabled]="isSelectButtonDisabled()"
+          (click)="onSelectClick()"
+          type="button"
+        >
+          <span class="button__text">Выбрать</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

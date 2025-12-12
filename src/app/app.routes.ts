@@ -54,6 +54,14 @@ export const routes: Routes = [
         data: { roles: ['hr-manager', 'economist', 'admin'] }
       },
       
+      // Categories (HR, Экономист, Админ)
+      {
+        path: 'categories',
+        loadComponent: () => import('./features/categories/categories.component').then(m => m.CategoriesComponent),
+        canActivate: [roleGuard],
+        data: { roles: ['hr-manager', 'economist', 'admin'] }
+      },
+      
       // Notifications (Все роли)
       {
         path: 'notifications',
