@@ -1,0 +1,331 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Inter:wght@300&display=swap');
+
+:host,
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  background: #2a2a2a;
+  min-height: 100vh;
+  position: relative;
+  color: #dbdce4;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.receipt-window {
+  box-sizing: border-box;
+  position: absolute;
+  width: 956px;
+  height: 261px;
+  border: none;
+  background-image:
+    repeating-linear-gradient(to right, #9a0e10 0px, #9a0e10 10px, transparent 10px, transparent 20px),
+    repeating-linear-gradient(to right, #9a0e10 0px, #9a0e10 10px, transparent 10px, transparent 20px),
+    repeating-linear-gradient(to bottom, #9a0e10 0px, #9a0e10 10px, transparent 10px, transparent 20px),
+    repeating-linear-gradient(to bottom, #9a0e10 0px, #9a0e10 10px, transparent 10px, transparent 20px),
+    linear-gradient(rgba(221, 141, 118, 0.5), rgba(221, 141, 118, 0.5));
+  background-size:
+    100% 1px,
+    100% 1px,
+    1px 100%,
+    1px 100%,
+    100% 100%;
+  background-position:
+    top,
+    bottom,
+    left,
+    right,
+    center;
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y, no-repeat;
+}
+
+.download-button {
+  border: none;
+  cursor: pointer;
+}
+
+.receipt-default {
+  left: calc(50% - 956px / 2 - 0.5px);
+  top: calc(50% - 261px / 2 - 281px);
+}
+
+.receipt-default .download-button {
+  position: absolute;
+  width: 450px;
+  height: 62px;
+  left: 253px;
+  top: 69px;
+  background: linear-gradient(90deg, #c22918 -79%, #d1614d 54.61%, #c22918 189.67%);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  isolation: isolate;
+}
+
+.receipt-default .format-text {
+  position: absolute;
+  width: 478px;
+  height: 116px;
+  left: calc(50% - 478px / 2);
+  top: 145px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  text-align: center;
+  font-variant: small-caps;
+  color: #9a0e10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.receipt-added {
+  left: calc(50% - 956px / 2 + 0.5px);
+  top: calc(50% - 261px / 2);
+}
+
+.receipt-added .image-placeholder,
+.receipt-process .image-placeholder {
+  position: absolute;
+  width: 67px;
+  height: 124px;
+  left: calc(50% - 67px / 2 + 0.5px);
+  top: 20px;
+  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.receipt-added .download-button {
+  position: absolute;
+  width: 244px;
+  height: 41px;
+  left: calc(50% - 244px / 2);
+  top: calc(50% - 41px / 2 + 71px);
+  background: linear-gradient(90deg, #c22918 -79%, #d1614d 54.61%, #c22918 189.67%);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  isolation: isolate;
+}
+
+.receipt-added .frame-6 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  position: absolute;
+  width: 551px;
+  height: 24px;
+  left: calc(50% - 551px / 2 + 0.5px);
+  top: calc(50% - 24px / 2 + 29.5px);
+}
+
+.receipt-added .success-text {
+  width: 300px;
+  height: 23px;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #dbdce4;
+}
+
+.receipt-added .text-button {
+  position: absolute;
+  width: 175px;
+  height: 31px;
+  left: calc(50% - 175px / 2 + 0.5px);
+  top: 222px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.receipt-added .text-button span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-transform: capitalize;
+  color: #dbdce4;
+}
+
+.receipt-process {
+  left: calc(50% - 956px / 2 + 0.5px);
+  top: calc(50% - 261px / 2 + 281px);
+}
+
+.receipt-process .image-placeholder {
+  left: calc(50% - 67px / 2 - 4.5px);
+  top: 14px;
+}
+
+.receipt-process .download-button {
+  position: absolute;
+  width: 244px;
+  height: 41px;
+  left: calc(50% - 244px / 2);
+  top: calc(50% - 41px / 2 + 71px);
+  background: linear-gradient(90deg, rgba(194, 41, 24, 0.6) -79%, rgba(209, 97, 77, 0.6) 54.61%, rgba(194, 41, 24, 0.6) 189.67%);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border: none;
+  cursor: not-allowed;
+  isolation: isolate;
+}
+
+.receipt-process .frame-4-process {
+  width: 166px;
+  left: calc(50% - 166px / 2);
+  top: calc(50% - 43px / 2 + 1px);
+}
+
+.receipt-process .frame-5-process {
+  width: 146px;
+  height: 23px;
+  left: 10px;
+  top: 10px;
+}
+
+.receipt-process .btn-text-process {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.receipt-process .process-frame-6 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  position: absolute;
+  width: 551px;
+  height: 24px;
+  left: calc(50% - 551px / 2 + 0.5px);
+  top: calc(50% + 93px);
+}
+
+.receipt-process .progress-line {
+  width: 183px;
+  height: 0;
+  border: 1px solid #ffffff;
+}
+
+.receipt-process .progress-text {
+  width: 22px;
+  height: 12px;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 11px;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #ffffff;
+}
+
+.receipt-process .process-text-button {
+  position: absolute;
+  width: 175px;
+  left: calc(50% - 175px / 2 + 0.5px);
+  top: 85.06%;
+  bottom: 3.07%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.receipt-process .process-text-button span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-transform: capitalize;
+  color: #dbdce4;
+}
+
+.frame-4 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  isolation: isolate;
+  position: absolute;
+  width: 226px;
+  height: 43px;
+  left: calc(50% - 226px / 2);
+  top: calc(50% - 43px / 2);
+}
+
+.receipt-default .frame-4 {
+  top: calc(50% - 43px / 2 - 0.5px);
+}
+
+.frame-5 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  gap: 10px;
+  position: absolute;
+  width: 207px;
+  height: 23px;
+  left: calc(50% - 207px / 2 + 0.5px);
+  top: calc(50% - 23px / 2);
+  z-index: 0;
+}
+
+.btn-text {
+  margin: 0 auto;
+  width: 151px;
+  height: 23px;
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #ffffff;
+}
+
+.receipt-added .btn-text {
+  width: 146px;
+}

@@ -1,0 +1,46 @@
+<div class="container">
+  <section class="receipt-window receipt-default" *ngIf="state() === 'default'">
+    <button class="download-button btn-default" (click)="showAdded()">
+      <div class="frame-4">
+        <div class="frame-5">
+          <span class="btn-text">Загрузить чек</span>
+        </div>
+      </div>
+    </button>
+    <div class="format-text">
+      Допустимые форматы: JPG, JPEG, PNG, PDF<br />
+      Максимальный размер файла: 10 МБ
+    </div>
+  </section>
+
+  <section class="receipt-window receipt-added" *ngIf="state() === 'added'">
+    <div class="image-placeholder"></div>
+    <button class="download-button btn-added" (click)="startProcess()">
+      <div class="frame-4">
+        <div class="frame-5">
+          <span class="btn-text">Добавить чек</span>
+        </div>
+      </div>
+    </button>
+    <div class="frame-6">
+      <span class="success-text">Файл {{ fileName() }} успешно загружен</span>
+    </div>
+    <button class="text-button" (click)="reset()"><span>Отмена</span></button>
+  </section>
+
+  <section class="receipt-window receipt-process" *ngIf="state() === 'process'">
+    <div class="image-placeholder process-image"></div>
+    <button class="download-button btn-process" disabled>
+      <div class="frame-4 frame-4-process">
+        <div class="frame-5 frame-5-process">
+          <span class="btn-text btn-text-process">Добавить чек</span>
+        </div>
+      </div>
+    </button>
+    <div class="frame-6 process-frame-6">
+      <div class="progress-line"></div>
+      <span class="progress-text">{{ progress() }}%</span>
+    </div>
+    <button class="text-button process-text-button" (click)="reset()"><span>Отмена</span></button>
+  </section>
+</div>
