@@ -43,7 +43,7 @@
 </div>
 
 <!-- Модальное окно добавления -->
-<div class="modal-overlay" *ngIf="showAddModal()" (click)="closeAddModal()">
+<div class="modal-overlay" *ngIf="showAddModal()" appModalContainer (click)="closeAddModal()">
   <div class="modal modal--add" (click)="$event.stopPropagation()">
     <button class="modal__close" type="button" (click)="closeAddModal()">
       <span class="modal__close-line"></span>
@@ -53,31 +53,66 @@
     
     <form [formGroup]="addForm" (ngSubmit)="onAddSubmit()" class="modal__form">
       <div class="input-field">
-        <input type="text" formControlName="lastName" placeholder=" " class="input-field__input">
+        <input 
+          type="text" 
+          formControlName="lastName" 
+          placeholder=" " 
+          class="input-field__input"
+          [class.input-field__input--error]="isFieldInvalid('lastName', 'add')">
         <label class="input-field__label">Фамилия*</label>
         <div class="input-field__line"></div>
+        <div *ngIf="isFieldInvalid('lastName', 'add')" class="input-field__error">
+          {{ getFieldError('lastName', 'add') }}
+        </div>
       </div>
 
       <div class="input-field">
-        <input type="text" formControlName="firstName" placeholder=" " class="input-field__input">
+        <input 
+          type="text" 
+          formControlName="firstName" 
+          placeholder=" " 
+          class="input-field__input"
+          [class.input-field__input--error]="isFieldInvalid('firstName', 'add')">
         <label class="input-field__label">Имя*</label>
         <div class="input-field__line"></div>
+        <div *ngIf="isFieldInvalid('firstName', 'add')" class="input-field__error">
+          {{ getFieldError('firstName', 'add') }}
+        </div>
       </div>
 
       <div class="input-field">
-        <input type="text" formControlName="middleName" placeholder=" " class="input-field__input">
+        <input 
+          type="text" 
+          formControlName="middleName" 
+          placeholder=" " 
+          class="input-field__input"
+          [class.input-field__input--error]="isFieldInvalid('middleName', 'add')">
         <label class="input-field__label">Отчество</label>
         <div class="input-field__line"></div>
+        <div *ngIf="isFieldInvalid('middleName', 'add')" class="input-field__error">
+          {{ getFieldError('middleName', 'add') }}
+        </div>
       </div>
 
       <div class="input-field">
-        <input type="email" formControlName="email" placeholder=" " class="input-field__input">
+        <input 
+          type="email" 
+          formControlName="email" 
+          placeholder=" " 
+          class="input-field__input"
+          [class.input-field__input--error]="isFieldInvalid('email', 'add')">
         <label class="input-field__label">Электронная почта*</label>
         <div class="input-field__line"></div>
+        <div *ngIf="isFieldInvalid('email', 'add')" class="input-field__error">
+          {{ getFieldError('email', 'add') }}
+        </div>
       </div>
 
       <div class="input-field input-field--select">
-        <select formControlName="role" class="input-field__select">
+        <select 
+          formControlName="role" 
+          class="input-field__select"
+          [class.input-field__input--error]="isFieldInvalid('role', 'add')">
           <option value="">Выберите роль</option>
           <option value="hr-manager">HR-менеджер</option>
           <option value="economist">Экономист</option>
@@ -86,16 +121,42 @@
         </select>
         <label class="input-field__label">Роль*</label>
         <div class="input-field__line"></div>
+        <div *ngIf="isFieldInvalid('role', 'add')" class="input-field__error">
+          {{ getFieldError('role', 'add') }}
+        </div>
       </div>
 
-      <div class="input-field">
-        <input type="password" formControlName="password" placeholder=" " class="input-field__input">
+      <div class="input-field input-field--password">
+        <input 
+          [type]="showPasswordAdd() ? 'text' : 'password'" 
+          formControlName="password" 
+          placeholder=" " 
+          class="input-field__input"
+          [class.input-field__input--error]="isFieldInvalid('password', 'add')"
+          [readonly]="addForm.get('generatePassword')?.value">
         <label class="input-field__label">Пароль</label>
         <div class="input-field__line"></div>
+        <button 
+          type="button" 
+          class="input-field__toggle-password"
+          (click)="togglePasswordVisibility('add')"
+          *ngIf="!addForm.get('generatePassword')?.value"
+          aria-label="Показать/скрыть пароль">
+          <span *ngIf="showPasswordAdd()">👁️</span>
+          <span *ngIf="!showPasswordAdd()">👁️‍🗨️</span>
+        </button>
+        <div *ngIf="isFieldInvalid('password', 'add')" class="input-field__error">
+          {{ getFieldError('password', 'add') }}
+        </div>
       </div>
 
       <div class="checkbox-field">
-        <input type="checkbox" formControlName="generatePassword" id="generate-password" class="checkbox-field__input">
+        <input 
+          type="checkbox" 
+          formControlName="generatePassword" 
+          id="generate-password" 
+          class="checkbox-field__input"
+          (change)="onGeneratePasswordChange($any($event.target).checked, 'add')">
         <label for="generate-password" class="checkbox-field__label">Сгенерировать пароль</label>
       </div>
 
@@ -105,7 +166,7 @@
 </div>
 
 <!-- Модальное окно редактирования -->
-<div class="modal-overlay" *ngIf="showEditModal()" (click)="closeEditModal()">
+<div class="modal-overlay" *ngIf="showEditModal()" appModalContainer (click)="closeEditModal()">
   <div class="modal modal--edit" (click)="$event.stopPropagation()">
     <button class="modal__close" type="button" (click)="closeEditModal()">
       <span class="modal__close-line"></span>
@@ -115,31 +176,66 @@
     
     <form [formGroup]="editForm" (ngSubmit)="onEditSubmit()" class="modal__form">
       <div class="input-field">
-        <input type="text" formControlName="lastName" placeholder=" " class="input-field__input">
+        <input 
+          type="text" 
+          formControlName="lastName" 
+          placeholder=" " 
+          class="input-field__input"
+          [class.input-field__input--error]="isFieldInvalid('lastName', 'edit')">
         <label class="input-field__label">Фамилия*</label>
         <div class="input-field__line"></div>
+        <div *ngIf="isFieldInvalid('lastName', 'edit')" class="input-field__error">
+          {{ getFieldError('lastName', 'edit') }}
+        </div>
       </div>
 
       <div class="input-field">
-        <input type="text" formControlName="firstName" placeholder=" " class="input-field__input">
+        <input 
+          type="text" 
+          formControlName="firstName" 
+          placeholder=" " 
+          class="input-field__input"
+          [class.input-field__input--error]="isFieldInvalid('firstName', 'edit')">
         <label class="input-field__label">Имя*</label>
         <div class="input-field__line"></div>
+        <div *ngIf="isFieldInvalid('firstName', 'edit')" class="input-field__error">
+          {{ getFieldError('firstName', 'edit') }}
+        </div>
       </div>
 
       <div class="input-field">
-        <input type="text" formControlName="middleName" placeholder=" " class="input-field__input">
+        <input 
+          type="text" 
+          formControlName="middleName" 
+          placeholder=" " 
+          class="input-field__input"
+          [class.input-field__input--error]="isFieldInvalid('middleName', 'edit')">
         <label class="input-field__label">Отчество</label>
         <div class="input-field__line"></div>
+        <div *ngIf="isFieldInvalid('middleName', 'edit')" class="input-field__error">
+          {{ getFieldError('middleName', 'edit') }}
+        </div>
       </div>
 
       <div class="input-field">
-        <input type="email" formControlName="email" placeholder=" " class="input-field__input">
+        <input 
+          type="email" 
+          formControlName="email" 
+          placeholder=" " 
+          class="input-field__input"
+          [class.input-field__input--error]="isFieldInvalid('email', 'edit')">
         <label class="input-field__label">Электронная почта*</label>
         <div class="input-field__line"></div>
+        <div *ngIf="isFieldInvalid('email', 'edit')" class="input-field__error">
+          {{ getFieldError('email', 'edit') }}
+        </div>
       </div>
 
       <div class="input-field input-field--select">
-        <select formControlName="role" class="input-field__select">
+        <select 
+          formControlName="role" 
+          class="input-field__select"
+          [class.input-field__input--error]="isFieldInvalid('role', 'edit')">
           <option value="hr-manager">HR-менеджер</option>
           <option value="economist">Экономист</option>
           <option value="director">Директор</option>
@@ -147,26 +243,52 @@
         </select>
         <label class="input-field__label">Роль*</label>
         <div class="input-field__line"></div>
+        <div *ngIf="isFieldInvalid('role', 'edit')" class="input-field__error">
+          {{ getFieldError('role', 'edit') }}
+        </div>
       </div>
 
-      <div class="input-field">
-        <input type="password" formControlName="password" placeholder=" " class="input-field__input">
+      <div class="input-field input-field--password">
+        <input 
+          [type]="showPasswordEdit() ? 'text' : 'password'" 
+          formControlName="password" 
+          placeholder=" " 
+          class="input-field__input"
+          [class.input-field__input--error]="isFieldInvalid('password', 'edit')"
+          [readonly]="editForm.get('generatePassword')?.value">
         <label class="input-field__label">Пароль</label>
         <div class="input-field__line"></div>
+        <button 
+          type="button" 
+          class="input-field__toggle-password"
+          (click)="togglePasswordVisibility('edit')"
+          *ngIf="!editForm.get('generatePassword')?.value"
+          aria-label="Показать/скрыть пароль">
+          <span *ngIf="showPasswordEdit()">👁️</span>
+          <span *ngIf="!showPasswordEdit()">👁️‍🗨️</span>
+        </button>
+        <div *ngIf="isFieldInvalid('password', 'edit')" class="input-field__error">
+          {{ getFieldError('password', 'edit') }}
+        </div>
       </div>
 
       <div class="checkbox-field">
-        <input type="checkbox" formControlName="generatePassword" id="generate-password-edit" class="checkbox-field__input">
+        <input 
+          type="checkbox" 
+          formControlName="generatePassword" 
+          id="generate-password-edit" 
+          class="checkbox-field__input"
+          (change)="onGeneratePasswordChange($any($event.target).checked, 'edit')">
         <label for="generate-password-edit" class="checkbox-field__label">Сгенерировать новый пароль</label>
       </div>
 
-      <button type="submit" class="modal__button">Сохранить</button>
+      <button type="submit" class="modal__button" [disabled]="editForm.invalid">Сохранить</button>
     </form>
   </div>
 </div>
 
 <!-- Модальное окно удаления -->
-<div class="modal-overlay" *ngIf="showDeleteModal()" (click)="closeDeleteModal()">
+<div class="modal-overlay" *ngIf="showDeleteModal()" appModalContainer (click)="closeDeleteModal()">
   <div class="modal modal--delete" (click)="$event.stopPropagation()">
     <button class="modal__close" type="button" (click)="closeDeleteModal()">
       <span class="modal__close-line"></span>
@@ -184,7 +306,7 @@
 </div>
 
 <!-- Модальное окно ошибки -->
-<div class="modal-overlay" *ngIf="showErrorModal()" (click)="closeErrorModal()">
+<div class="modal-overlay" *ngIf="showErrorModal()" appModalContainer (click)="closeErrorModal()">
   <div class="modal modal--error" (click)="$event.stopPropagation()">
     <button class="modal__close" type="button" (click)="closeErrorModal()">
       <span class="modal__close-line"></span>

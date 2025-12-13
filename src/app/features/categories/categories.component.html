@@ -27,40 +27,10 @@
   </div>
 
   <!-- Модальное окно добавления категории -->
-  <div class="modal-overlay" *ngIf="showAddModal()" (click)="onOverlayClick($event)">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <div class="modal-container">
-        <button class="modal-close" (click)="closeAddModal()" aria-label="Закрыть" type="button"></button>
-
-        <h1 class="modal-title">Добавление категории</h1>
-
-        <div class="input-field">
-          <input
-            type="text"
-            class="input-field__input"
-            id="category-input"
-            placeholder=" "
-            autocomplete="off"
-            [value]="newCategoryName()"
-            (input)="onCategoryNameChange($any($event.target).value)"
-            (keydown.enter)="addCategory()"
-          />
-          <label for="category-input" class="input-field__label">Название</label>
-          <div class="input-field__line"></div>
-        </div>
-
-        <div class="btnModel">
-          <button
-            class="button"
-            [disabled]="isSubmitting() || !newCategoryName().trim()"
-            (click)="addCategory()"
-            type="button"
-          >
-            <span class="button__text">{{ isSubmitting() ? 'Добавление...' : 'Добавить' }}</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <app-add-category-modal
+    *ngIf="showAddModal()"
+    (categoryAdded)="onCategoryAdded($event)"
+    (closed)="closeAddModal()">
+  </app-add-category-modal>
 </main>
 

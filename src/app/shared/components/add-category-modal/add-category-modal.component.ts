@@ -19,6 +19,7 @@ export class AddCategoryModalComponent implements OnInit, OnDestroy {
   newCategoryName = signal<string>('');
   isSubmitting = signal<boolean>(false);
   isVisible = true;
+  isTouched = signal<boolean>(false);
 
   constructor(
     private categoriesService: CategoriesService,
@@ -35,11 +36,13 @@ export class AddCategoryModalComponent implements OnInit, OnDestroy {
 
   onCategoryNameChange(value: string): void {
     this.newCategoryName.set(value);
+    this.isTouched.set(true);
   }
 
   addCategory(): void {
+    this.isTouched.set(true);
     const name = this.newCategoryName().trim();
-    if (!name || this.isSubmitting()) {
+    if (!name || name.length < 2 || name.length > 50 || this.isSubmitting()) {
       return;
     }
 
@@ -71,7 +74,21 @@ export class AddCategoryModalComponent implements OnInit, OnDestroy {
   }
 
   isAddButtonDisabled(): boolean {
-    return !this.newCategoryName().trim() || this.isSubmitting();
+    const name = this.newCategoryName().trim();
+    return !name || name.length < 2 || name.length > 50 || this.isSubmitting();
+  }
+
+  getCategoryError(): string {
+    const name = this.newCategoryName().trim();
+    if (!this.isTouched()) return '';
+    if (!name) return 'Название категории обязательно';
+    if (name.length < 2) return 'Минимальная длина: 2 символа';
+    if (name.length > 50) return 'Максимальная длина: 50 символов';
+    return '';
+  }
+
+  hasCategoryError(): boolean {
+    return !!this.getCategoryError();
   }
 }
 

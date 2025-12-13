@@ -4,11 +4,13 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { UsersService, Employee } from '../../../core/services/users.service';
 import { UserRole } from '../../../core/models/user.model';
 import { CustomDropdownComponent, DropdownOption } from '../../../shared/components/custom-dropdown/custom-dropdown.component';
+import { ModalStateService } from '../../../core/services/modal-state.service';
+import { ModalContainerDirective } from '../../../shared/directives/modal-container.directive';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, CustomDropdownComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, CustomDropdownComponent, ModalContainerDirective],
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
@@ -21,6 +23,8 @@ export class UsersComponent implements OnInit {
   errorMessage = signal('');
   selectedEmployee: Employee | null = null;
   filterRole = signal<UserRole | 'all'>('all');
+  showPasswordAdd = signal(true);
+  showPasswordEdit = signal(true);
   
   addForm: FormGroup;
   editForm: FormGroup;
@@ -43,26 +47,53 @@ export class UsersComponent implements OnInit {
 
   constructor(
     private usersService: UsersService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private modalStateService: ModalStateService
   ) {
     this.addForm = this.fb.group({
-      lastName: ['', Validators.required],
-      firstName: ['', Validators.required],
-      middleName: [''],
-      email: ['', [Validators.required, Validators.email]],
+      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      middleName: ['', [Validators.maxLength(50)]],
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       role: ['', Validators.required],
       password: [''],
       generatePassword: [false]
     });
 
+    // Валидация пароля: если generatePassword = false, то пароль обязателен
+    this.addForm.get('generatePassword')?.valueChanges.subscribe(generate => {
+      const passwordControl = this.addForm.get('password');
+      if (!generate) {
+        passwordControl?.setValidators([Validators.required, Validators.minLength(6)]);
+      } else {
+        passwordControl?.clearValidators();
+        passwordControl?.setValue('');
+      }
+      passwordControl?.updateValueAndValidity();
+    });
+
     this.editForm = this.fb.group({
-      lastName: ['', Validators.required],
-      firstName: ['', Validators.required],
-      middleName: [''],
-      email: ['', [Validators.required, Validators.email]],
+      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      middleName: ['', [Validators.maxLength(50)]],
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       role: ['', Validators.required],
       password: [''],
       generatePassword: [false]
+    });
+
+    // Валидация пароля для редактирования: если generatePassword = false и пароль указан, то проверяем длину
+    this.editForm.get('generatePassword')?.valueChanges.subscribe(generate => {
+      const passwordControl = this.editForm.get('password');
+      if (!generate && passwordControl?.value) {
+        passwordControl?.setValidators([Validators.minLength(6)]);
+      } else {
+        passwordControl?.clearValidators();
+        if (generate) {
+          passwordControl?.setValue('');
+        }
+      }
+      passwordControl?.updateValueAndValidity();
     });
   }
 
@@ -91,18 +122,36 @@ export class UsersComponent implements OnInit {
 
   openAddModal(): void {
     this.addForm.reset({
+      lastName: '',
+      firstName: '',
+      middleName: '',
+      email: '',
+      role: '',
+      password: '',
       generatePassword: false
     });
+    // Устанавливаем валидацию пароля по умолчанию
+    this.addForm.get('password')?.setValidators([Validators.required, Validators.minLength(6)]);
+    this.addForm.get('password')?.updateValueAndValidity();
+    this.showPasswordAdd.set(true);
     this.showAddModal.set(true);
+    this.modalStateService.openModal();
   }
 
   closeAddModal(): void {
     this.showAddModal.set(false);
     this.addForm.reset();
+    this.modalStateService.closeModal();
   }
 
   async onAddSubmit(): Promise<void> {
-    if (this.addForm.invalid) return;
+    if (this.addForm.invalid) {
+      // Помечаем все поля как touched для отображения ошибок
+      Object.keys(this.addForm.controls).forEach(key => {
+        this.addForm.get(key)?.markAsTouched();
+      });
+      return;
+    }
 
     const formValue = this.addForm.value;
     const employee: Omit<Employee, 'id'> = {
@@ -111,7 +160,7 @@ export class UsersComponent implements OnInit {
       middleName: formValue.middleName || undefined,
       email: formValue.email,
       role: formValue.role,
-      password: formValue.generatePassword ? this.generatePassword() : formValue.password
+      password: formValue.generatePassword ? formValue.password : formValue.password
     };
 
     const success = await this.usersService.addEmployee(employee);
@@ -121,6 +170,7 @@ export class UsersComponent implements OnInit {
     } else {
       this.errorMessage.set(`Пользователь с почтой ${formValue.email} уже существует`);
       this.showErrorModal.set(true);
+      this.modalStateService.openModal();
     }
   }
 
@@ -135,17 +185,28 @@ export class UsersComponent implements OnInit {
       password: '',
       generatePassword: false
     });
+    this.showPasswordEdit.set(true);
     this.showEditModal.set(true);
+    this.modalStateService.openModal();
   }
 
   closeEditModal(): void {
     this.showEditModal.set(false);
     this.selectedEmployee = null;
     this.editForm.reset();
+    this.modalStateService.closeModal();
   }
 
   onEditSubmit(): void {
-    if (this.editForm.invalid || !this.selectedEmployee) return;
+    if (this.editForm.invalid || !this.selectedEmployee) {
+      if (this.editForm.invalid) {
+        // Помечаем все поля как touched для отображения ошибок
+        Object.keys(this.editForm.controls).forEach(key => {
+          this.editForm.get(key)?.markAsTouched();
+        });
+      }
+      return;
+    }
 
     const formValue = this.editForm.value;
     const updates: Partial<Employee> = {
@@ -157,7 +218,7 @@ export class UsersComponent implements OnInit {
     };
 
     if (formValue.generatePassword || formValue.password) {
-      updates.password = formValue.generatePassword ? this.generatePassword() : formValue.password;
+      updates.password = formValue.generatePassword ? formValue.password : formValue.password;
     }
 
     this.usersService.updateEmployee(this.selectedEmployee.id, updates);
@@ -168,11 +229,13 @@ export class UsersComponent implements OnInit {
   openDeleteModal(employee: Employee): void {
     this.selectedEmployee = employee;
     this.showDeleteModal.set(true);
+    this.modalStateService.openModal();
   }
 
   closeDeleteModal(): void {
     this.showDeleteModal.set(false);
     this.selectedEmployee = null;
+    this.modalStateService.closeModal();
   }
 
   onDeleteConfirm(): void {
@@ -186,6 +249,7 @@ export class UsersComponent implements OnInit {
   closeErrorModal(): void {
     this.showErrorModal.set(false);
     this.errorMessage.set('');
+    this.modalStateService.closeModal();
   }
 
   getFullName(employee: Employee): string {
@@ -197,6 +261,67 @@ export class UsersComponent implements OnInit {
   }
 
   private generatePassword(): string {
-    return Math.random().toString(36).slice(-8) + '_i';
+    const length = 12;
+    const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+    let password = '';
+    for (let i = 0; i < length; i++) {
+      password += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+    return password;
+  }
+
+  onGeneratePasswordChange(isGenerate: boolean, formType: 'add' | 'edit'): void {
+    const form = formType === 'add' ? this.addForm : this.editForm;
+    const passwordControl = form.get('password');
+    
+    if (isGenerate) {
+      const generatedPassword = this.generatePassword();
+      passwordControl?.setValue(generatedPassword);
+      passwordControl?.clearValidators();
+      passwordControl?.updateValueAndValidity();
+    } else {
+      passwordControl?.setValue('');
+      if (formType === 'add') {
+        passwordControl?.setValidators([Validators.required, Validators.minLength(6)]);
+      } else {
+        passwordControl?.clearValidators();
+      }
+      passwordControl?.updateValueAndValidity();
+    }
+  }
+
+  getFieldError(fieldName: string, formType: 'add' | 'edit' = 'add'): string {
+    const form = formType === 'add' ? this.addForm : this.editForm;
+    const control = form.get(fieldName);
+    
+    if (control?.hasError('required')) {
+      return 'Это поле обязательно для заполнения';
+    }
+    if (control?.hasError('email')) {
+      return 'Введите корректный email';
+    }
+    if (control?.hasError('minlength')) {
+      const requiredLength = control.errors?.['minlength']?.requiredLength;
+      return `Минимальная длина: ${requiredLength} символов`;
+    }
+    if (control?.hasError('maxlength')) {
+      const maxLength = control.errors?.['maxlength']?.requiredLength;
+      return `Максимальная длина: ${maxLength} символов`;
+    }
+    return '';
+  }
+
+  isFieldInvalid(fieldName: string, formType: 'add' | 'edit' = 'add'): boolean {
+    const form = formType === 'add' ? this.addForm : this.editForm;
+    const control = form.get(fieldName);
+    return !!(control && control.invalid && (control.dirty || control.touched));
+  }
+
+  togglePasswordVisibility(formType: 'add' | 'edit'): void {
+    if (formType === 'add') {
+      this.showPasswordAdd.update(value => !value);
+    } else {
+      this.showPasswordEdit.update(value => !value);
+    }
   }
 }

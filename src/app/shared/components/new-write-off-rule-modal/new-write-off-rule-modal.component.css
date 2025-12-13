@@ -288,3 +288,31 @@
   pointer-events: none;
 }
 
+/* Стили для ошибок валидации */
+.input-field__input--error {
+  border-color: #C22918 !important;
+}
+
+.input-field__input--error ~ .input-field__line {
+  background-color: #C22918 !important;
+}
+
+.input-field__error {
+  position: absolute;
+  bottom: -18px;
+  left: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  color: #C22918;
+  margin-top: 4px;
+}
+
+.input-field {
+  margin-bottom: 20px;
+}
+
+.frequency-section {
+  position: relative;
+  margin-bottom: 20px;
+}
+

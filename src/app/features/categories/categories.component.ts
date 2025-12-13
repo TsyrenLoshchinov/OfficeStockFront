@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CategoriesService } from './services/categories.service';
 import { Category } from '../../core/models/category.model';
+import { AddCategoryModalComponent } from '../../shared/components/add-category-modal/add-category-modal.component';
 
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AddCategoryModalComponent],
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.css']
 })
@@ -15,8 +16,6 @@ export class CategoriesComponent implements OnInit {
   categories = signal<Category[]>([]);
   isLoading = signal<boolean>(false);
   showAddModal = signal<boolean>(false);
-  newCategoryName = signal<string>('');
-  isSubmitting = signal<boolean>(false);
 
   sortedCategories = computed(() => {
     const sorted = [...this.categories()];
@@ -46,42 +45,16 @@ export class CategoriesComponent implements OnInit {
 
   openAddModal(): void {
     this.showAddModal.set(true);
-    this.newCategoryName.set('');
   }
 
   closeAddModal(): void {
     this.showAddModal.set(false);
-    this.newCategoryName.set('');
   }
 
-  addCategory(): void {
-    const name = this.newCategoryName().trim();
-    if (!name) {
-      alert('Введите название категории');
-      return;
-    }
-
-    if (this.isSubmitting()) {
-      return;
-    }
-
-    this.isSubmitting.set(true);
-    this.categoriesService.addCategory(name).subscribe({
-      next: (newCategory) => {
-        this.categories.update(cats => [...cats, newCategory]);
-        this.isSubmitting.set(false);
-        this.closeAddModal();
-      },
-      error: (error) => {
-        console.error('Ошибка добавления категории:', error);
-        this.isSubmitting.set(false);
-        alert('Ошибка при добавлении категории');
-      }
-    });
-  }
-
-  onCategoryNameChange(value: string): void {
-    this.newCategoryName.set(value);
+  onCategoryAdded(categoryName: string): void {
+    // Категория уже добавлена через сервис в модалке, просто обновляем список
+    this.loadCategories();
+    this.closeAddModal();
   }
 
   deleteCategory(id: number): void {
@@ -98,10 +71,5 @@ export class CategoriesComponent implements OnInit {
     }
   }
 
-  onOverlayClick(event: MouseEvent): void {
-    if (event.target === event.currentTarget) {
-      this.closeAddModal();
-    }
-  }
 }
 

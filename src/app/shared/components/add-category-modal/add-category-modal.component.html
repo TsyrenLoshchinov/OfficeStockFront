@@ -13,11 +13,16 @@
           placeholder=" "
           autocomplete="off"
           [value]="newCategoryName()"
+          [class.input-field__input--error]="hasCategoryError()"
           (input)="onCategoryNameChange($any($event.target).value)"
           (keydown.enter)="addCategory()"
+          maxlength="50"
         />
-        <label for="category-input" class="input-field__label">Название</label>
+        <label for="category-input" class="input-field__label">Название*</label>
         <div class="input-field__line"></div>
+        <div *ngIf="hasCategoryError()" class="input-field__error">
+          {{ getCategoryError() }}
+        </div>
       </div>
 
       <div class="btnModel">

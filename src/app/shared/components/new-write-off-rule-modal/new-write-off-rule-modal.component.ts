@@ -25,6 +25,7 @@ export class NewWriteOffRuleModalComponent implements OnInit, OnDestroy {
   showDropdown = signal<boolean>(false);
   isSubmitting = signal<boolean>(false);
   isVisible = true;
+  isItemTouched = signal<boolean>(false);
 
   constructor(
     private warehouseService: WarehouseService,
@@ -60,11 +61,16 @@ export class NewWriteOffRuleModalComponent implements OnInit, OnDestroy {
     this.selectedItem.set(item);
     this.showDropdown.set(false);
     this.searchQuery.set(item.name);
+    this.isItemTouched.set(true);
   }
 
   onFrequencyChange(value: number): void {
-    if (value >= 1) {
+    if (value >= 1 && value <= 365) {
       this.frequency.set(value);
+    } else if (value > 365) {
+      this.frequency.set(365);
+    } else if (value < 1) {
+      this.frequency.set(1);
     }
   }
 
@@ -79,7 +85,8 @@ export class NewWriteOffRuleModalComponent implements OnInit, OnDestroy {
   }
 
   createRule(): void {
-    if (!this.selectedItem() || this.isSubmitting()) {
+    this.isItemTouched.set(true);
+    if (!this.selectedItem() || this.frequency() < 1 || this.frequency() > 365 || this.isSubmitting()) {
       return;
     }
 
@@ -123,7 +130,28 @@ export class NewWriteOffRuleModalComponent implements OnInit, OnDestroy {
   }
 
   isConfirmButtonDisabled(): boolean {
-    return !this.selectedItem() || this.isSubmitting();
+    return !this.selectedItem() || this.frequency() < 1 || this.frequency() > 365 || this.isSubmitting();
+  }
+
+  getItemError(): string {
+    if (!this.isItemTouched()) return '';
+    if (!this.selectedItem()) return 'Необходимо выбрать товар';
+    return '';
+  }
+
+  hasItemError(): boolean {
+    return !!this.getItemError();
+  }
+
+  getFrequencyError(): string {
+    const freq = this.frequency();
+    if (freq < 1) return 'Минимальное значение: 1 день';
+    if (freq > 365) return 'Максимальное значение: 365 дней';
+    return '';
+  }
+
+  hasFrequencyError(): boolean {
+    return !!this.getFrequencyError();
   }
 }
 

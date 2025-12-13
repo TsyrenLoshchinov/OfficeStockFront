@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap');
+
+.main__container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 24px;
+  margin-right: 24px;
+}
+
+.main__title {
+  width: 310px;
+  height: 123px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 36px;
+  color: #9A0E10;
+  align-content: center;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 92px;
+  width: 100%;
+  max-width: calc(100% - 92px);
+  margin-bottom: 20px;
+}
+
+.clear-all {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  color: #9A0E10;
+  border: none;
+  cursor: pointer;
+  transition: all 0.5s;
+  background-color: transparent;
+  padding: 0;
+}
+
+.clear-all:hover {
+  color: #DD8D76;
+}
+
+.notifications {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.notification-card {
+  box-sizing: border-box;
+  position: relative;
+  gap: 10px;
+  margin-right: 83px;
+  min-height: 100px;
+  border-radius: 10px;
+  padding: 10px 60px 10px 10px;
+  background: transparent;
+  transition: border 0.3s ease-in-out, opacity 0.3s ease, transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-card.unread {
+  background: #D76B49B2;
+}
+
+.notification-card__title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 22px;
+  margin-bottom: 6px;
+  color: #9A0E10;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.notification-card__text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 22px;
+  margin: 0 0 4px;
+  color: #DD8D76;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.notification-card__text.unread {
+  color: #FFFFFF;
+}
+
+.notification-card__date {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 22px;
+  color: #C22918;
+}
+
+.notification-card__close {
+  position: absolute;
+  width: 39px;
+  height: 39px;
+  right: 4px;
+  top: 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.notification-card__close::before,
+.notification-card__close::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 18px;
+  width: 31px;
+  height: 1px;
+  background: #C22918;
+}
+
+.notification-card__close::before {
+  transform: rotate(45deg);
+}
+
+.notification-card__close::after {
+  transform: rotate(-45deg);
+}
+
+.notification-card:hover {
+  border: 1px solid #DD8D76;
+}
+
+.empty-state {
+  padding: 40px;
+  text-align: center;
+  color: #535353;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 17px;
+}
+
+.empty-state p {
+  margin: 0;
+}
+
