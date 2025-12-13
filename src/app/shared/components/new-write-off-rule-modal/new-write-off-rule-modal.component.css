@@ -21,7 +21,7 @@
   padding: 20px;
 }
 
-.conteiner {
+.modal-container {
   box-sizing: border-box;
   position: relative;
   width: 514px;
@@ -29,21 +29,17 @@
   background: #FFFFFF;
   border: 0.5px solid #C22918;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  padding: 20px;
+  padding: 40px 26px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 .modal-title {
-  position: absolute;
-  width: 299px;
-  height: 60px;
-  left: calc(50% - 299px/2);
-  top: 8px;
   font-family: 'Inter', sans-serif;
   font-weight: 200;
-  font-size: 20px;
+  font-size: 24px;
   line-height: 50px;
-  display: flex;
-  align-items: flex-end;
   text-align: center;
   color: #C22918;
   margin: 0;
@@ -53,40 +49,37 @@
   position: absolute;
   width: 39px;
   height: 39px;
-  left: 471px;
+  right: 3px;
   top: 3px;
   border: none;
   background: transparent;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.modal-close::before,
-.modal-close::after {
-  content: "";
+.close-line {
   position: absolute;
-  left: 8px;
-  top: 8px;
   width: 31px;
   height: 1px;
   background: #C22918;
 }
 
-.modal-close::before {
+.close-line:first-child {
   transform: rotate(45deg);
 }
 
-.modal-close::after {
+.close-line:last-child {
   transform: rotate(-45deg);
 }
 
 .input-field {
   box-sizing: border-box;
-  position: absolute;
-  width: 413px;
-  height: 57px;
-  left: calc(50% - 413px/2);
-  top: 68px;
   position: relative;
+  width: 100%;
+  height: 57px;
+  margin: 0;
 }
 
 .input-field__input {
@@ -199,21 +192,15 @@
 }
 
 .frequency-section {
-  position: absolute;
-  width: 300px;
-  height: 47px;
-  left: calc(50% - 300px/2);
-  top: 132px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   gap: 10px;
+  margin: 0;
 }
 
 .frequency-label {
-  width: 162px;
-  height: 23px;
   font-family: 'Inter', sans-serif;
   font-weight: 300;
   font-size: 20px;
@@ -221,6 +208,7 @@
   display: flex;
   align-items: center;
   color: #535353;
+  white-space: nowrap;
 }
 
 .frequency-input-wrapper {
@@ -251,8 +239,6 @@
 }
 
 .frequency-unit {
-  width: 35px;
-  height: 23px;
   font-family: 'Inter', sans-serif;
   font-weight: 300;
   font-size: 20px;
@@ -260,49 +246,38 @@
   display: flex;
   align-items: center;
   color: #535353;
+  white-space: nowrap;
 }
 
-.btnModel {
-  position: absolute;
-  width: 153px;
-  height: 53px;
-  left: calc(50% - 153px/2);
-  top: 196px;
+.modal-footer {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 10px;
 }
 
-.button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  height: 100%;
-  padding: 11px 47px;
-  box-sizing: border-box;
-  background-color: transparent;
+.confirm-button {
+  width: 174px;
+  height: 57px;
+  background: transparent;
   border: 1px solid rgba(88, 88, 88, 0.5);
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   font-size: 16px;
+  line-height: 50px;
   color: #9A0E10;
   cursor: pointer;
-  transition: border-color 0.6s ease-in-out, color 0.6s ease-in-out, background-color 0.6s ease-in-out;
+  transition: all 0.3s ease;
+  padding: 0;
 }
 
-.button__text {
-  transition: opacity 0.6s ease-in-out;
-}
-
-.button:hover:not(:disabled) {
-  background-color: #C22918;
+.confirm-button:hover:not(:disabled) {
   border-color: #C22918;
-  color: #FFFFFF;
+  color: #C22918;
+  background: rgba(194, 41, 24, 0.05);
 }
 
-.button:disabled {
+.confirm-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;

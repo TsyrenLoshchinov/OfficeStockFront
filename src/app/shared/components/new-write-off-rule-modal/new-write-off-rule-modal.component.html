@@ -1,7 +1,10 @@
 <div class="modal-overlay" *ngIf="isVisible" (click)="onOverlayClick($event)">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <div class="conteiner">
-      <button class="modal-close" (click)="close()" aria-label="Закрыть" type="button"></button>
+    <div class="modal-container">
+      <button class="modal-close" (click)="close()" aria-label="Закрыть" type="button">
+        <span class="close-line"></span>
+        <span class="close-line"></span>
+      </button>
 
       <h1 class="modal-title">Новое правило списания</h1>
 
@@ -44,14 +47,14 @@
         <span class="frequency-unit">дня</span>
       </div>
 
-      <div class="btnModel">
+      <div class="modal-footer">
         <button
-          class="button"
+          class="confirm-button"
           [disabled]="isConfirmButtonDisabled()"
           (click)="createRule()"
           type="button"
         >
-          <span class="button__text">{{ isSubmitting() ? 'Создание...' : 'Подтвердить' }}</span>
+          {{ isSubmitting() ? 'Создание...' : 'Подтвердить' }}
         </button>
       </div>
     </div>

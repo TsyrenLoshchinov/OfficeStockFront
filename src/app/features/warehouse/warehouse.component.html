@@ -3,30 +3,6 @@
     <h1 class="main__title">Склад</h1>
 
     <div class="actions">
-      <div class="dropdown">
-        <select
-          class="dropdown__select"
-          aria-label="Фильтр"
-          [value]="filterValue()"
-          (change)="onFilterChange($any($event.target).value)"
-        >
-          <option value="all">Показать все</option>
-          <option value="unread">Непрочитанные</option>
-        </select>
-        <div class="dropdown__custom-ui" aria-hidden="true">
-          <div class="dropdown__icon">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-          <div class="dropdown__label">{{ filterValue() === 'all' ? 'Показать все' : 'Непрочитанные' }}</div>
-          <div class="dropdown__arrow"></div>
-        </div>
-        <div class="dropdown__menu">
-          <div class="dropdown__item" data-value="all" (click)="onFilterChange('all')">Показать все</div>
-          <div class="dropdown__item" data-value="unread" (click)="onFilterChange('unread')">Непрочитанные</div>
-        </div>
-      </div>
       <button class="configure-btn" type="button" (click)="openAutomaticWriteOffModal()">
         Настроить автоматическое списание
       </button>
@@ -46,11 +22,34 @@
         <div class="cell-category">{{ item.category }}</div>
         <div class="cell-date">{{ formatDate(item.estimatedConsumptionDate) }}</div>
         <div class="cell-quantity">
-          <span *ngIf="item.writeOffQuantity">Списать </span>
-          <span class="quantity-value">{{ item.writeOffQuantity || item.quantity }}</span>
+          <ng-container *ngIf="editingItemId() !== item.id; else editQuantity">
+            <span class="quantity-value">{{ item.quantity }}</span>
+          </ng-container>
+          <ng-template #editQuantity>
+            <div class="quantity-input-wrapper">
+              <button class="quantity-btn quantity-btn--decrease" (click)="decreaseQuantity()" type="button">-</button>
+              <input 
+                type="number" 
+                class="quantity-input" 
+                [(ngModel)]="editingQuantity"
+                (keydown.enter)="saveQuantity(item)"
+                min="0"
+                [max]="item.quantity">
+              <button class="quantity-btn quantity-btn--increase" (click)="increaseQuantity(item.quantity)" type="button">+</button>
+              <button class="quantity-save-btn" (click)="saveQuantity(item)" type="button" aria-label="Сохранить">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 6L9 17l-5-5"/>
+                </svg>
+              </button>
+            </div>
+          </ng-template>
         </div>
         <div class="cell-action">
-          <button class="write-off-btn" (click)="writeOffItem(item)" type="button">
+          <button 
+            class="write-off-btn" 
+            (click)="startWriteOff(item)" 
+            type="button"
+            *ngIf="editingItemId() !== item.id">
             Списать
           </button>
         </div>

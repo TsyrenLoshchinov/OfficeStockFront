@@ -1,5 +1,6 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { WarehouseService } from './services/warehouse.service';
 import { WarehouseItem } from '../../core/models/warehouse.model';
 import { AutomaticWriteOffModalComponent } from '../../shared/components/automatic-write-off-modal/automatic-write-off-modal.component';
@@ -8,7 +9,7 @@ import { NewWriteOffRuleModalComponent } from '../../shared/components/new-write
 @Component({
   selector: 'app-warehouse',
   standalone: true,
-  imports: [CommonModule, AutomaticWriteOffModalComponent, NewWriteOffRuleModalComponent],
+  imports: [CommonModule, FormsModule, AutomaticWriteOffModalComponent, NewWriteOffRuleModalComponent],
   templateUrl: './warehouse.component.html',
   styleUrls: ['./warehouse.component.css']
 })
@@ -17,7 +18,8 @@ export class WarehouseComponent implements OnInit {
   isLoading = signal<boolean>(false);
   showAutomaticWriteOffModal = signal<boolean>(false);
   showNewRuleModal = signal<boolean>(false);
-  filterValue = signal<string>('all'); // 'all' | 'unread' | etc.
+  editingItemId = signal<number | null>(null);
+  editingQuantity: number = 0;
 
   constructor(private warehouseService: WarehouseService) {}
 
@@ -52,19 +54,54 @@ export class WarehouseComponent implements OnInit {
     });
   }
 
-  writeOffItem(item: WarehouseItem): void {
-    const quantity = item.writeOffQuantity || item.quantity;
-    if (confirm(`Вы уверены, что хотите списать ${quantity} шт. товара "${item.name}"?`)) {
-      this.warehouseService.writeOffItem(item.id, quantity).subscribe({
+  startWriteOff(item: WarehouseItem): void {
+    this.editingItemId.set(item.id);
+    this.editingQuantity = item.quantity;
+  }
+
+  decreaseQuantity(): void {
+    if (this.editingQuantity > 0) {
+      this.editingQuantity--;
+    }
+  }
+
+  increaseQuantity(maxQuantity: number): void {
+    if (this.editingQuantity < maxQuantity) {
+      this.editingQuantity++;
+    }
+  }
+
+  saveQuantity(item: WarehouseItem): void {
+    if (this.editingQuantity < 0) {
+      alert('Количество не может быть отрицательным');
+      return;
+    }
+
+    if (this.editingQuantity > item.quantity) {
+      alert(`Количество не может превышать текущее количество (${item.quantity})`);
+      this.editingQuantity = item.quantity;
+      return;
+    }
+
+    const quantityToWriteOff = item.quantity - this.editingQuantity;
+    
+    if (quantityToWriteOff > 0) {
+      this.warehouseService.writeOffItem(item.id, quantityToWriteOff).subscribe({
         next: () => {
           // Обновляем список после списания
           this.loadItems();
+          this.editingItemId.set(null);
+          this.editingQuantity = 0;
         },
         error: (error) => {
           console.error('Ошибка списания товара:', error);
           alert('Ошибка при списании товара');
         }
       });
+    } else {
+      // Если количество не изменилось, просто закрываем режим редактирования
+      this.editingItemId.set(null);
+      this.editingQuantity = 0;
     }
   }
 
@@ -97,8 +134,4 @@ export class WarehouseComponent implements OnInit {
     }
   }
 
-  onFilterChange(value: string): void {
-    this.filterValue.set(value);
-    // Здесь можно добавить логику фильтрации
-  }
 }

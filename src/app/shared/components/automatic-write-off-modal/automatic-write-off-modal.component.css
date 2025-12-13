@@ -21,76 +21,66 @@
   padding: 20px;
 }
 
-.conteiner {
+.modal-container {
   box-sizing: border-box;
   position: relative;
-  width: 514px;
+  width: 570px;
   min-height: 399px;
+  max-height: 80vh;
   background: #FFFFFF;
   border: 0.5px solid #C22918;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  padding: 20px;
+  padding: 40px 26px 26px;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-title {
-  position: absolute;
-  width: 299px;
-  height: 60px;
-  left: calc(50% - 299px/2);
-  top: 8px;
   font-family: 'Inter', sans-serif;
   font-weight: 200;
-  font-size: 20px;
+  font-size: 24px;
   line-height: 50px;
-  display: flex;
-  align-items: flex-end;
   text-align: center;
   color: #C22918;
-  margin: 0;
+  margin: 0 0 20px 0;
 }
 
 .modal-close {
   position: absolute;
   width: 39px;
   height: 39px;
-  left: 471px;
+  right: 3px;
   top: 3px;
   border: none;
   background: transparent;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.modal-close::before,
-.modal-close::after {
-  content: "";
+.close-line {
   position: absolute;
-  left: 8px;
-  top: 8px;
   width: 31px;
   height: 1px;
   background: #C22918;
 }
 
-.modal-close::before {
+.close-line:first-child {
   transform: rotate(45deg);
 }
 
-.modal-close::after {
+.close-line:last-child {
   transform: rotate(-45deg);
 }
 
 .table-header {
-  position: absolute;
-  width: 436px;
-  height: 48px;
-  left: calc(50% - 436px/2);
-  top: 60px;
   display: grid;
-  grid-template-columns: 256px 140px 80px;
+  grid-template-columns: 1fr auto auto;
   gap: 20px;
-  align-items: flex-end;
   padding-bottom: 10px;
-  border-bottom: 0.5px solid #535353;
+  margin-bottom: 0;
+  border-bottom: 0.5px solid #989898;
 }
 
 .header-name {
@@ -99,35 +89,38 @@
   font-size: 14px;
   line-height: 22px;
   color: #535353;
-  text-align: left;
 }
 
 .header-frequency {
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 22px;
   color: #535353;
   text-align: center;
+  min-width: 120px;
 }
 
 .header-action {
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 22px;
   color: #535353;
   text-align: right;
+  min-width: 100px;
+}
+
+.rules-list-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: 0;
+  max-height: 300px;
+  min-height: 200px;
 }
 
 .rules-list {
-  position: absolute;
-  width: 476px;
-  max-height: 208px;
-  left: 23px;
-  top: 96px;
-  overflow-y: auto;
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -135,16 +128,17 @@
 
 .rule-item {
   box-sizing: border-box;
-  width: 436px;
   min-height: 47px;
   display: grid;
-  grid-template-columns: 256px 140px 80px;
+  grid-template-columns: 1fr auto auto;
   gap: 20px;
   align-items: center;
-  padding: 10px 0;
-  border-bottom: 0.2px solid #535353;
-  position: relative;
-  flex-shrink: 0;
+  padding: 12px 0;
+  border-bottom: 0.5px solid #989898;
+}
+
+.rule-item:last-child {
+  border-bottom: none;
 }
 
 .rule-name {
@@ -152,8 +146,9 @@
   font-weight: 300;
   font-size: 14px;
   line-height: 22px;
-  color: #C22918;
-  text-align: left;
+  color: #535353;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .rule-frequency {
@@ -163,86 +158,83 @@
   line-height: 22px;
   color: #C22918;
   text-align: center;
+  min-width: 120px;
 }
 
 .delete-btn {
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 22px;
   color: #535353;
   background: none;
   border: none;
   cursor: pointer;
   text-align: right;
-  text-transform: capitalize;
   transition: color 0.3s;
+  min-width: 100px;
+  padding: 0;
 }
 
 .delete-btn:hover {
   color: #C22918;
 }
 
-.rules-list::-webkit-scrollbar {
+.rules-list-wrapper::-webkit-scrollbar {
   width: 10px;
 }
 
-.rules-list::-webkit-scrollbar-track {
+.rules-list-wrapper::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.rules-list::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #C22918 57.2%, #FFFFFF 57.21%);
+.rules-list-wrapper::-webkit-scrollbar-thumb {
+  background: #C22918;
+  border-radius: 5px;
   border: 0.2px solid #C22918;
 }
 
 .empty-state,
 .loading-state {
   text-align: center;
-  padding: 20px;
+  padding: 40px 20px;
   color: #989898;
   font-family: 'Inter', sans-serif;
   font-weight: 300;
   font-size: 14px;
 }
 
-.btnModel {
-  position: absolute;
-  width: 134px;
-  height: 46px;
-  left: calc(50% - 134px/2);
-  bottom: 27px;
+.modal-footer {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 20px;
+  padding-top: 20px;
 }
 
-.button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  height: 100%;
-  padding: 11px 47px;
-  box-sizing: border-box;
-  background-color: transparent;
+.add-button {
+  width: 174px;
+  height: 57px;
+  background: transparent;
   border: 1px solid rgba(88, 88, 88, 0.5);
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   font-size: 16px;
+  line-height: 50px;
   color: #9A0E10;
   cursor: pointer;
-  transition: border-color 0.6s ease-in-out, color 0.6s ease-in-out, background-color 0.6s ease-in-out;
+  transition: all 0.3s ease;
+  padding: 0;
 }
 
-.button__text {
-  transition: opacity 0.6s ease-in-out;
-}
-
-.button:hover {
-  background-color: #C22918;
+.add-button:hover:not(:disabled) {
   border-color: #C22918;
-  color: #FFFFFF;
+  color: #C22918;
+  background: rgba(194, 41, 24, 0.05);
+}
+
+.add-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
