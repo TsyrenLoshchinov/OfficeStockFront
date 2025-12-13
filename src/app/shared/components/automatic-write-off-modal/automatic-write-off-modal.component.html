@@ -1,0 +1,40 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="onOverlayClick($event)">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="conteiner">
+      <button class="modal-close" (click)="close()" aria-label="Закрыть" type="button"></button>
+
+      <h1 class="modal-title">Автоматическое списание</h1>
+
+      <div class="table-header">
+        <div class="header-name">Наименование</div>
+        <div class="header-frequency">Периодичность</div>
+        <div class="header-action">Удалить всё</div>
+      </div>
+
+      <div class="rules-list" *ngIf="!isLoading(); else loadingTemplate">
+        <div class="rule-item" *ngFor="let rule of rules()">
+          <div class="rule-name">{{ rule.itemName }}</div>
+          <div class="rule-frequency">{{ formatFrequency(rule) }}</div>
+          <button class="delete-btn" (click)="deleteRule(rule.id)" type="button">Удалить</button>
+        </div>
+
+        <div *ngIf="rules().length === 0" class="empty-state">
+          <p>Нет правил списания</p>
+        </div>
+      </div>
+
+      <ng-template #loadingTemplate>
+        <div class="loading-state">
+          <p>Загрузка правил...</p>
+        </div>
+      </ng-template>
+
+      <div class="btnModel">
+        <button class="button" (click)="onAddClick()" type="button">
+          <span class="button__text">Добавить</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
