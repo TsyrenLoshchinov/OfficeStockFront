@@ -8,10 +8,9 @@
 .main {
   position: relative;
   z-index: 2;
-  margin-left: 126px;
-  width: 1280px;
+  margin: 0 auto;
   min-height: 720px;
-  background: #FFFFFF;
+  background: transparent;
 }
 
 .main__container {
@@ -30,14 +29,16 @@
   color: #9A0E10;
   align-content: center;
   margin: 0;
-  margin-bottom: 30px;
 }
 
 .add-category-link {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
   font-family: 'Inter', sans-serif;
   font-weight: 300;
   font-size: 18px;
-  color: #989898;
+  color: #535353;
   cursor: pointer;
   margin-bottom: 30px;
   transition: color 0.3s;
@@ -68,17 +69,17 @@
 }
 
 .category-name {
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
   font-size: 20px;
-  color: #9A0E10;
+  color: #C22918;
 }
 
 .delete-btn {
   font-family: 'Inter', sans-serif;
   font-weight: 300;
   font-size: 16px;
-  color: #989898;
+  color: #535353;
   background: none;
   border: none;
   cursor: pointer;
