@@ -1,0 +1,86 @@
+<main class="main">
+  <div class="main__container">
+    <h1 class="main__title">Склад</h1>
+
+    <div class="actions">
+      <div class="dropdown">
+        <select
+          class="dropdown__select"
+          aria-label="Фильтр"
+          [value]="filterValue()"
+          (change)="onFilterChange($any($event.target).value)"
+        >
+          <option value="all">Показать все</option>
+          <option value="unread">Непрочитанные</option>
+        </select>
+        <div class="dropdown__custom-ui" aria-hidden="true">
+          <div class="dropdown__icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="dropdown__label">{{ filterValue() === 'all' ? 'Показать все' : 'Непрочитанные' }}</div>
+          <div class="dropdown__arrow"></div>
+        </div>
+        <div class="dropdown__menu">
+          <div class="dropdown__item" data-value="all" (click)="onFilterChange('all')">Показать все</div>
+          <div class="dropdown__item" data-value="unread" (click)="onFilterChange('unread')">Непрочитанные</div>
+        </div>
+      </div>
+      <button class="configure-btn" type="button" (click)="openAutomaticWriteOffModal()">
+        Настроить автоматическое списание
+      </button>
+    </div>
+
+    <div class="warehouse-table" *ngIf="!isLoading(); else loadingTemplate">
+      <div class="table-header">
+        <div class="header-name">Наименование</div>
+        <div class="header-category">Категория</div>
+        <div class="header-date">Предполагаемая дата расходования запаса</div>
+        <div class="header-quantity">Количество</div>
+        <div class="header-action"></div>
+      </div>
+
+      <div class="table-row" *ngFor="let item of items()">
+        <div class="cell-name">{{ item.name }}</div>
+        <div class="cell-category">{{ item.category }}</div>
+        <div class="cell-date">{{ formatDate(item.estimatedConsumptionDate) }}</div>
+        <div class="cell-quantity">
+          <span *ngIf="item.writeOffQuantity">Списать </span>
+          <span class="quantity-value">{{ item.writeOffQuantity || item.quantity }}</span>
+        </div>
+        <div class="cell-action">
+          <button class="write-off-btn" (click)="writeOffItem(item)" type="button">
+            Списать
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="items().length === 0" class="empty-state">
+        <p>Нет товаров на складе</p>
+      </div>
+    </div>
+
+    <ng-template #loadingTemplate>
+      <div class="loading-state">
+        <p>Загрузка товаров...</p>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Модальное окно автоматического списания -->
+  <app-automatic-write-off-modal
+    *ngIf="showAutomaticWriteOffModal()"
+    (addRuleRequested)="openNewRuleModal()"
+    (closed)="closeAutomaticWriteOffModal()">
+  </app-automatic-write-off-modal>
+
+  <!-- Модальное окно нового правила списания -->
+  <app-new-write-off-rule-modal
+    *ngIf="showNewRuleModal()"
+    [warehouseItems]="items()"
+    (ruleCreated)="onNewRuleCreated()"
+    (closed)="closeNewRuleModal()">
+  </app-new-write-off-rule-modal>
+</main>
+
