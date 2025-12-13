@@ -13,13 +13,12 @@
         </div>
 
         <!-- Предпросмотр чека -->
-        <div *ngIf="showPreview && receiptData" class="preview-container">
-            <app-receipt-preview 
-                [receiptData]="receiptData"
-                (confirmed)="onReceiptConfirmed($event)"
-                (cancelled)="onReceiptCancelled()">
-            </app-receipt-preview>
-        </div>
+        <app-receipt-modal
+            *ngIf="showPreview && receiptData"
+            [receiptData]="receiptData"
+            [isReadOnly]="false"
+            (closed)="onReceiptCancelled()">
+        </app-receipt-modal>
     </div>
 </div>
 

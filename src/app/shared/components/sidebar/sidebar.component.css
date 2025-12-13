@@ -1,3 +1,17 @@
+/* Overlay для затемнения фона */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 91px; /* Начинается справа от сайдбара */
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    backdrop-filter: blur(2px);
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    cursor: pointer;
+}
+
 /* Стили из OfficeStockFront/UI/sideBar&header/style.css */
 .sidebar {
     position: fixed;

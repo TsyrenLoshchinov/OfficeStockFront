@@ -1,3 +1,11 @@
+<!-- Overlay для затемнения фона -->
+<div 
+  class="sidebar-overlay" 
+  *ngIf="isOpen"
+  (click)="closeSidebar()"
+  [attr.aria-hidden]="!isOpen">
+</div>
+
 <aside class="sidebar" [attr.data-open]="isOpen">
   <div class="left-bar">
     <button 
@@ -41,7 +49,7 @@
         *ngFor="let item of filteredMenuItems"
         [routerLink]="item.route"
         routerLinkActive="sidebar__nav-item--active"
-        [routerLinkActiveOptions]="{exact: false}"
+        [routerLinkActiveOptions]="item.route === '/app' ? {exact: true} : {exact: false}"
         class="sidebar__nav-item"
         (click)="closeSidebar()">
         <span class="sidebar__nav-title">{{ item.label }}</span>

@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UploadReceiptComponent } from '../upload-receipt/upload-receipt.component';
-import { ReceiptPreviewComponent } from '../receipt-preview/receipt-preview.component';
+import { ReceiptModalComponent } from '../../../shared/components/receipt-modal/receipt-modal.component';
 import { Receipt, ReceiptUploadResponse } from '../../../core/models/receipt.model';
 
 @Component({
   selector: 'app-receipts-page',
   standalone: true,
-  imports: [CommonModule, UploadReceiptComponent, ReceiptPreviewComponent],
+  imports: [CommonModule, UploadReceiptComponent, ReceiptModalComponent],
   templateUrl: './receipts-page.component.html',
   styleUrls: ['./receipts-page.component.css']
 })
@@ -25,9 +25,8 @@ export class ReceiptsPageComponent {
     this.showPreview = true;
   }
 
-  onReceiptConfirmed(receipt: Receipt): void {
-    console.log('Receipt confirmed:', receipt);
-    // Здесь можно добавить логику обновления списка чеков
+  onReceiptConfirmed(): void {
+    // После подтверждения чека закрываем модальное окно
     this.showPreview = false;
     this.receiptData = null;
   }
