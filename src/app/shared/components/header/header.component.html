@@ -1,4 +1,4 @@
-<header class="header">
+<header class="header" [class.header--modal-open]="hasOpenModal()" [class.header--sidebar-open]="isSidebarOpen">
   <div class="headers__btn">
     <a routerLink="/app/receipts" class="header__logo">
       <img src="assets/icons/logoHeader.png" alt="Логотип" class="header__logo-image">

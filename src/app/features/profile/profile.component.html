@@ -17,3 +17,8 @@
     </div>
   </div>
 </div>
+
+<!-- Отладочная информация (можно удалить после проверки) -->
+<div *ngIf="!user" style="color: red; padding: 20px; border: 2px solid red; margin: 20px;">
+  <strong>Ошибка:</strong> Данные пользователя не найдены. Проверьте авторизацию.
+</div>

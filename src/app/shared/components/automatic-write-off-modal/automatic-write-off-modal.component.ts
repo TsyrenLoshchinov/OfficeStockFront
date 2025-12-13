@@ -1,16 +1,18 @@
-import { Component, OnInit, signal, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WarehouseService } from '../../../features/warehouse/services/warehouse.service';
 import { WriteOffRule } from '../../../core/models/warehouse.model';
+import { ModalContainerDirective } from '../../directives/modal-container.directive';
+import { ModalStateService } from '../../../core/services/modal-state.service';
 
 @Component({
   selector: 'app-automatic-write-off-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ModalContainerDirective],
   templateUrl: './automatic-write-off-modal.component.html',
   styleUrls: ['./automatic-write-off-modal.component.css']
 })
-export class AutomaticWriteOffModalComponent implements OnInit {
+export class AutomaticWriteOffModalComponent implements OnInit, OnDestroy {
   @Output() addRuleRequested = new EventEmitter<void>();
   @Output() closed = new EventEmitter<void>();
 
@@ -18,10 +20,18 @@ export class AutomaticWriteOffModalComponent implements OnInit {
   isLoading = signal<boolean>(false);
   isVisible = true;
 
-  constructor(private warehouseService: WarehouseService) {}
+  constructor(
+    private warehouseService: WarehouseService,
+    private modalStateService: ModalStateService
+  ) {}
 
   ngOnInit(): void {
+    this.modalStateService.openModal();
     this.loadRules();
+  }
+
+  ngOnDestroy(): void {
+    this.modalStateService.closeModal();
   }
 
   loadRules(): void {
@@ -79,6 +89,7 @@ export class AutomaticWriteOffModalComponent implements OnInit {
 
   close(): void {
     this.isVisible = false;
+    this.modalStateService.closeModal();
     this.closed.emit();
   }
 

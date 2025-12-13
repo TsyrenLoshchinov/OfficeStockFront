@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Receipt, ReceiptItem } from '../../../core/models/receipt.model';
@@ -8,6 +8,8 @@ import { ChangeCategoryModalComponent } from '../change-category-modal/change-ca
 import { ConfirmationChangesModalComponent } from '../confirmation-changes-modal/confirmation-changes-modal.component';
 import { AddCategoryModalComponent } from '../add-category-modal/add-category-modal.component';
 import { ConfirmationAddModalComponent } from '../confirmation-add-modal/confirmation-add-modal.component';
+import { ModalStateService } from '../../../core/services/modal-state.service';
+import { ModalContainerDirective } from '../../directives/modal-container.directive';
 
 @Component({
   selector: 'app-receipt-modal',
@@ -18,12 +20,13 @@ import { ConfirmationAddModalComponent } from '../confirmation-add-modal/confirm
     ChangeCategoryModalComponent,
     ConfirmationChangesModalComponent,
     AddCategoryModalComponent,
-    ConfirmationAddModalComponent
+    ConfirmationAddModalComponent,
+    ModalContainerDirective
   ],
   templateUrl: './receipt-modal.component.html',
   styleUrls: ['./receipt-modal.component.css']
 })
-export class ReceiptModalComponent implements OnInit {
+export class ReceiptModalComponent implements OnInit, OnDestroy {
   @Input() receiptData!: Receipt;
   @Input() isReadOnly: boolean = false; // Для просмотра из списка чеков
   @Output() closed = new EventEmitter<void>();
@@ -47,7 +50,8 @@ export class ReceiptModalComponent implements OnInit {
 
   constructor(
     private receiptsService: ReceiptsService,
-    private categoriesService: CategoriesService
+    private categoriesService: CategoriesService,
+    private modalStateService: ModalStateService
   ) {
     this.editedReceipt = {
       organization: '',
@@ -58,6 +62,7 @@ export class ReceiptModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.modalStateService.openModal();
     this.editedReceipt = {
       organization: this.receiptData.organization,
       purchaseDate: this.receiptData.purchaseDate,
@@ -76,6 +81,10 @@ export class ReceiptModalComponent implements OnInit {
         this.availableCategories = ['Аптека', 'Чай', 'Офисные принадлежности', 'Продукты', 'Не определёно'];
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.modalStateService.closeModal();
   }
 
   updateItemName(item: ReceiptItem, newName: string): void {
@@ -219,6 +228,7 @@ export class ReceiptModalComponent implements OnInit {
 
   close(): void {
     this.isVisible = false;
+    this.modalStateService.closeModal();
     this.closed.emit();
   }
 

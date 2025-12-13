@@ -16,3 +16,9 @@ body {
     color: #535353;
 }
 
+/* Глобальный стиль для всех модальных окон - они должны быть выше сайдбара */
+.modal-overlay {
+    z-index: 10000 !important;
+    position: fixed !important;
+}
+

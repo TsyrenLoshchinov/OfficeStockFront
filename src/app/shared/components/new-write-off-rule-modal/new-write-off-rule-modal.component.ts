@@ -1,17 +1,19 @@
-import { Component, Input, Output, EventEmitter, OnInit, signal } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WarehouseService } from '../../../features/warehouse/services/warehouse.service';
 import { WarehouseItem, CreateWriteOffRulePayload } from '../../../core/models/warehouse.model';
+import { ModalContainerDirective } from '../../directives/modal-container.directive';
+import { ModalStateService } from '../../../core/services/modal-state.service';
 
 @Component({
   selector: 'app-new-write-off-rule-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ModalContainerDirective],
   templateUrl: './new-write-off-rule-modal.component.html',
   styleUrls: ['./new-write-off-rule-modal.component.css']
 })
-export class NewWriteOffRuleModalComponent implements OnInit {
+export class NewWriteOffRuleModalComponent implements OnInit, OnDestroy {
   @Input() warehouseItems: WarehouseItem[] = [];
   @Output() ruleCreated = new EventEmitter<void>();
   @Output() closed = new EventEmitter<void>();
@@ -24,10 +26,18 @@ export class NewWriteOffRuleModalComponent implements OnInit {
   isSubmitting = signal<boolean>(false);
   isVisible = true;
 
-  constructor(private warehouseService: WarehouseService) {}
+  constructor(
+    private warehouseService: WarehouseService,
+    private modalStateService: ModalStateService
+  ) {}
 
   ngOnInit(): void {
+    this.modalStateService.openModal();
     this.filteredItems.set(this.warehouseItems);
+  }
+
+  ngOnDestroy(): void {
+    this.modalStateService.closeModal();
   }
 
   onSearchChange(value: string): void {
@@ -96,6 +106,7 @@ export class NewWriteOffRuleModalComponent implements OnInit {
 
   close(): void {
     this.isVisible = false;
+    this.modalStateService.closeModal();
     this.closed.emit();
   }
 

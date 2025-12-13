@@ -1,20 +1,32 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ModalStateService } from '../../../core/services/modal-state.service';
+import { ModalContainerDirective } from '../../directives/modal-container.directive';
 
 @Component({
   selector: 'app-confirmation-changes-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ModalContainerDirective],
   templateUrl: './confirmation-changes-modal.component.html',
   styleUrls: ['./confirmation-changes-modal.component.css']
 })
-export class ConfirmationChangesModalComponent {
+export class ConfirmationChangesModalComponent implements OnInit, OnDestroy {
   @Input() oldCategory: string = '';
   @Input() newCategory: string = '';
   @Output() confirmed = new EventEmitter<void>();
   @Output() closed = new EventEmitter<void>();
 
   isVisible = true;
+
+  constructor(private modalStateService: ModalStateService) {}
+
+  ngOnInit(): void {
+    this.modalStateService.openModal();
+  }
+
+  ngOnDestroy(): void {
+    this.modalStateService.closeModal();
+  }
 
   confirm(): void {
     this.confirmed.emit();
@@ -23,6 +35,7 @@ export class ConfirmationChangesModalComponent {
 
   close(): void {
     this.isVisible = false;
+    this.modalStateService.closeModal();
     this.closed.emit();
   }
 

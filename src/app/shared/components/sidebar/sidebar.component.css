@@ -33,6 +33,16 @@
     box-shadow: 6px 0px 6px 0px #00000040;
 }
 
+.sidebar--modal-open {
+    pointer-events: none;
+}
+
+.sidebar--modal-open .menu-button,
+.sidebar--modal-open .exitIcon,
+.sidebar--modal-open .sidebar__nav-item {
+    pointer-events: none;
+}
+
 .left-bar {
     width: 91px;
     border-right: 1px solid #DBDCE4;
@@ -185,6 +195,8 @@
     pointer-events: none;
     transform: translateX(-20px);
     transition: opacity 0.25s ease, transform 0.25s ease;
+    position: relative;
+    z-index: 1;
 }
 
 .sidebar[data-open="true"] .sidebar__panel {

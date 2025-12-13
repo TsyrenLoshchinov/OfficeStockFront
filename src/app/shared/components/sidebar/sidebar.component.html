@@ -6,7 +6,7 @@
   [attr.aria-hidden]="!isOpen">
 </div>
 
-<aside class="sidebar" [attr.data-open]="isOpen">
+<aside class="sidebar" [attr.data-open]="isOpen" [class.sidebar--modal-open]="hasOpenModal()">
   <div class="left-bar">
     <button 
       class="menu-button" 

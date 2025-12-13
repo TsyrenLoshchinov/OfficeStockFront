@@ -1,17 +1,19 @@
-import { Component, Input, Output, EventEmitter, OnInit, signal } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CategoriesService } from '../../../features/categories/services/categories.service';
 import { Category } from '../../../core/models/category.model';
+import { ModalStateService } from '../../../core/services/modal-state.service';
+import { ModalContainerDirective } from '../../directives/modal-container.directive';
 
 @Component({
   selector: 'app-change-category-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ModalContainerDirective],
   templateUrl: './change-category-modal.component.html',
   styleUrls: ['./change-category-modal.component.css']
 })
-export class ChangeCategoryModalComponent implements OnInit {
+export class ChangeCategoryModalComponent implements OnInit, OnDestroy {
   @Input() currentCategory: string = '';
   @Input() itemIndex: number = -1;
   @Output() categorySelected = new EventEmitter<string>();
@@ -25,10 +27,18 @@ export class ChangeCategoryModalComponent implements OnInit {
   showDropdown = signal<boolean>(false);
   isVisible = true;
 
-  constructor(private categoriesService: CategoriesService) {}
+  constructor(
+    private categoriesService: CategoriesService,
+    private modalStateService: ModalStateService
+  ) {}
 
   ngOnInit(): void {
+    this.modalStateService.openModal();
     this.loadCategories();
+  }
+
+  ngOnDestroy(): void {
+    this.modalStateService.closeModal();
   }
 
   loadCategories(): void {
@@ -85,6 +95,7 @@ export class ChangeCategoryModalComponent implements OnInit {
 
   close(): void {
     this.isVisible = false;
+    this.modalStateService.closeModal();
     this.closed.emit();
   }
 

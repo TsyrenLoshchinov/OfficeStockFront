@@ -9,7 +9,7 @@
 
     <app-sidebar></app-sidebar>
 
-    <div class="app-content">
+    <div class="app-content" [class.app-content--sidebar-open]="isSidebarOpen()">
       <app-header></app-header>
       <main class="main-content">
         <router-outlet></router-outlet>
@@ -17,6 +17,9 @@
     </div>
 
     <div class="app__overlay" [attr.data-visible]="false"></div>
+    
+    <!-- Контейнер для модальных окон на уровне layout -->
+    <div id="modal-container"></div>
   </div>
 </div>
 

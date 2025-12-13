@@ -90,3 +90,15 @@
     color: #535353;
 }
 
+.header--modal-open {
+    pointer-events: none;
+    opacity: 0.5;
+    filter: blur(2px);
+}
+
+.header--sidebar-open {
+    opacity: 0.5;
+    filter: blur(2px);
+    pointer-events: none;
+}
+

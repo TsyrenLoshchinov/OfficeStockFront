@@ -1,16 +1,18 @@
-import { Component, Output, EventEmitter, signal } from '@angular/core';
+import { Component, Output, EventEmitter, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CategoriesService } from '../../../features/categories/services/categories.service';
+import { ModalContainerDirective } from '../../directives/modal-container.directive';
+import { ModalStateService } from '../../../core/services/modal-state.service';
 
 @Component({
   selector: 'app-add-category-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ModalContainerDirective],
   templateUrl: './add-category-modal.component.html',
   styleUrls: ['./add-category-modal.component.css']
 })
-export class AddCategoryModalComponent {
+export class AddCategoryModalComponent implements OnInit, OnDestroy {
   @Output() categoryAdded = new EventEmitter<string>();
   @Output() closed = new EventEmitter<void>();
 
@@ -18,7 +20,18 @@ export class AddCategoryModalComponent {
   isSubmitting = signal<boolean>(false);
   isVisible = true;
 
-  constructor(private categoriesService: CategoriesService) {}
+  constructor(
+    private categoriesService: CategoriesService,
+    private modalStateService: ModalStateService
+  ) {}
+
+  ngOnInit(): void {
+    this.modalStateService.openModal();
+  }
+
+  ngOnDestroy(): void {
+    this.modalStateService.closeModal();
+  }
 
   onCategoryNameChange(value: string): void {
     this.newCategoryName.set(value);
@@ -47,6 +60,7 @@ export class AddCategoryModalComponent {
 
   close(): void {
     this.isVisible = false;
+    this.modalStateService.closeModal();
     this.closed.emit();
   }
 

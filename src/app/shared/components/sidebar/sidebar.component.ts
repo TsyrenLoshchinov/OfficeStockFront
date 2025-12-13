@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { UserRole } from '../../../core/models/user.model';
+import { ModalStateService } from '../../../core/services/modal-state.service';
 
 interface MenuItem {
   label: string;
@@ -21,6 +22,7 @@ interface MenuItem {
 export class SidebarComponent implements OnInit {
   isOpen = false;
   currentRole: UserRole | null = null;
+  hasOpenModal = this.modalStateService.hasOpenModal;
 
   menuItems: MenuItem[] = [
     { label: 'Главная', route: '/app', roles: ['hr-manager'] },
@@ -37,7 +39,8 @@ export class SidebarComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private modalStateService: ModalStateService
   ) {}
 
   ngOnInit(): void {
