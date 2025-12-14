@@ -17,7 +17,8 @@
             *ngIf="showPreview && receiptData"
             [receiptData]="receiptData"
             [isReadOnly]="false"
-            (closed)="onReceiptCancelled()">
+            (closed)="onReceiptCancelled()"
+            (confirmed)="onReceiptConfirmed()">
         </app-receipt-modal>
     </div>
 </div>

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
-import { User } from '../../core/models/user.model';
+import { UserRead } from '../../core/services/users.service';
 
 @Component({
   selector: 'app-profile',
@@ -11,43 +11,56 @@ import { User } from '../../core/models/user.model';
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent implements OnInit {
-  user: User | null = null;
+  profile = signal<UserRead | null>(null);
+  isLoading = signal<boolean>(true);
+  error = signal<string | null>(null);
 
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.user = this.authService.getUser();
+    this.loadProfile();
+  }
+
+  loadProfile(): void {
+    this.isLoading.set(true);
+    this.error.set(null);
+    
+    this.authService.getCurrentUserProfile().subscribe({
+      next: (profile) => {
+        this.profile.set(profile);
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Ошибка загрузки профиля:', error);
+        this.error.set('Ошибка при загрузке данных профиля');
+        this.isLoading.set(false);
+      }
+    });
   }
 
   getFullName(): string {
-    // Маппинг username на ФИО (можно расширить модель User)
-    const usernameMap: Record<string, string> = {
-      'admin': 'Администратор Системы',
-      'hr-manager': 'Иванов Иван Иванович',
-      'economist': 'Петрова Мария Сергеевна',
-      'director': 'Сидоров Петр Александрович'
-    };
-    return usernameMap[this.user?.username || ''] || this.user?.username || 'Пользователь';
+    const profile = this.profile();
+    return profile?.name || 'Пользователь';
   }
 
   getPosition(): string {
+    const profile = this.profile();
+    return profile?.position || this.getRoleLabel();
+  }
+
+  getRoleLabel(): string {
+    const profile = this.profile();
     const roleMap: Record<string, string> = {
       'admin': 'Администратор',
       'hr-manager': 'HR-менеджер',
       'economist': 'Экономист',
       'director': 'Директор'
     };
-    return roleMap[this.user?.role || ''] || 'Сотрудник';
+    return roleMap[profile?.role_name || ''] || 'Сотрудник';
   }
 
   getEmail(): string {
-    // Маппинг username на email
-    const emailMap: Record<string, string> = {
-      'admin': 'admin@officestock.com',
-      'hr-manager': 'iiivanov@pochta.com',
-      'economist': 'petrova@pochta.com',
-      'director': 'sidorov@pochta.com'
-    };
-    return emailMap[this.user?.username || ''] || `${this.user?.username || 'user'}@pochta.com`;
+    const profile = this.profile();
+    return profile?.email || '';
   }
 }

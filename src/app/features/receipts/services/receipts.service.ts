@@ -15,10 +15,11 @@ export class ReceiptsService {
 
   uploadReceipt(file: File): Observable<ReceiptUploadResponse> {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', file, file.name);
     
+    // Angular HttpClient автоматически установит правильный Content-Type для FormData с boundary
     return this.http.post<ReceiptUploadResponse>(
-      `${this.apiService.getBaseUrl()}/receipts/parse-qr`, // отправляем файл на сервер
+      `${this.apiService.getBaseUrl()}/receipts/upload`,
       formData
     );
   }

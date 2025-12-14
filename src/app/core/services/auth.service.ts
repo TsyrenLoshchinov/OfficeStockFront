@@ -4,6 +4,8 @@ import { Observable, BehaviorSubject, tap, map } from 'rxjs';
 import { Router } from '@angular/router';
 import { LoginPayload, LoginResponse, LoginResponseBackend, UserRole, User } from '../models/user.model';
 import { ApiService } from './api.service';
+import { UserRead } from './users.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -111,6 +113,52 @@ export class AuthService {
   hasAnyRole(roles: UserRole[]): boolean {
     const userRole = this.getRole();
     return userRole ? roles.includes(userRole) : false;
+  }
+
+  getCurrentUserProfile(): Observable<UserRead> {
+    if (environment.useMockAuth) {
+      const user = this.getUser();
+      const mockProfile: UserRead = {
+        id: user?.userId || 1,
+        email: `${user?.username || 'user'}@pochta.com`,
+        name: user?.username || 'Пользователь',
+        position: null,
+        role_name: user?.role || 'hr-manager',
+        role_id: null,
+        is_active: true,
+        is_superuser: user?.role === 'admin',
+        is_verified: false
+      };
+      return new Observable(observer => {
+        observer.next(mockProfile);
+        observer.complete();
+      });
+    }
+
+    return this.http.get<UserRead>(`${this.apiService.getBaseUrl()}/users/me`);
+  }
+
+  updateCurrentUserProfile(updates: Partial<UserRead>): Observable<UserRead> {
+    if (environment.useMockAuth) {
+      const user = this.getUser();
+      const updatedProfile: UserRead = {
+        id: user?.userId || 1,
+        email: updates.email || `${user?.username || 'user'}@pochta.com`,
+        name: updates.name || user?.username || 'Пользователь',
+        position: updates.position || null,
+        role_name: updates.role_name || user?.role || 'hr-manager',
+        role_id: updates.role_id || null,
+        is_active: updates.is_active !== undefined ? updates.is_active : true,
+        is_superuser: updates.is_superuser !== undefined ? updates.is_superuser : user?.role === 'admin',
+        is_verified: updates.is_verified !== undefined ? updates.is_verified : false
+      };
+      return new Observable(observer => {
+        observer.next(updatedProfile);
+        observer.complete();
+      });
+    }
+
+    return this.http.patch<UserRead>(`${this.apiService.getBaseUrl()}/users/me`, updates);
   }
 }
 

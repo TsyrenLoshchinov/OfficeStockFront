@@ -1,24 +1,29 @@
 <div class="main__container">
   <h1 class="main__title">Профиль</h1>
 
-  <div class="fio">
-    <p>{{ getFullName() }}</p>
+  <div *ngIf="isLoading()" class="loading">
+    <p>Загрузка данных профиля...</p>
   </div>
 
-  <div class="profile-info">
-    <div class="column first">
-      <p class="job title">Должность:</p>
-      <p class="mail title">Электронная почта:</p>
+  <div *ngIf="error()" class="error">
+    <p>{{ error() }}</p>
+  </div>
+
+  <div *ngIf="!isLoading() && !error() && profile()">
+    <div class="fio">
+      <p>{{ getFullName() }}</p>
     </div>
 
-    <div class="column second">
-      <p class="title">{{ getPosition() }}</p>
-      <p class="mail">{{ getEmail() }}</p>
+    <div class="profile-info">
+      <div class="column first">
+        <p class="job title">Должность:</p>
+        <p class="mail title">Электронная почта:</p>
+      </div>
+
+      <div class="column second">
+        <p class="title">{{ getPosition() }}</p>
+        <p class="mail">{{ getEmail() }}</p>
+      </div>
     </div>
   </div>
-</div>
-
-<!-- Отладочная информация (можно удалить после проверки) -->
-<div *ngIf="!user" style="color: red; padding: 20px; border: 2px solid red; margin: 20px;">
-  <strong>Ошибка:</strong> Данные пользователя не найдены. Проверьте авторизацию.
 </div>

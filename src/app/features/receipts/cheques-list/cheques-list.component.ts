@@ -113,9 +113,6 @@ export class ChequesListComponent implements OnInit {
   closeModal(): void {
     this.showModal.set(false);
     this.selectedCheque = null;
-    // Обновляем список чеков после закрытия модального окна
-    // (на случай, если были изменения)
-    this.loadCheques();
   }
 
   formatDate(dateString: string): string {

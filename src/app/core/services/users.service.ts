@@ -1,5 +1,10 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { map, delay } from 'rxjs/operators';
 import { UserRole } from '../models/user.model';
+import { ApiService } from './api.service';
+import { environment } from '../../../environments/environment';
 
 export interface Employee {
   id: string;
@@ -11,80 +16,208 @@ export interface Employee {
   password?: string;
 }
 
+// API interfaces
+export interface UserRead {
+  id: number;
+  email: string;
+  name: string;
+  position?: string | null;
+  role_name?: string | null;
+  role_id?: number | null;
+  is_active: boolean;
+  is_superuser: boolean;
+  is_verified: boolean;
+}
+
+export interface UserCreateAdmin {
+  email: string;
+  password: string;
+  name: string;
+  position?: string | null;
+  role_name?: string | null;
+  is_superuser?: boolean;
+}
+
+export interface UserUpdateAdmin {
+  email?: string | null;
+  name?: string | null;
+  position?: string | null;
+  is_superuser?: boolean;
+  role_name?: string | null;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
-  private readonly employees = signal<Employee[]>([
-    {
-      id: '001',
-      firstName: 'Иван',
-      lastName: 'Иванов',
-      middleName: 'Иванович',
-      email: 'iiivanov@pochta.com',
-      role: 'hr-manager'
-    },
-    {
-      id: '002',
-      firstName: 'Мария',
-      lastName: 'Петрова',
-      middleName: 'Сергеевна',
-      email: 'petrova@pochta.com',
-      role: 'economist'
-    },
-    {
-      id: '003',
-      firstName: 'Петр',
-      lastName: 'Сидоров',
-      middleName: 'Александрович',
-      email: 'sidorov@pochta.com',
-      role: 'director'
-    },
-    {
-      id: '004',
-      firstName: 'Анна',
-      lastName: 'Козлова',
-      middleName: 'Владимировна',
-      email: 'kozlova@pochta.com',
-      role: 'hr-manager'
-    }
-  ]);
+  constructor(
+    private http: HttpClient,
+    private apiService: ApiService
+  ) {}
 
-  getEmployees(): readonly Employee[] {
-    return this.employees();
-  }
+  private mapUserReadToEmployee(user: UserRead): Employee {
+    // Парсим имя: предполагаем формат "Фамилия Имя Отчество" или "Имя Фамилия"
+    const nameParts = user.name.split(' ');
+    let firstName = '';
+    let lastName = '';
+    let middleName = '';
 
-  getEmployeeById(id: string): Employee | undefined {
-    return this.employees().find(emp => emp.id === id);
-  }
-
-  addEmployee(employee: Omit<Employee, 'id'>): Promise<boolean> {
-    return new Promise((resolve) => {
-      // Проверка на существующий email
-      const exists = this.employees().some(emp => emp.email === employee.email);
-      if (exists) {
-        resolve(false);
-        return;
+    if (nameParts.length >= 2) {
+      lastName = nameParts[0];
+      firstName = nameParts[1];
+      if (nameParts.length >= 3) {
+        middleName = nameParts.slice(2).join(' ');
       }
+    } else {
+      firstName = user.name;
+    }
 
-      const newId = String(this.employees().length + 1).padStart(3, '0');
-      const newEmployee: Employee = {
-        ...employee,
-        id: newId
-      };
-      this.employees.update(employees => [...employees, newEmployee]);
-      resolve(true);
-    });
+    return {
+      id: user.id.toString(),
+      firstName,
+      lastName,
+      middleName: middleName || undefined,
+      email: user.email,
+      role: (user.role_name as UserRole) || 'hr-manager'
+    };
   }
 
-  updateEmployee(id: string, updates: Partial<Employee>): void {
-    this.employees.update(employees =>
-      employees.map(emp => emp.id === id ? { ...emp, ...updates } : emp)
+  private mapEmployeeToUserCreateAdmin(employee: Omit<Employee, 'id'>): UserCreateAdmin {
+    const fullName = `${employee.lastName} ${employee.firstName}${employee.middleName ? ' ' + employee.middleName : ''}`;
+    return {
+      email: employee.email,
+      password: employee.password || '',
+      name: fullName.trim(),
+      position: null,
+      role_name: employee.role,
+      is_superuser: employee.role === 'admin'
+    };
+  }
+
+  getEmployees(): Observable<Employee[]> {
+    if (environment.useMockAuth) {
+      // Mock данные для разработки
+      const mockEmployees: Employee[] = [
+        {
+          id: '001',
+          firstName: 'Иван',
+          lastName: 'Иванов',
+          middleName: 'Иванович',
+          email: 'iiivanov@pochta.com',
+          role: 'hr-manager'
+        },
+        {
+          id: '002',
+          firstName: 'Мария',
+          lastName: 'Петрова',
+          middleName: 'Сергеевна',
+          email: 'petrova@pochta.com',
+          role: 'economist'
+        },
+        {
+          id: '003',
+          firstName: 'Петр',
+          lastName: 'Сидоров',
+          middleName: 'Александрович',
+          email: 'sidorov@pochta.com',
+          role: 'director'
+        },
+        {
+          id: '004',
+          firstName: 'Анна',
+          lastName: 'Козлова',
+          middleName: 'Владимировна',
+          email: 'kozlova@pochta.com',
+          role: 'hr-manager'
+        }
+      ];
+      return of(mockEmployees).pipe(delay(300));
+    }
+
+    return this.http.get<UserRead[]>(`${this.apiService.getBaseUrl()}/admin/users/`).pipe(
+      map(users => users.map(user => this.mapUserReadToEmployee(user)))
     );
   }
 
-  deleteEmployee(id: string): void {
-    this.employees.update(employees => employees.filter(emp => emp.id !== id));
+  getEmployeeById(id: string): Observable<Employee | undefined> {
+    if (environment.useMockAuth) {
+      const mockEmployees: Employee[] = [
+        {
+          id: '001',
+          firstName: 'Иван',
+          lastName: 'Иванов',
+          middleName: 'Иванович',
+          email: 'iiivanov@pochta.com',
+          role: 'hr-manager'
+        }
+      ];
+      return of(mockEmployees.find(emp => emp.id === id)).pipe(delay(200));
+    }
+
+    return this.http.get<UserRead>(`${this.apiService.getBaseUrl()}/admin/users/${id}`).pipe(
+      map(user => this.mapUserReadToEmployee(user))
+    );
+  }
+
+  addEmployee(employee: Omit<Employee, 'id'>): Observable<Employee> {
+    if (environment.useMockAuth) {
+      const newEmployee: Employee = {
+        ...employee,
+        id: String(Math.floor(Math.random() * 1000)).padStart(3, '0')
+      };
+      return of(newEmployee).pipe(delay(300));
+    }
+
+    const payload = this.mapEmployeeToUserCreateAdmin(employee);
+    return this.http.post<UserRead>(`${this.apiService.getBaseUrl()}/admin/users/`, payload).pipe(
+      map(user => this.mapUserReadToEmployee(user))
+    );
+  }
+
+  updateEmployee(id: string, updates: Partial<Employee>): Observable<Employee> {
+    if (environment.useMockAuth) {
+      const updated: Employee = {
+        id,
+        firstName: updates.firstName || '',
+        lastName: updates.lastName || '',
+        middleName: updates.middleName,
+        email: updates.email || '',
+        role: updates.role || 'hr-manager'
+      };
+      return of(updated).pipe(delay(300));
+    }
+
+    const payload: UserUpdateAdmin = {
+      email: updates.email,
+      name: updates.firstName && updates.lastName 
+        ? `${updates.lastName} ${updates.firstName}${updates.middleName ? ' ' + updates.middleName : ''}`.trim()
+        : undefined,
+      position: null,
+      role_name: updates.role,
+      is_superuser: updates.role === 'admin'
+    };
+
+    return this.http.patch<UserRead>(`${this.apiService.getBaseUrl()}/admin/users/${id}`, payload).pipe(
+      map(user => this.mapUserReadToEmployee(user))
+    );
+  }
+
+  deleteEmployee(id: string): Observable<void> {
+    if (environment.useMockAuth) {
+      return of(void 0).pipe(delay(200));
+    }
+
+    return this.http.delete<void>(`${this.apiService.getBaseUrl()}/admin/users/${id}`);
+  }
+
+  changePassword(userId: string, newPassword: string): Observable<void> {
+    if (environment.useMockAuth) {
+      return of(void 0).pipe(delay(200));
+    }
+
+    return this.http.post<void>(`${this.apiService.getBaseUrl()}/admin/users/${userId}/change-password`, {
+      new_password: newPassword
+    });
   }
 }
 

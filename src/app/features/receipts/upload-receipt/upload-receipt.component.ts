@@ -85,13 +85,22 @@ export class UploadReceiptComponent {
         this.uploadProgress = 100;
         setTimeout(() => {
           this.isUploading = false;
+          // После успешной загрузки отправляем событие, модалка откроется поверх компонента
+          // Сбрасываем состояние компонента, чтобы модалка могла открыться
+          const file = this.selectedFile;
+          this.selectedFile = null;
+          this.fileInfo = null;
           this.receiptUploaded.emit(response);
         }, 500);
       },
       error: (error) => {
         clearInterval(progressInterval);
         this.isUploading = false;
-        this.errorMessage = error.error?.message || 'Ошибка при загрузке файла. Попробуйте еще раз.';
+        this.uploadProgress = 0;
+        // Очищаем выбранный файл при ошибке, чтобы пользователь мог выбрать другой
+        const errorMsg = error.error?.message || error.error?.detail || error.message || 'Ошибка при загрузке файла. Попробуйте еще раз.';
+        this.errorMessage = errorMsg;
+        // Не очищаем selectedFile сразу, чтобы пользователь мог увидеть ошибку и попробовать снова
       }
     });
   }
@@ -105,6 +114,13 @@ export class UploadReceiptComponent {
     const fileInput = document.getElementById('file-input') as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
+    }
+  }
+
+  retryUpload(): void {
+    if (this.selectedFile && !this.isUploading) {
+      this.errorMessage = '';
+      this.uploadFile();
     }
   }
 }

@@ -102,17 +102,32 @@ export class UsersComponent implements OnInit {
   }
 
   loadEmployees(): void {
-    this.employees.set([...this.usersService.getEmployees()]);
-    this.applyFilter();
+    this.usersService.getEmployees().subscribe({
+      next: (employees) => {
+        this.employees.set(employees);
+        this.applyFilter();
+      },
+      error: (error) => {
+        console.error('Ошибка загрузки сотрудников:', error);
+        this.errorMessage.set('Ошибка при загрузке списка сотрудников');
+        this.showErrorModal.set(true);
+      }
+    });
   }
 
   applyFilter(): void {
-    const allEmployees = this.usersService.getEmployees();
-    if (this.filterRole() === 'all') {
-      this.employees.set([...allEmployees]);
-    } else {
-      this.employees.set(allEmployees.filter(emp => emp.role === this.filterRole()));
-    }
+    this.usersService.getEmployees().subscribe({
+      next: (allEmployees) => {
+        if (this.filterRole() === 'all') {
+          this.employees.set([...allEmployees]);
+        } else {
+          this.employees.set(allEmployees.filter(emp => emp.role === this.filterRole()));
+        }
+      },
+      error: (error) => {
+        console.error('Ошибка фильтрации:', error);
+      }
+    });
   }
 
   onFilterChange(role: string): void {
@@ -144,7 +159,7 @@ export class UsersComponent implements OnInit {
     this.modalStateService.closeModal();
   }
 
-  async onAddSubmit(): Promise<void> {
+  onAddSubmit(): void {
     if (this.addForm.invalid) {
       // Помечаем все поля как touched для отображения ошибок
       Object.keys(this.addForm.controls).forEach(key => {
@@ -163,15 +178,18 @@ export class UsersComponent implements OnInit {
       password: formValue.generatePassword ? formValue.password : formValue.password
     };
 
-    const success = await this.usersService.addEmployee(employee);
-    if (success) {
-      this.loadEmployees();
-      this.closeAddModal();
-    } else {
-      this.errorMessage.set(`Пользователь с почтой ${formValue.email} уже существует`);
-      this.showErrorModal.set(true);
-      this.modalStateService.openModal();
-    }
+    this.usersService.addEmployee(employee).subscribe({
+      next: () => {
+        this.loadEmployees();
+        this.closeAddModal();
+      },
+      error: (error) => {
+        console.error('Ошибка добавления сотрудника:', error);
+        this.errorMessage.set(error.error?.detail || `Пользователь с почтой ${formValue.email} уже существует`);
+        this.showErrorModal.set(true);
+        this.modalStateService.openModal();
+      }
+    });
   }
 
   openEditModal(employee: Employee): void {
@@ -217,13 +235,32 @@ export class UsersComponent implements OnInit {
       role: formValue.role
     };
 
-    if (formValue.generatePassword || formValue.password) {
-      updates.password = formValue.generatePassword ? formValue.password : formValue.password;
-    }
-
-    this.usersService.updateEmployee(this.selectedEmployee.id, updates);
-    this.loadEmployees();
-    this.closeEditModal();
+    this.usersService.updateEmployee(this.selectedEmployee.id, updates).subscribe({
+      next: () => {
+        if (formValue.generatePassword && formValue.password) {
+          this.usersService.changePassword(this.selectedEmployee!.id, formValue.password).subscribe({
+            next: () => {
+              this.loadEmployees();
+              this.closeEditModal();
+            },
+            error: (error) => {
+              console.error('Ошибка изменения пароля:', error);
+              this.errorMessage.set('Ошибка при изменении пароля');
+              this.showErrorModal.set(true);
+            }
+          });
+        } else {
+          this.loadEmployees();
+          this.closeEditModal();
+        }
+      },
+      error: (error) => {
+        console.error('Ошибка обновления сотрудника:', error);
+        this.errorMessage.set(error.error?.detail || 'Ошибка при обновлении данных сотрудника');
+        this.showErrorModal.set(true);
+        this.modalStateService.openModal();
+      }
+    });
   }
 
   openDeleteModal(employee: Employee): void {
@@ -240,9 +277,18 @@ export class UsersComponent implements OnInit {
 
   onDeleteConfirm(): void {
     if (this.selectedEmployee) {
-      this.usersService.deleteEmployee(this.selectedEmployee.id);
-      this.loadEmployees();
-      this.closeDeleteModal();
+      this.usersService.deleteEmployee(this.selectedEmployee.id).subscribe({
+        next: () => {
+          this.loadEmployees();
+          this.closeDeleteModal();
+        },
+        error: (error) => {
+          console.error('Ошибка удаления сотрудника:', error);
+          this.errorMessage.set('Ошибка при удалении сотрудника');
+          this.showErrorModal.set(true);
+          this.modalStateService.openModal();
+        }
+      });
     }
   }
 

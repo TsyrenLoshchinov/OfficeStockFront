@@ -30,6 +30,7 @@ export class ReceiptModalComponent implements OnInit, OnDestroy {
   @Input() receiptData!: Receipt;
   @Input() isReadOnly: boolean = false; // Для просмотра из списка чеков
   @Output() closed = new EventEmitter<void>();
+  @Output() confirmed = new EventEmitter<void>();
 
   editedReceipt: Receipt;
   availableCategories: string[] = ['Не определёно']; // Начальное значение
@@ -217,6 +218,7 @@ export class ReceiptModalComponent implements OnInit, OnDestroy {
     this.receiptsService.confirmReceipt(this.editedReceipt).subscribe({
       next: () => {
         this.isSubmitting = false;
+        this.confirmed.emit();
         this.close();
       },
       error: (error) => {

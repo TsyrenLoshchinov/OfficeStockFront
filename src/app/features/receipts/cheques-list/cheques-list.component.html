@@ -41,11 +41,11 @@
     </ng-template>
   </div>
 
-  <!-- Модальное окно с информацией о чеке -->
+  <!-- Модальное окно с информацией о чеке (только для чтения) -->
   <app-receipt-modal
     *ngIf="showModal() && selectedCheque"
     [receiptData]="selectedCheque"
-    [isReadOnly]="false"
+    [isReadOnly]="true"
     (closed)="closeModal()">
   </app-receipt-modal>
 </main>

@@ -27,14 +27,18 @@
         <button class="download-button btn-added" (click)="onButtonClick()">
             <div class="frame-4">
                 <div class="frame-5">
-                    <span class="btn-text">Добавить чек</span>
+                    <span class="btn-text">Выбрать другой файл</span>
                 </div>
             </div>
         </button>
         <div class="frame-6">
-            <span class="success-text">Файл {{ fileInfo?.name }} успешно загружен</span>
+            <span class="success-text" *ngIf="!errorMessage">Файл {{ fileInfo?.name }} успешно загружен</span>
+            <span class="error-text" *ngIf="errorMessage">{{ errorMessage }}</span>
         </div>
-        <button class="text-button" (click)="cancelUpload()"><span>Отмена</span></button>
+        <div class="action-buttons">
+            <button class="text-button" (click)="retryUpload()" *ngIf="errorMessage"><span>Повторить</span></button>
+            <button class="text-button" (click)="cancelUpload()"><span>Отмена</span></button>
+        </div>
     </div>
 
     <!-- Состояние 3: Download Process (загрузка в процессе) -->

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { Cheque } from '../../../core/models/cheque.model';
-import { Receipt } from '../../../core/models/receipt.model';
+import { Receipt, ReceiptRead, ReceiptItemRead } from '../../../core/models/receipt.model';
 import { ApiService } from '../../../core/services/api.service';
 import { environment } from '../../../../environments/environment';
 
@@ -177,7 +177,23 @@ export class ChequesService {
       return of(mockReceipt).pipe(delay(200));
     }
 
-    return this.http.get<Receipt>(`${this.apiService.getBaseUrl()}/receipts/${id}/details`);
+    return this.http.get<ReceiptRead>(`${this.apiService.getBaseUrl()}/receipts/${id}`).pipe(
+      map((apiReceipt: ReceiptRead) => this.mapReceiptReadToReceipt(apiReceipt))
+    );
+  }
+
+  private mapReceiptReadToReceipt(apiReceipt: ReceiptRead): Receipt {
+    return {
+      organization: apiReceipt.name_supplier || 'Не указано',
+      purchaseDate: apiReceipt.date_buy ? new Date(apiReceipt.date_buy).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+      totalAmount: apiReceipt.sum,
+      items: apiReceipt.items.map((item: ReceiptItemRead) => ({
+        name: item.product_name,
+        quantity: item.count_product,
+        price: item.unit_price,
+        category: item.category_name || undefined
+      }))
+    };
   }
 }
 
