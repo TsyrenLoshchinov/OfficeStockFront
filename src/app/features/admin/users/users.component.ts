@@ -235,28 +235,37 @@ export class UsersComponent implements OnInit {
       role: formValue.role
     };
 
+    // Сначала обновляем данные сотрудника
     this.usersService.updateEmployee(this.selectedEmployee.id, updates).subscribe({
       next: () => {
-        if (formValue.generatePassword && formValue.password) {
+        console.log('Данные сотрудника обновлены успешно');
+        // Если пароль указан (независимо от чекбокса), обновляем его
+        if (formValue.password && formValue.password.trim() !== '') {
+          console.log('Обновление пароля...');
           this.usersService.changePassword(this.selectedEmployee!.id, formValue.password).subscribe({
             next: () => {
+              console.log('Пароль обновлен успешно');
               this.loadEmployees();
               this.closeEditModal();
             },
             error: (error) => {
               console.error('Ошибка изменения пароля:', error);
-              this.errorMessage.set('Ошибка при изменении пароля');
+              console.error('Детали ошибки:', error.error);
+              this.errorMessage.set(error.error?.detail || error.error?.message || 'Ошибка при изменении пароля');
               this.showErrorModal.set(true);
             }
           });
         } else {
+          // Если пароль не указан, просто обновляем список
           this.loadEmployees();
           this.closeEditModal();
         }
       },
       error: (error) => {
         console.error('Ошибка обновления сотрудника:', error);
-        this.errorMessage.set(error.error?.detail || 'Ошибка при обновлении данных сотрудника');
+        console.error('Детали ошибки:', error.error);
+        console.error('Отправленный payload:', updates);
+        this.errorMessage.set(error.error?.detail || error.error?.message || 'Ошибка при обновлении данных сотрудника');
         this.showErrorModal.set(true);
         this.modalStateService.openModal();
       }

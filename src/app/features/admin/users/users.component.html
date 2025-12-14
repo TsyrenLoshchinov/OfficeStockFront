@@ -31,7 +31,7 @@
       <div class="employee-row" *ngFor="let employee of employees()">
         <div class="employee-row__cell employee-row__cell--id">{{ employee.id }}</div>
         <div class="employee-row__cell employee-row__cell--name">{{ getFullName(employee) }}</div>
-        <div class="employee-row__cell employee-row__cell--email">{{ employee.email }}</div>
+        <div class="employee-row__cell employee-row__cell--email">{{ employee.email.toLowerCase() }}</div>
         <div class="employee-row__cell employee-row__cell--role">{{ getRoleLabel(employee.role) }}</div>
         <div class="employee-row__cell employee-row__cell--actions">
           <button class="action-button" type="button" (click)="openEditModal(employee)">Изменить</button>

@@ -188,17 +188,44 @@ export class UsersService {
     }
 
     const payload: UserUpdateAdmin = {
-      email: updates.email,
+      email: updates.email ? updates.email.toLowerCase().trim() : undefined, // Нормализуем email к нижнему регистру
       name: updates.firstName && updates.lastName 
         ? `${updates.lastName} ${updates.firstName}${updates.middleName ? ' ' + updates.middleName : ''}`.trim()
         : undefined,
       position: null,
-      role_name: updates.role,
+      role_name: updates.role, // Отправляем роль
       is_superuser: updates.role === 'admin'
     };
 
-    return this.http.patch<UserRead>(`${this.apiService.getBaseUrl()}/admin/users/${id}`, payload).pipe(
-      map(user => this.mapUserReadToEmployee(user))
+    console.log('Отправка обновления сотрудника:', { id, payload });
+
+    return this.http.patch<any>(`${this.apiService.getBaseUrl()}/admin/users/${id}`, payload).pipe(
+      map((response) => {
+        console.log('Ответ API при обновлении сотрудника:', response);
+        // Маппим ответ API в формат UserRead
+        let userRead: UserRead;
+        if (response.user_id !== undefined) {
+          // Формат: { user_id, user_name, email, role, is_superuser }
+          userRead = {
+            id: response.user_id,
+            email: response.email,
+            name: response.user_name,
+            position: null,
+            role_name: response.role,
+            role_id: null,
+            is_active: true,
+            is_superuser: response.is_superuser,
+            is_verified: false
+          };
+        } else if (response.id !== undefined) {
+          // Формат: { id, name, email, role_name, ... }
+          userRead = response as UserRead;
+        } else {
+          console.error('Неизвестный формат ответа API:', response);
+          throw new Error('Неизвестный формат ответа API');
+        }
+        return this.mapUserReadToEmployee(userRead);
+      })
     );
   }
 

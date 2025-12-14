@@ -135,7 +135,33 @@ export class AuthService {
       });
     }
 
-    return this.http.get<UserRead>(`${this.apiService.getBaseUrl()}/users/me`);
+    return this.http.get<any>(`${this.apiService.getBaseUrl()}/users/me`).pipe(
+      map((response) => {
+        // Маппим ответ API в формат UserRead
+        // API может возвращать либо { user_id, user_name, email, role, is_superuser }
+        // либо { id, name, email, role_name, ... }
+        if (response.user_id !== undefined) {
+          // Формат: { user_id, user_name, email, role, is_superuser }
+          return {
+            id: response.user_id,
+            email: response.email,
+            name: response.user_name,
+            position: null,
+            role_name: response.role, // Маппим role в role_name
+            role_id: null,
+            is_active: true,
+            is_superuser: response.is_superuser,
+            is_verified: false
+          } as UserRead;
+        } else if (response.id !== undefined) {
+          // Формат: { id, name, email, role_name, ... }
+          return response as UserRead;
+        } else {
+          // Если формат неизвестен, пытаемся использовать как есть
+          return response as UserRead;
+        }
+      })
+    );
   }
 
   updateCurrentUserProfile(updates: Partial<UserRead>): Observable<UserRead> {

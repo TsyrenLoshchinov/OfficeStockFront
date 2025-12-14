@@ -44,8 +44,8 @@ export class ProfileComponent implements OnInit {
   }
 
   getPosition(): string {
-    const profile = this.profile();
-    return profile?.position || this.getRoleLabel();
+    // Всегда используем роль для отображения должности
+    return this.getRoleLabel();
   }
 
   getRoleLabel(): string {
@@ -56,7 +56,28 @@ export class ProfileComponent implements OnInit {
       'economist': 'Экономист',
       'director': 'Директор'
     };
-    return roleMap[profile?.role_name || ''] || 'Сотрудник';
+    
+    // Используем role_name из профиля, если он есть
+    let role = profile?.role_name;
+    
+    // Если role_name нет в профиле, используем роль из сохраненного пользователя при авторизации
+    if (!role) {
+      const currentUser = this.authService.getUser();
+      role = currentUser?.role || null;
+    }
+    
+    // Нормализуем роль к нижнему регистру для поиска в маппинге
+    if (role) {
+      const normalizedRole = role.toLowerCase().trim();
+      const mappedRole = roleMap[normalizedRole];
+      if (mappedRole) {
+        return mappedRole;
+      }
+      // Если роль не найдена в маппинге, возвращаем роль как есть
+      return role;
+    }
+    
+    return 'Сотрудник';
   }
 
   getEmail(): string {
