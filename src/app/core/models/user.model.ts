@@ -7,10 +7,19 @@ export interface User {
 }
 
 export interface LoginPayload {
-  login: string;
+  username: string;
   password: string;
 }
 
+// Ответ от бэкенда (snake_case)
+export interface LoginResponseBackend {
+  user_id: number;
+  user_name: string;
+  role: UserRole;
+  access_token: string;
+}
+
+// Нормализованный ответ для использования в приложении (camelCase)
 export interface LoginResponse {
   accessToken: string;
   role: UserRole;

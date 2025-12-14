@@ -23,7 +23,7 @@ export class LoginComponent {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      login: ['', [Validators.required]],
+      username: ['', [Validators.required]],
       password: ['', [Validators.required]]
     });
   }
@@ -37,7 +37,7 @@ export class LoginComponent {
     this.errorMessage = '';
 
     const credentials: LoginPayload = {
-      login: this.loginForm.value.login,
+      username: this.loginForm.value.username,
       password: this.loginForm.value.password
     };
 
@@ -49,7 +49,7 @@ export class LoginComponent {
       },
       error: (error) => {
         this.isLoading = false;
-        this.errorMessage = error.error?.message || 'Ошибка входа. Проверьте логин и пароль.';
+        this.errorMessage = error.error?.message || 'Ошибка входа. Проверьте username и пароль.';
       }
     });
   }

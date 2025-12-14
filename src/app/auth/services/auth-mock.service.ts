@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, of, delay, tap } from 'rxjs';
+import { Observable, BehaviorSubject, of, delay, tap, map } from 'rxjs';
 import { Router } from '@angular/router';
-import { LoginPayload, LoginResponse, UserRole, User } from '../../core/models/user.model';
+import { LoginPayload, LoginResponse, LoginResponseBackend, UserRole, User } from '../../core/models/user.model';
 
 /**
  * Mock-сервис для авторизации (для разработки без бэкенда)
@@ -9,19 +9,19 @@ import { LoginPayload, LoginResponse, UserRole, User } from '../../core/models/u
  * Тестовые данные для входа:
  * 
  * HR-менеджер:
- *   Логин: hr_manager
+ *   Username: hr_manager
  *   Пароль: hr123
  * 
  * Экономист:
- *   Логин: economist
+ *   Username: economist
  *   Пароль: econ123
  * 
  * Директор:
- *   Логин: director
+ *   Username: director
  *   Пароль: dir123
  * 
  * Администратор:
- *   Логин: admin
+ *   Username: admin
  *   Пароль: admin123
  */
 @Injectable({
@@ -36,32 +36,32 @@ export class AuthMockService {
   // Тестовые пользователи
   private readonly mockUsers = [
     {
-      login: 'hr_manager',
+      username: 'hr_manager',
       password: 'hr123',
       role: 'hr-manager' as UserRole,
       userId: 1,
-      username: 'HR Менеджер'
+      user_name: 'HR Менеджер'
     },
     {
-      login: 'economist',
+      username: 'economist',
       password: 'econ123',
       role: 'economist' as UserRole,
       userId: 2,
-      username: 'Экономист'
+      user_name: 'Экономист'
     },
     {
-      login: 'director',
+      username: 'director',
       password: 'dir123',
       role: 'director' as UserRole,
       userId: 3,
-      username: 'Директор'
+      user_name: 'Директор'
     },
     {
-      login: 'admin',
+      username: 'admin',
       password: 'admin123',
       role: 'admin' as UserRole,
       userId: 4,
-      username: 'Администратор'
+      user_name: 'Администратор'
     }
   ];
 
@@ -69,23 +69,32 @@ export class AuthMockService {
 
   login(credentials: LoginPayload): Observable<LoginResponse> {
     const user = this.mockUsers.find(
-      u => u.login === credentials.login && u.password === credentials.password
+      u => u.username === credentials.username && u.password === credentials.password
     );
 
     if (!user) {
-      throw { error: { message: 'Неверный логин или пароль' } };
+      throw { error: { message: 'Неверный username или пароль' } };
     }
 
-    const response: LoginResponse = {
-      accessToken: `mock_token_${user.userId}_${Date.now()}`,
+    // Имитируем ответ от бэкенда в формате snake_case
+    const backendResponse: LoginResponseBackend = {
+      user_id: user.userId,
+      user_name: user.user_name,
       role: user.role,
-      userId: user.userId,
-      username: user.username
+      access_token: `mock_token_${user.userId}_${Date.now()}`
     };
 
-    // Имитация задержки сети
-    return of(response).pipe(
+    // Имитация задержки сети и преобразование в camelCase
+    return of(backendResponse).pipe(
       delay(500),
+      map((backendResponse: LoginResponseBackend) => {
+        return {
+          accessToken: backendResponse.access_token,
+          role: backendResponse.role,
+          userId: backendResponse.user_id,
+          username: backendResponse.user_name
+        } as LoginResponse;
+      }),
       tap(response => {
         this.setToken(response.accessToken);
         const userData: User = {

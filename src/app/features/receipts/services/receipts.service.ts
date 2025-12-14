@@ -18,7 +18,7 @@ export class ReceiptsService {
     formData.append('file', file);
     
     return this.http.post<ReceiptUploadResponse>(
-      `${this.apiService.getBaseUrl()}/receipts/upload`, // отправляем файл на сервер
+      `${this.apiService.getBaseUrl()}/receipts/parse-qr`, // отправляем файл на сервер
       formData
     );
   }

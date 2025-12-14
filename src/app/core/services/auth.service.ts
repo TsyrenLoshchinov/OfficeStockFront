@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable, BehaviorSubject, tap, map } from 'rxjs';
 import { Router } from '@angular/router';
-import { LoginPayload, LoginResponse, UserRole, User } from '../models/user.model';
+import { LoginPayload, LoginResponse, LoginResponseBackend, UserRole, User } from '../models/user.model';
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -21,8 +21,32 @@ export class AuthService {
   ) {}
 
   login(credentials: LoginPayload): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiService.getBaseUrl()}/auth/login`, credentials)
+    // Подготавливаем данные в формате application/x-www-form-urlencoded
+    const body = new HttpParams()
+      .set('grant_type', 'password')
+      .set('username', credentials.username)
+      .set('password', credentials.password);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'accept': 'application/json'
+    });
+
+    return this.http.post<LoginResponseBackend>(
+      `${this.apiService.getBaseUrl()}/auth/login`,
+      body.toString(),
+      { headers }
+    )
       .pipe(
+        map((backendResponse: LoginResponseBackend) => {
+          // Преобразуем ответ от бэкенда (snake_case) в наш формат (camelCase)
+          return {
+            accessToken: backendResponse.access_token,
+            role: backendResponse.role,
+            userId: backendResponse.user_id,
+            username: backendResponse.user_name
+          } as LoginResponse;
+        }),
         tap(response => {
           this.setToken(response.accessToken);
           const user: User = {

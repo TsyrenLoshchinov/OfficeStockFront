@@ -51,7 +51,7 @@ export class AuthMockService {
 
   login(credentials: LoginPayload): Observable<LoginResponse> {
     const user = this.mockUsers.find(
-      u => u.login === credentials.login && u.password === credentials.password
+      u => u.login === credentials.username && u.password === credentials.password
     );
 
     if (!user) {
