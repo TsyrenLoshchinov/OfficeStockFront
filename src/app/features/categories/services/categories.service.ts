@@ -45,12 +45,17 @@ export class CategoriesService {
     return this.http.post<Category>(`${this.apiService.getBaseUrl()}/categories`, { name });
   }
 
-  deleteCategory(id: number): Observable<void> {
+  deleteCategory(name: string): Observable<void> {
     if (environment.useMockAuth) {
       return of(void 0).pipe(delay(200));
     }
 
-    return this.http.delete<void>(`${this.apiService.getBaseUrl()}/categories/${id}`);
+    return this.http.delete<void>(
+      `${this.apiService.getBaseUrl()}/categories`,
+      {
+        body: { name }
+      }
+    );
   }
 }
 

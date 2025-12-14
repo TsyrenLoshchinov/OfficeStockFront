@@ -57,11 +57,11 @@ export class CategoriesComponent implements OnInit {
     this.closeAddModal();
   }
 
-  deleteCategory(id: number): void {
+  deleteCategory(name: string): void {
     if (confirm('Вы уверены, что хотите удалить эту категорию?')) {
-      this.categoriesService.deleteCategory(id).subscribe({
+      this.categoriesService.deleteCategory(name).subscribe({
         next: () => {
-          this.categories.update(cats => cats.filter(c => c.id !== id));
+          this.categories.update(cats => cats.filter(c => c.name !== name));
         },
         error: (error) => {
           console.error('Ошибка удаления категории:', error);

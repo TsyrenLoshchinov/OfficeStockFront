@@ -9,7 +9,7 @@
     <div class="categories-list" *ngIf="!isLoading(); else loadingTemplate">
       <div class="category-item" *ngFor="let category of sortedCategories()">
         <span class="category-name">{{ category.name }}</span>
-        <button class="delete-btn" (click)="deleteCategory(category.id)" aria-label="Удалить категорию">
+        <button class="delete-btn" (click)="deleteCategory(category.name)" aria-label="Удалить категорию">
           Удалить
         </button>
       </div>
