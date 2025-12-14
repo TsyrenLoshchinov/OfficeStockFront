@@ -47,7 +47,7 @@ export class WarehouseService {
       return of(mockItems).pipe(delay(300));
     }
 
-    return this.http.get<WarehouseItem[]>(`${this.apiService.getBaseUrl()}/warehouse/items`);
+    return this.http.get<WarehouseItem[]>(`${this.apiService.getBaseUrl()}/warehouse/products`);
   }
 
   writeOffItem(itemId: number, quantity: number): Observable<void> {

@@ -19,13 +19,19 @@ export class ReceiptsPageComponent {
   constructor(private router: Router) {}
 
   onReceiptUploaded(response: ReceiptUploadResponse): void {
+    // После успешной загрузки фотографии открываем модальное окно с информацией о чеке
     this.receiptData = {
       organization: response.organization,
       purchaseDate: response.purchaseDate,
       totalAmount: response.totalAmount,
-      items: response.items.map(item => ({ ...item }))
+      items: response.items.map(item => ({ ...item })),
+      // Сохраняем дополнительные поля для отправки при подтверждении
+      fiscal_number: response.fiscal_number,
+      fiscal_document: response.fiscal_document,
+      fiscal_sign: response.fiscal_sign,
+      order_name: response.order_name
     };
-    this.showPreview = true;
+    this.showPreview = true; // Показываем модальное окно, скрываем компонент загрузки
   }
 
   onReceiptConfirmed(): void {
@@ -37,6 +43,7 @@ export class ReceiptsPageComponent {
   }
 
   onReceiptCancelled(): void {
+    // При отмене закрываем модальное окно и сбрасываем состояние
     this.showPreview = false;
     this.receiptData = null;
   }
