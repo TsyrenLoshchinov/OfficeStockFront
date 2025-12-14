@@ -41,13 +41,55 @@ export class ReceiptsService {
       { headers }
     ).pipe(
       map((apiResponse) => {
+        // Проверяем, является ли чек дубликатом
+        if (apiResponse.is_duplicate) {
+          // Если дубликат, возвращаем минимальный объект с флагом
+          return {
+            organization: '',
+            purchaseDate: '',
+            totalAmount: 0,
+            items: [],
+            is_duplicate: true,
+            success: apiResponse.success,
+            error: apiResponse.error,
+            message: apiResponse.message
+          } as ReceiptUploadResponse;
+        }
+
+        // Проверяем, успешно ли обработан чек
+        if (!apiResponse.success) {
+          // Если не успешно, возвращаем объект с ошибкой
+          return {
+            organization: '',
+            purchaseDate: '',
+            totalAmount: 0,
+            items: [],
+            success: false,
+            error: apiResponse.error || apiResponse.message || 'Не удалось обработать чек',
+            message: apiResponse.message
+          } as ReceiptUploadResponse;
+        }
+
         // Маппим ответ API в формат ReceiptUploadResponse
         const receipt = apiResponse.receipt;
+        // Проверяем, что receipt не null
+        if (!receipt) {
+          return {
+            organization: '',
+            purchaseDate: '',
+            totalAmount: 0,
+            items: [],
+            success: false,
+            error: 'Данные чека не получены',
+            message: apiResponse.message
+          } as ReceiptUploadResponse;
+        }
+
         return {
           organization: receipt.name_supplier || '',
           purchaseDate: receipt.date_buy,
           totalAmount: receipt.sum,
-          items: receipt.items.map(item => ({
+          items: (receipt.items || []).map(item => ({
             name: item.product_name,
             quantity: item.count_product,
             price: item.unit_price,
@@ -57,7 +99,12 @@ export class ReceiptsService {
           fiscal_number: receipt.fiscal_number,
           fiscal_document: receipt.fiscal_document,
           fiscal_sign: receipt.fiscal_sign,
-          order_name: receipt.order_name
+          order_name: receipt.order_name,
+          // Сохраняем флаги и сообщения
+          is_duplicate: false,
+          success: true,
+          error: null,
+          message: apiResponse.message
         } as ReceiptUploadResponse;
       })
     );

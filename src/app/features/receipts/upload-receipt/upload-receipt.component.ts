@@ -85,11 +85,23 @@ export class UploadReceiptComponent {
         this.uploadProgress = 100;
         setTimeout(() => {
           this.isUploading = false;
-          // После успешной загрузки отправляем событие, модалка откроется поверх компонента
-          // Сбрасываем состояние компонента, чтобы модалка могла открыться
-          const file = this.selectedFile;
-          this.selectedFile = null;
-          this.fileInfo = null;
+          
+          // Если чек является дубликатом или не удалось обработать, сбрасываем состояние файла
+          if (response.is_duplicate || response.success === false) {
+            this.selectedFile = null;
+            this.fileInfo = null;
+            const fileInput = document.getElementById('file-input') as HTMLInputElement;
+            if (fileInput) {
+              fileInput.value = '';
+            }
+          } else {
+            // После успешной загрузки отправляем событие, модалка откроется поверх компонента
+            // Сбрасываем состояние компонента, чтобы модалка могла открыться
+            const file = this.selectedFile;
+            this.selectedFile = null;
+            this.fileInfo = null;
+          }
+          
           this.receiptUploaded.emit(response);
         }, 500);
       },

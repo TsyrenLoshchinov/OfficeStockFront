@@ -83,26 +83,21 @@ export class WarehouseComponent implements OnInit {
       return;
     }
 
-    const quantityToWriteOff = item.quantity - this.editingQuantity;
+    // Отправляем новое значение rest (остаток) вместо количества для списания
+    const newRest = this.editingQuantity;
     
-    if (quantityToWriteOff > 0) {
-      this.warehouseService.writeOffItem(item.id, quantityToWriteOff).subscribe({
-        next: () => {
-          // Обновляем список после списания
-          this.loadItems();
-          this.editingItemId.set(null);
-          this.editingQuantity = 0;
-        },
-        error: (error) => {
-          console.error('Ошибка списания товара:', error);
-          alert('Ошибка при списании товара');
-        }
-      });
-    } else {
-      // Если количество не изменилось, просто закрываем режим редактирования
-      this.editingItemId.set(null);
-      this.editingQuantity = 0;
-    }
+    this.warehouseService.writeOffItem(item.id, newRest).subscribe({
+      next: (updatedItem) => {
+        // Обновляем список после списания
+        this.loadItems();
+        this.editingItemId.set(null);
+        this.editingQuantity = 0;
+      },
+      error: (error) => {
+        console.error('Ошибка списания товара:', error);
+        alert('Ошибка при списании товара');
+      }
+    });
   }
 
   openAutomaticWriteOffModal(): void {

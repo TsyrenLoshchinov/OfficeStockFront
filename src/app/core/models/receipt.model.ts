@@ -27,6 +27,14 @@ export interface ReceiptUploadResponse {
   fiscal_document?: string | null;
   fiscal_sign?: string | null;
   order_name?: string | null;
+  // Флаг дубликата
+  is_duplicate?: boolean;
+  // Флаг успешности обработки
+  success?: boolean;
+  // Сообщение об ошибке
+  error?: string | null;
+  // Сообщение от API
+  message?: string;
 }
 
 export interface ReceiptConfirmPayload {
@@ -77,7 +85,7 @@ export interface ReceiptUploadApiResponse {
   success: boolean;
   is_duplicate: boolean;
   message: string;
-  receipt: ReceiptRead;
+  receipt: ReceiptRead | null; // Может быть null при дубликате
   error: string | null;
 }
 

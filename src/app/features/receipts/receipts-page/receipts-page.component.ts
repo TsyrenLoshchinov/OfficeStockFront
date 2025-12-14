@@ -19,6 +19,32 @@ export class ReceiptsPageComponent {
   constructor(private router: Router) {}
 
   onReceiptUploaded(response: ReceiptUploadResponse): void {
+    // Проверяем, является ли чек дубликатом
+    if (response?.is_duplicate) {
+      alert('Такой чек уже добавлен');
+      // Сбрасываем состояние и остаемся на странице добавления чека
+      this.showPreview = false;
+      this.receiptData = null;
+      return;
+    }
+
+    // Проверяем, успешно ли обработан чек
+    if (response?.success === false) {
+      // Показываем ошибку из ответа API
+      const errorMessage = response.error || response.message || 'Не удалось обработать чек';
+      alert(errorMessage);
+      // Сбрасываем состояние и остаемся на странице добавления чека
+      this.showPreview = false;
+      this.receiptData = null;
+      return;
+    }
+
+    // Проверяем, что response валиден
+    if (!response || !response.organization) {
+      console.error('Неверный формат ответа:', response);
+      return;
+    }
+
     // После успешной загрузки фотографии открываем модальное окно с информацией о чеке
     this.receiptData = {
       organization: response.organization,

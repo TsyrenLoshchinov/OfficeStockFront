@@ -7,6 +7,16 @@ export interface WarehouseItem {
   writeOffQuantity?: number; // Количество для списания
 }
 
+// API Response interface
+export interface WarehouseItemApiResponse {
+  id: number;
+  product_id: number;
+  product_name: string;
+  category_name: string;
+  rest: string; // Строка с числом
+  last_update: string;
+}
+
 export interface WriteOffRule {
   id: number;
   itemId: number;

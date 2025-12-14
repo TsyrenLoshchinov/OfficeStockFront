@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
-import { WarehouseItem, WriteOffRule, CreateWriteOffRulePayload } from '../../../core/models/warehouse.model';
+import { delay, map } from 'rxjs/operators';
+import { WarehouseItem, WriteOffRule, CreateWriteOffRulePayload, WarehouseItemApiResponse } from '../../../core/models/warehouse.model';
 import { ApiService } from '../../../core/services/api.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -12,8 +13,18 @@ import { environment } from '../../../../environments/environment';
 export class WarehouseService {
   constructor(
     private http: HttpClient,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private authService: AuthService
   ) {}
+
+  private getHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'accept': 'application/json',
+      ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+    });
+  }
 
   getWarehouseItems(): Observable<WarehouseItem[]> {
     if (environment.useMockAuth) {
@@ -47,15 +58,40 @@ export class WarehouseService {
       return of(mockItems).pipe(delay(300));
     }
 
-    return this.http.get<WarehouseItem[]>(`${this.apiService.getBaseUrl()}/warehouse/products`);
+    return this.http.get<WarehouseItemApiResponse[]>(
+      `${this.apiService.getBaseUrl()}/warehouse/products/`,
+      { headers: this.getHeaders() }
+    ).pipe(
+      map((apiItems) => {
+        // Маппим ответ API в формат WarehouseItem
+        return apiItems.map(item => ({
+          id: item.id,
+          name: item.product_name,
+          category: item.category_name,
+          estimatedConsumptionDate: null, // API не возвращает эту информацию
+          quantity: parseFloat(item.rest) || 0
+        }));
+      })
+    );
   }
 
-  writeOffItem(itemId: number, quantity: number): Observable<void> {
+  writeOffItem(itemId: number, rest: number): Observable<WarehouseItemApiResponse> {
     if (environment.useMockAuth) {
-      return of(void 0).pipe(delay(200));
+      return of({
+        id: itemId,
+        product_id: itemId,
+        product_name: 'Товар',
+        category_name: 'Категория',
+        rest: rest.toString(),
+        last_update: new Date().toISOString()
+      } as WarehouseItemApiResponse).pipe(delay(200));
     }
 
-    return this.http.post<void>(`${this.apiService.getBaseUrl()}/warehouse/items/${itemId}/write-off`, { quantity });
+    return this.http.post<WarehouseItemApiResponse>(
+      `${this.apiService.getBaseUrl()}/warehouse/products/${itemId}/write-off`,
+      { rest },
+      { headers: this.getHeaders() }
+    );
   }
 
   getWriteOffRules(): Observable<WriteOffRule[]> {
