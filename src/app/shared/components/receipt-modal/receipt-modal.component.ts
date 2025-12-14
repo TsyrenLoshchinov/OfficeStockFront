@@ -68,7 +68,12 @@ export class ReceiptModalComponent implements OnInit, OnDestroy {
       organization: this.receiptData.organization,
       purchaseDate: this.receiptData.purchaseDate,
       totalAmount: this.receiptData.totalAmount,
-      items: this.receiptData.items.map(item => ({ ...item }))
+      items: this.receiptData.items.map(item => ({ ...item })),
+      // Копируем дополнительные поля для отправки при подтверждении
+      fiscal_number: this.receiptData.fiscal_number,
+      fiscal_document: this.receiptData.fiscal_document,
+      fiscal_sign: this.receiptData.fiscal_sign,
+      order_name: this.receiptData.order_name
     };
     
     // Загружаем категории из сервиса
