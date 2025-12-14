@@ -87,8 +87,8 @@ export class WarehouseService {
       } as WarehouseItemApiResponse).pipe(delay(200));
     }
 
-    return this.http.post<WarehouseItemApiResponse>(
-      `${this.apiService.getBaseUrl()}/warehouse/products/${itemId}/write-off`,
+    return this.http.patch<WarehouseItemApiResponse>(
+      `${this.apiService.getBaseUrl()}/warehouse/products/${itemId}`,
       { rest },
       { headers: this.getHeaders() }
     );
