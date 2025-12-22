@@ -13,7 +13,7 @@ export class CategoriesService {
   constructor(
     private http: HttpClient,
     private apiService: ApiService
-  ) {}
+  ) { }
 
   getCategories(): Observable<Category[]> {
     if (environment.useMockAuth) {
@@ -29,7 +29,7 @@ export class CategoriesService {
       return of(mockCategories).pipe(delay(300));
     }
 
-    return this.http.get<Category[]>(`${this.apiService.getBaseUrl()}/categories`);
+    return this.http.get<Category[]>(`${this.apiService.getBaseUrl()}/categories/`);
   }
 
   addCategory(name: string): Observable<Category> {
@@ -42,7 +42,7 @@ export class CategoriesService {
       return of(newCategory).pipe(delay(300));
     }
 
-    return this.http.post<Category>(`${this.apiService.getBaseUrl()}/categories`, { name });
+    return this.http.post<Category>(`${this.apiService.getBaseUrl()}/categories/`, { name });
   }
 
   deleteCategory(name: string): Observable<void> {
@@ -50,8 +50,9 @@ export class CategoriesService {
       return of(void 0).pipe(delay(200));
     }
 
+    // API requires DELETE with body containing category name
     return this.http.delete<void>(
-      `${this.apiService.getBaseUrl()}/categories`,
+      `${this.apiService.getBaseUrl()}/categories/`,
       {
         body: { name }
       }

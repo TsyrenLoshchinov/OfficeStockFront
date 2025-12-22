@@ -12,19 +12,19 @@
     width: 956px;
     height: 261px;
     background: rgba(221, 141, 118, 0.5);
-    background-image: 
+    background-image:
         repeating-linear-gradient(to right, #9A0E10 0px, #9A0E10 10px, transparent 10px, transparent 20px),
         repeating-linear-gradient(to right, #9A0E10 0px, #9A0E10 10px, transparent 10px, transparent 20px),
         repeating-linear-gradient(to bottom, #9A0E10 0px, #9A0E10 10px, transparent 10px, transparent 20px),
         repeating-linear-gradient(to bottom, #9A0E10 0px, #9A0E10 10px, transparent 10px, transparent 20px),
         linear-gradient(rgba(221, 141, 118, 0.5), rgba(221, 141, 118, 0.5));
-    background-size: 
+    background-size:
         100% 1px,
         100% 1px,
         1px 100%,
         1px 100%,
         100% 100%;
-    background-position: 
+    background-position:
         top,
         bottom,
         left,
@@ -195,49 +195,61 @@
     justify-content: center;
     align-items: center;
     padding: 10px;
-    gap: 20px;
+    gap: 15px;
     position: absolute;
-    width: 551px;
+    width: 300px;
     height: 24px;
-    left: calc(50% - 551px/2 + 0.5px);
-    top: calc(50% + 93px);
+    left: calc(50% - 150px);
+    top: calc(50% + 65px);
 }
 
 .receipt-process .progress-line {
-    width: 183px;
-    height: 2px;
-    background: #FFFFFF;
+    width: 150px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
     flex: none;
     order: 0;
     flex-grow: 0;
     transition: width 0.3s ease;
-    margin-right: 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+.receipt-process .progress-line::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: #FFFFFF;
+    border-radius: 2px;
+    width: var(--progress, 0%);
+    transition: width 0.3s ease;
 }
 
 .receipt-process .progress-text {
-    width: 40px;
+    width: 45px;
     height: 12px;
     font-family: 'Montserrat', sans-serif;
     font-style: normal;
-    font-weight: 300;
-    font-size: 11px;
+    font-weight: 400;
+    font-size: 12px;
     line-height: 22px;
     display: flex;
     align-items: center;
-    text-align: center;
+    text-align: right;
     color: #FFFFFF;
     flex: none;
     order: 1;
     flex-grow: 0;
-    margin-left: 10px;
 }
 
 .receipt-process .process-text-button {
     position: absolute;
     width: 175px;
     left: calc(50% - 175px/2 + 0.5px);
-    top: 85.06%;
-    bottom: 3.07%;
+    top: calc(50% + 100px);
     background: transparent;
     border: none;
     cursor: pointer;
@@ -371,4 +383,3 @@
     border: none;
     cursor: pointer;
 }
-

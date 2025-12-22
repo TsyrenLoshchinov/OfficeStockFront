@@ -53,7 +53,7 @@ export class UsersService {
   constructor(
     private http: HttpClient,
     private apiService: ApiService
-  ) {}
+  ) { }
 
   private mapUserReadToEmployee(user: UserRead): Employee {
     // Парсим имя: предполагаем формат "Фамилия Имя Отчество" или "Имя Фамилия"
@@ -189,7 +189,7 @@ export class UsersService {
 
     const payload: UserUpdateAdmin = {
       email: updates.email ? updates.email.toLowerCase().trim() : undefined, // Нормализуем email к нижнему регистру
-      name: updates.firstName && updates.lastName 
+      name: updates.firstName && updates.lastName
         ? `${updates.lastName} ${updates.firstName}${updates.middleName ? ' ' + updates.middleName : ''}`.trim()
         : undefined,
       position: null,
@@ -242,9 +242,11 @@ export class UsersService {
       return of(void 0).pipe(delay(200));
     }
 
-    return this.http.post<void>(`${this.apiService.getBaseUrl()}/admin/users/${userId}/change-password`, {
-      new_password: newPassword
-    });
+    // API expects new_password as query parameter, not in body
+    return this.http.post<void>(
+      `${this.apiService.getBaseUrl()}/admin/users/${userId}/change-password?new_password=${encodeURIComponent(newPassword)}`,
+      {}
+    );
   }
 }
 

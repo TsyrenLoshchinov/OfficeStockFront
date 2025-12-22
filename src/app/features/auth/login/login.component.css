@@ -243,14 +243,14 @@
     background-color: #C22918;
 }
 
-.input-field__input:focus + .input-field__label,
-.input-field__input:not(:placeholder-shown) + .input-field__label {
+.input-field__input:focus+.input-field__label,
+.input-field__input:not(:placeholder-shown)+.input-field__label {
     top: 0;
     font-size: 6px;
     line-height: 6.3em;
 }
 
-.input-field__input:focus ~ .input-field__line {
+.input-field__input:focus~.input-field__line {
     background-color: #C22918;
 }
 
@@ -258,8 +258,24 @@
     opacity: 0;
 }
 
-.input-field__input--error ~ .input-field__line {
+.input-field__input--error~.input-field__line {
     background-color: #C22918;
+}
+
+/* Fix for browser autofill background color */
+.input-field__input:-webkit-autofill,
+.input-field__input:-webkit-autofill:hover,
+.input-field__input:-webkit-autofill:focus,
+.input-field__input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+    -webkit-text-fill-color: #000000 !important;
+    transition: background-color 5000s ease-in-out 0s;
+    background-color: transparent !important;
+}
+
+/* Ensure autofill doesn't break the input field styling */
+.input-field__input:-moz-autofill {
+    background-color: transparent !important;
 }
 
 .button {
@@ -322,7 +338,7 @@
     color: #C22918;
     font-size: 14px;
     text-align: center;
-    margin-top: -10px;
+    margin-top: 10px;
     font-family: 'Inter', sans-serif;
 }
 
@@ -337,4 +353,3 @@
         object-fit: cover;
     }
 }
-

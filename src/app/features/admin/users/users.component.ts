@@ -25,7 +25,7 @@ export class UsersComponent implements OnInit {
   filterRole = signal<UserRole | 'all'>('all');
   showPasswordAdd = signal(true);
   showPasswordEdit = signal(true);
-  
+
   addForm: FormGroup;
   editForm: FormGroup;
 
@@ -185,7 +185,7 @@ export class UsersComponent implements OnInit {
       },
       error: (error) => {
         console.error('Ошибка добавления сотрудника:', error);
-        this.errorMessage.set(error.error?.detail || `Пользователь с почтой ${formValue.email} уже существует`);
+        this.errorMessage.set(this.extractErrorMessage(error, `Пользователь с почтой ${formValue.email} уже существует`));
         this.showErrorModal.set(true);
         this.modalStateService.openModal();
       }
@@ -250,8 +250,7 @@ export class UsersComponent implements OnInit {
             },
             error: (error) => {
               console.error('Ошибка изменения пароля:', error);
-              console.error('Детали ошибки:', error.error);
-              this.errorMessage.set(error.error?.detail || error.error?.message || 'Ошибка при изменении пароля');
+              this.errorMessage.set(this.extractErrorMessage(error, 'Ошибка при изменении пароля'));
               this.showErrorModal.set(true);
             }
           });
@@ -263,9 +262,7 @@ export class UsersComponent implements OnInit {
       },
       error: (error) => {
         console.error('Ошибка обновления сотрудника:', error);
-        console.error('Детали ошибки:', error.error);
-        console.error('Отправленный payload:', updates);
-        this.errorMessage.set(error.error?.detail || error.error?.message || 'Ошибка при обновлении данных сотрудника');
+        this.errorMessage.set(this.extractErrorMessage(error, 'Ошибка при обновлении данных сотрудника'));
         this.showErrorModal.set(true);
         this.modalStateService.openModal();
       }
@@ -328,7 +325,7 @@ export class UsersComponent implements OnInit {
   onGeneratePasswordChange(isGenerate: boolean, formType: 'add' | 'edit'): void {
     const form = formType === 'add' ? this.addForm : this.editForm;
     const passwordControl = form.get('password');
-    
+
     if (isGenerate) {
       const generatedPassword = this.generatePassword();
       passwordControl?.setValue(generatedPassword);
@@ -348,7 +345,7 @@ export class UsersComponent implements OnInit {
   getFieldError(fieldName: string, formType: 'add' | 'edit' = 'add'): string {
     const form = formType === 'add' ? this.addForm : this.editForm;
     const control = form.get(fieldName);
-    
+
     if (control?.hasError('required')) {
       return 'Это поле обязательно для заполнения';
     }
@@ -378,5 +375,36 @@ export class UsersComponent implements OnInit {
     } else {
       this.showPasswordEdit.update(value => !value);
     }
+  }
+
+  private extractErrorMessage(error: any, defaultMessage: string): string {
+    if (!error) return defaultMessage;
+
+    // Try to get error from error.error
+    const errorBody = error.error;
+    if (!errorBody) return error.message || defaultMessage;
+
+    // If errorBody is a string, return it
+    if (typeof errorBody === 'string') return errorBody;
+
+    // If it's an object, try common fields
+    if (typeof errorBody === 'object') {
+      // Try detail field
+      if (errorBody.detail) {
+        if (typeof errorBody.detail === 'string') return errorBody.detail;
+        if (Array.isArray(errorBody.detail) && errorBody.detail.length > 0) {
+          const first = errorBody.detail[0];
+          if (typeof first === 'string') return first;
+          if (first.msg) return first.msg;
+        }
+        return JSON.stringify(errorBody.detail);
+      }
+      // Try message field
+      if (typeof errorBody.message === 'string') return errorBody.message;
+      // Try msg field
+      if (typeof errorBody.msg === 'string') return errorBody.msg;
+    }
+
+    return defaultMessage;
   }
 }

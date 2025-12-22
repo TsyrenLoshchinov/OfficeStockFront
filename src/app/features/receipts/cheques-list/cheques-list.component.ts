@@ -28,11 +28,11 @@ export class ChequesListComponent implements OnInit {
   sortedCheques = computed(() => {
     const sorted = [...this.cheques()];
     if (this.sortOrder() === 'newest') {
-      return sorted.sort((a, b) => 
+      return sorted.sort((a, b) =>
         new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
       );
     } else {
-      return sorted.sort((a, b) => 
+      return sorted.sort((a, b) =>
         new Date(a.uploadedAt).getTime() - new Date(b.uploadedAt).getTime()
       );
     }
@@ -40,7 +40,7 @@ export class ChequesListComponent implements OnInit {
 
   constructor(
     private chequesService: ChequesService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadCheques();
@@ -115,13 +115,21 @@ export class ChequesListComponent implements OnInit {
     this.selectedCheque = null;
   }
 
-  formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('ru-RU', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
+  formatDate(dateString: string | null | undefined): string {
+    if (!dateString) return 'Не указана';
+
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'Не указана';
+
+      return date.toLocaleDateString('ru-RU', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    } catch {
+      return 'Не указана';
+    }
   }
 }
 

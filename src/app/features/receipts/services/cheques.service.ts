@@ -14,7 +14,7 @@ export class ChequesService {
   constructor(
     private http: HttpClient,
     private apiService: ApiService
-  ) {}
+  ) { }
 
   getCheques(): Observable<Cheque[]> {
     if (environment.useMockAuth) {
@@ -54,7 +54,23 @@ export class ChequesService {
       return of(mockCheques).pipe(delay(300));
     }
 
-    return this.http.get<Cheque[]>(`${this.apiService.getBaseUrl()}/receipts`);
+    // API returns ReceiptRead[] which we need to map to Cheque[]
+    return this.http.get<ReceiptRead[]>(`${this.apiService.getBaseUrl()}/receipts/`).pipe(
+      map(receipts => receipts.map(receipt => this.mapReceiptReadToCheque(receipt)))
+    );
+  }
+
+  private mapReceiptReadToCheque(receipt: ReceiptRead): Cheque {
+    return {
+      id: receipt.id ?? 0,
+      number: receipt.fiscal_document || receipt.id?.toString() || 'Без номера',
+      date: receipt.date_buy || '',
+      fileName: `receipt_${receipt.id || 'unknown'}.jpg`,
+      uploadedAt: receipt.date_create || receipt.date_buy || '',
+      organization: receipt.name_supplier || 'Не указано',
+      totalAmount: receipt.sum || 0,
+      status: 'confirmed'
+    };
   }
 
   deleteCheque(id: number): Observable<void> {

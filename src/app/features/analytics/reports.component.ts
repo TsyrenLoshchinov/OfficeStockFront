@@ -7,7 +7,6 @@ import { CategoriesService } from '../categories/services/categories.service';
 import { ModalContainerDirective } from '../../shared/directives/modal-container.directive';
 import { ModalStateService } from '../../core/services/modal-state.service';
 import { ReportsApiService } from './services/reports.service';
-import { Report } from '../../core/models/report.model';
 
 interface BalanceItem {
   name: string;
@@ -45,19 +44,15 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('barChart') barChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('donutChart') donutChartRef!: ElementRef<HTMLCanvasElement>;
 
-  activeTab = signal<'balances' | 'expenses' | 'suppliers' | 'saved'>('balances');
+  activeTab = signal<'expenses' | 'suppliers'>('expenses');
   showVisualization = signal(false);
-
-  // Saved reports from API
-  savedReports = signal<Report[]>([]);
-  isLoadingReports = signal<boolean>(false);
 
   warehouseItems = signal<WarehouseItem[]>([]);
   selectedItems = signal<number[]>([]);
   selectedCategories = signal<string[]>([]);
   dateFrom = signal<string>('');
   dateTo = signal<string>('');
-  openFilterSections = signal<Set<string>>(new Set(['categories', 'products', 'period']));
+  openFilterSections = signal<Set<string>>(new Set(['period']));
 
   // Исходные данные
   private allBalancesData: BalanceItem[] = [
@@ -86,16 +81,12 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
     return filtered;
   });
 
-  expensesData = signal<ExpenseItem[]>([
-    { name: 'Вафли «Яшкино»', category: 'Вафли', amount: 445.00 },
-    { name: 'Пластырь прозрачный 3шт.', category: 'Аптека', amount: 378.00 },
-    { name: 'Чай зеленый «Fantasy Peach»', category: 'Чай', amount: 163.00 }
-  ]);
+  expensesData = signal<ExpenseItem[]>([]);
 
-  suppliersData = signal<SupplierItem[]>([
-    { name: 'ООО «Магнит»', checksCount: 1, totalAmount: 986.00, averageCheck: 445.00 },
-    { name: 'ООО «Ярче»', checksCount: 2, totalAmount: 745.00, averageCheck: 372.50 }
-  ]);
+  suppliersData = signal<SupplierItem[]>([]);
+
+  totalExpenseAmount = signal<number>(0);
+  totalSuppliersAmount = signal<number>(0);
 
   private barChart: any = null;
   private donutChart: any = null;
@@ -116,23 +107,42 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loadWarehouseItems();
     this.loadCategories();
-    this.loadSavedReports();
+    this.loadReportsData();
   }
 
-  loadSavedReports(): void {
-    this.isLoadingReports.set(true);
-    this.reportsApiService.getReports().subscribe({
-      next: (reports) => {
-        this.savedReports.set(reports);
-        this.isLoadingReports.set(false);
-      },
-      error: (error) => {
-        console.error('Ошибка загрузки отчетов:', error);
-        this.isLoadingReports.set(false);
-      }
-    });
+  loadReportsData(): void {
+    const startDate = this.dateFrom();
+    const endDate = this.dateTo();
+
+    if (startDate && endDate) {
+      // Load expenses by category
+      this.reportsApiService.getExpensesByCategory(startDate, endDate).subscribe({
+        next: (data) => {
+          this.expensesData.set(data.categories.map(c => ({
+            name: c.category,
+            category: c.category,
+            amount: c.amount
+          })));
+          this.totalExpenseAmount.set(data.total);
+        },
+        error: (error) => console.error('Ошибка загрузки расходов:', error)
+      });
+
+      // Load expenses by company (suppliers)
+      this.reportsApiService.getExpensesByCompany(startDate, endDate).subscribe({
+        next: (data) => {
+          this.suppliersData.set(data.suppliers.map(s => ({
+            name: s.name,
+            checksCount: 0,
+            totalAmount: s.totalAmount,
+            averageCheck: 0
+          })));
+          this.totalSuppliersAmount.set(data.total);
+        },
+        error: (error) => console.error('Ошибка загрузки поставщиков:', error)
+      });
+    }
   }
 
   availableCategories = computed(() => {
@@ -173,16 +183,9 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  setActiveTab(tab: 'balances' | 'expenses' | 'suppliers' | 'saved'): void {
+  setActiveTab(tab: 'expenses' | 'suppliers'): void {
     this.activeTab.set(tab);
-    // Обновляем открытые секции фильтров в зависимости от вкладки
-    if (tab === 'balances') {
-      this.openFilterSections.set(new Set(['categories', 'products', 'period']));
-    } else if (tab === 'saved') {
-      this.openFilterSections.set(new Set());
-    } else {
-      this.openFilterSections.set(new Set(['period']));
-    }
+    this.openFilterSections.set(new Set(['period']));
   }
 
   toggleFilterSection(section: string): void {
@@ -221,10 +224,12 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onDateFromChange(value: string): void {
     this.dateFrom.set(value);
+    this.loadReportsData();
   }
 
   onDateToChange(value: string): void {
     this.dateTo.set(value);
+    this.loadReportsData();
   }
 
   totalExpenses = computed(() => {
@@ -236,19 +241,11 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
   });
 
   categoryData = computed(() => {
-    const categories = new Map<string, number>();
-    this.balancesData().forEach(item => {
-      const count = categories.get(item.category) || 0;
-      categories.set(item.category, count + item.quantity);
-    });
-
-    const colors = ['#D76B49', '#DD8D76', '#C22918', '#9A0E10'];
-    let colorIndex = 0;
-
-    return Array.from(categories.entries()).map(([name, value]) => ({
-      name,
-      value,
-      color: colors[colorIndex++ % colors.length]
+    const colors = ['#D76B49', '#DD8D76', '#C22918', '#9A0E10', '#FF6B4A', '#942010'];
+    return this.expensesData().map((item, index) => ({
+      name: item.category,
+      value: item.amount,
+      color: colors[index % colors.length]
     }));
   });
 
@@ -524,9 +521,47 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   downloadReport(type: 'expenses' | 'suppliers'): void {
-    // Здесь будет логика скачивания отчета
-    console.log(`Скачивание отчета: ${type}`);
-    alert(`Функция скачивания отчета "${type}" будет реализована позже`);
+    const dateFromFormatted = this.formatDisplayDate(this.dateFrom());
+    const dateToFormatted = this.formatDisplayDate(this.dateTo());
+    const periodStr = `${dateFromFormatted} - ${dateToFormatted}`;
+
+    let csvContent = '';
+    let filename = '';
+
+    if (type === 'expenses') {
+      filename = `expenses_report_${this.dateFrom()}_${this.dateTo()}.csv`;
+      csvContent = 'Отчет по расходам\n';
+      csvContent += `Период: ${periodStr}\n\n`;
+      csvContent += 'Категория;Сумма\n';
+      this.expensesData().forEach(item => {
+        csvContent += `${item.category};${item.amount.toFixed(2)}\n`;
+      });
+      csvContent += `\nИтого;${this.totalExpenses().toFixed(2)}\n`;
+    } else {
+      filename = `suppliers_report_${this.dateFrom()}_${this.dateTo()}.csv`;
+      csvContent = 'Отчет по поставщикам\n';
+      csvContent += `Период: ${periodStr}\n\n`;
+      csvContent += 'Поставщик;Сумма закупок\n';
+      this.suppliersData().forEach(item => {
+        csvContent += `${item.name};${item.totalAmount.toFixed(2)}\n`;
+      });
+      csvContent += `\nИтого;${this.totalSuppliersExpenses().toFixed(2)}\n`;
+    }
+
+    // Create and download file
+    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
+
+  private formatDisplayDate(dateStr: string): string {
+    if (!dateStr) return '';
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) return dateStr;
+    return `${parts[2]}.${parts[1]}.${parts[0]}`;
   }
 
   private formatDateForInput(date: Date): string {
@@ -534,34 +569,5 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
-  }
-
-  // Report helper methods
-  getReportStatusClass(status: Report['status']): string {
-    return `status-${status}`;
-  }
-
-  getReportStatusLabel(status: Report['status']): string {
-    switch (status) {
-      case 'completed': return 'Готов';
-      case 'pending': return 'В обработке';
-      case 'failed': return 'Ошибка';
-      default: return status;
-    }
-  }
-
-  formatReportDate(dateString: string): string {
-    const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${day}.${month}.${year} ${hours}:${minutes}`;
-  }
-
-  downloadSavedReport(report: Report): void {
-    console.log(`Скачивание отчета: ${report.title}`);
-    alert(`Скачивание отчета "${report.title}" будет реализовано позже`);
   }
 }

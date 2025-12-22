@@ -27,8 +27,11 @@
 .conteiner {
   display: flex;
   flex-direction: column;
-  width: auto;
+  width: 600px;
+  min-width: 550px;
+  max-width: 90vw;
   height: auto;
+  max-height: 85vh;
   position: relative;
   background: #FFFFFF;
   padding: 20px;
@@ -97,6 +100,8 @@
   margin-left: 20px;
   margin-right: 10px;
   margin-bottom: 20px;
+  max-height: 350px;
+  overflow-y: auto;
 }
 
 .productList h5 {
@@ -108,12 +113,12 @@
 
 .table-row {
   display: grid;
-  grid-template-columns: 120px 70px 45px 47px 28px;
-  gap: 20px;
+  grid-template-columns: 160px 140px 70px 60px 60px;
+  gap: 12px;
   font-family: 'Inter', sans-serif;
   text-align: center;
   font-weight: 200;
-  font-size: 8px;
+  font-size: 11px;
   color: #535353;
   padding-top: 8px;
   padding-bottom: 5px;
@@ -140,6 +145,8 @@
 
 .table-row.header {
   color: #58585880;
+  font-size: 12px;
+  font-weight: 400;
 }
 
 .grid-category {
@@ -156,7 +163,7 @@
   background: none;
   font-family: 'Inter', sans-serif;
   font-weight: 300;
-  font-size: 8px;
+  font-size: 11px;
   color: #535353;
   cursor: pointer;
   text-align: center;
@@ -177,7 +184,7 @@
   background: transparent;
   font-family: 'Inter', sans-serif;
   font-weight: 300;
-  font-size: 8px;
+  font-size: 11px;
   color: #535353;
   cursor: pointer;
   padding: 2px;
@@ -203,7 +210,7 @@
   background: transparent;
   font-family: 'Inter', sans-serif;
   font-weight: 200;
-  font-size: 8px;
+  font-size: 11px;
   color: #535353;
   text-align: left;
   padding: 2px;
@@ -299,4 +306,3 @@
   margin-bottom: 10px;
   font-family: 'Inter', sans-serif;
 }
-
