@@ -3,23 +3,17 @@
 
   <!-- Вкладки -->
   <div class="tabs">
-    <button 
-      class="tab" 
-      [class.tab--active]="activeTab() === 'balances'"
-      (click)="setActiveTab('balances')">
+    <button class="tab" [class.tab--active]="activeTab() === 'balances'" (click)="setActiveTab('balances')">
       Остатки
     </button>
-    <button 
-      class="tab" 
-      [class.tab--active]="activeTab() === 'expenses'"
-      (click)="setActiveTab('expenses')">
+    <button class="tab" [class.tab--active]="activeTab() === 'expenses'" (click)="setActiveTab('expenses')">
       Расходы
     </button>
-    <button 
-      class="tab" 
-      [class.tab--active]="activeTab() === 'suppliers'"
-      (click)="setActiveTab('suppliers')">
+    <button class="tab" [class.tab--active]="activeTab() === 'suppliers'" (click)="setActiveTab('suppliers')">
       Поставщики
+    </button>
+    <button class="tab" [class.tab--active]="activeTab() === 'saved'" (click)="setActiveTab('saved')">
+      Сохраненные отчеты
     </button>
   </div>
 
@@ -33,9 +27,7 @@
       <div class="filter-content" *ngIf="isFilterSectionOpen('categories')">
         <div class="filter-checkboxes">
           <label class="filter-checkbox" *ngFor="let category of availableCategories()">
-            <input 
-              type="checkbox" 
-              [checked]="selectedCategories().includes(category)"
+            <input type="checkbox" [checked]="selectedCategories().includes(category)"
               (change)="toggleCategory(category)">
             <span>{{ category }}</span>
           </label>
@@ -51,10 +43,7 @@
       <div class="filter-content" *ngIf="isFilterSectionOpen('products')">
         <div class="filter-checkboxes">
           <label class="filter-checkbox" *ngFor="let item of warehouseItems()">
-            <input 
-              type="checkbox" 
-              [checked]="selectedItems().includes(item.id)"
-              (change)="toggleItem(item.id)">
+            <input type="checkbox" [checked]="selectedItems().includes(item.id)" (change)="toggleItem(item.id)">
             <span>{{ item.name }}</span>
           </label>
         </div>
@@ -70,17 +59,11 @@
         <div class="filter-dates">
           <div class="date-input">
             <label>С:</label>
-            <input 
-              type="date" 
-              [value]="dateFrom()"
-              (change)="onDateFromChange($any($event.target).value)">
+            <input type="date" [value]="dateFrom()" (change)="onDateFromChange($any($event.target).value)">
           </div>
           <div class="date-input">
             <label>По:</label>
-            <input 
-              type="date" 
-              [value]="dateTo()"
-              (change)="onDateToChange($any($event.target).value)">
+            <input type="date" [value]="dateTo()" (change)="onDateToChange($any($event.target).value)">
           </div>
         </div>
       </div>
@@ -98,17 +81,11 @@
         <div class="filter-dates">
           <div class="date-input">
             <label>С:</label>
-            <input 
-              type="date" 
-              [value]="dateFrom()"
-              (change)="onDateFromChange($any($event.target).value)">
+            <input type="date" [value]="dateFrom()" (change)="onDateFromChange($any($event.target).value)">
           </div>
           <div class="date-input">
             <label>По:</label>
-            <input 
-              type="date" 
-              [value]="dateTo()"
-              (change)="onDateToChange($any($event.target).value)">
+            <input type="date" [value]="dateTo()" (change)="onDateToChange($any($event.target).value)">
           </div>
         </div>
       </div>
@@ -187,9 +164,42 @@
       </table>
     </div>
     <div class="summary">
-      <p>Общая сумма расходов за этот период: <span class="summary-amount">{{ totalSuppliersExpenses().toFixed(2) }}</span></p>
+      <p>Общая сумма расходов за этот период: <span class="summary-amount">{{ totalSuppliersExpenses().toFixed(2)
+          }}</span></p>
     </div>
     <button class="download-button" (click)="downloadReport('suppliers')">Скачать отчёт</button>
+  </div>
+
+  <!-- Вкладка: Сохраненные отчеты -->
+  <div class="tab-content" *ngIf="activeTab() === 'saved'">
+    <div class="saved-reports-container" *ngIf="!isLoadingReports(); else loadingReports">
+      <div class="saved-reports-list" *ngIf="savedReports().length > 0">
+        <div class="saved-report-card" *ngFor="let report of savedReports()">
+          <div class="saved-report-header">
+            <span class="saved-report-title">{{ report.title }}</span>
+            <span class="status-badge" [ngClass]="getReportStatusClass(report.status)">
+              {{ getReportStatusLabel(report.status) }}
+            </span>
+          </div>
+          <p class="saved-report-description">{{ report.description }}</p>
+          <div class="saved-report-footer">
+            <time class="saved-report-date">{{ formatReportDate(report.date) }}</time>
+            <button class="download-report-btn" [disabled]="report.status !== 'completed'"
+              (click)="downloadSavedReport(report)">
+              Скачать
+            </button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="savedReports().length === 0" class="empty-state">
+        <p>Нет сохраненных отчетов</p>
+      </div>
+    </div>
+    <ng-template #loadingReports>
+      <div class="loading-state">
+        <p>Загрузка отчетов...</p>
+      </div>
+    </ng-template>
   </div>
 </div>
 
@@ -200,14 +210,14 @@
       <span class="close-line"></span>
       <span class="close-line"></span>
     </button>
-    
+
     <h2 class="visualization-title">Визуализация данных</h2>
-    
+
     <!-- Столбчатая диаграмма -->
     <div class="chart-container">
       <canvas #barChart id="barChart"></canvas>
     </div>
-    
+
     <!-- Круговая диаграмма -->
     <div class="chart-container">
       <h3 class="chart-title">Отношение количества товаров по категориям</h3>
@@ -226,4 +236,3 @@
     </div>
   </div>
 </div>
-

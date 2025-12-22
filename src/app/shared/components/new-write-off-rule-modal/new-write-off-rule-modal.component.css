@@ -136,14 +136,14 @@
   background-color: #C22918;
 }
 
-.input-field__input:focus + .input-field__label,
-.input-field__input:not(:placeholder-shown) + .input-field__label {
+.input-field__input:focus+.input-field__label,
+.input-field__input:not(:placeholder-shown)+.input-field__label {
   bottom: 32px;
   font-size: 6px;
   line-height: 6.3em;
 }
 
-.input-field__input:focus ~ .input-field__line {
+.input-field__input:focus~.input-field__line {
   background-color: #C22918;
 }
 
@@ -293,7 +293,7 @@
   border-color: #C22918 !important;
 }
 
-.input-field__input--error ~ .input-field__line {
+.input-field__input--error~.input-field__line {
   background-color: #C22918 !important;
 }
 
@@ -316,3 +316,82 @@
   margin-bottom: 20px;
 }
 
+.quantity-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.quantity-label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  color: #535353;
+  white-space: nowrap;
+}
+
+.quantity-input-wrapper {
+  box-sizing: border-box;
+  width: 63px;
+  height: 27px;
+  background: #FFFFFF;
+  border: 0.2px solid #C22918;
+  position: relative;
+}
+
+.quantity-input {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  border: none;
+  background: transparent;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 22px;
+  text-align: center;
+  color: #000000;
+  padding: 0;
+  outline: none;
+}
+
+.quantity-unit {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  color: #535353;
+  white-space: nowrap;
+}
+
+.quantity-error,
+.frequency-error {
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.dropdown-list__empty {
+  font-family: 'Montserrat', sans-serif;
+  padding: 12px 6px;
+  font-weight: 200;
+  font-size: 13px;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+  color: #989898;
+  text-align: center;
+}

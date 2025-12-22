@@ -1,14 +1,8 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CustomDropdownComponent, DropdownOption } from '../../shared/components/custom-dropdown/custom-dropdown.component';
-
-interface Notification {
-  id: number;
-  title: string;
-  message: string;
-  date: string;
-  isRead: boolean;
-}
+import { NotificationsService } from './services/notifications.service';
+import { Notification } from '../../core/models/notification.model';
 
 @Component({
   selector: 'app-notifications',
@@ -17,53 +11,9 @@ interface Notification {
   templateUrl: './notifications.component.html',
   styleUrls: ['./notifications.component.css']
 })
-export class NotificationsComponent {
-  // Временные данные для отображения (без логики)
-  notifications = signal<Notification[]>([
-    {
-      id: 1,
-      title: 'Нужно купить Эзену сушняк',
-      message: 'На складе осталось 0 бутылок энергоса.',
-      date: '2025-10-19',
-      isRead: true
-    },
-    {
-      id: 2,
-      title: 'Необходимо пополнить запасы',
-      message: 'На складе осталось 4 бутылки пива. Нужно пополнить запасы',
-      date: '2025-10-19',
-      isRead: false
-    },
-    {
-      id: 3,
-      title: 'Нужны купить сиги',
-      message: 'На складе осталось 4 пачки сигарет. Нужно пополнить запасы',
-      date: '2025-10-19',
-      isRead: false
-    },
-    {
-      id: 4,
-      title: 'Срочно купить 3л воды',
-      message: 'Срочно оформить заказ у поставщика "АкваСервис" на 200 единиц продукции. Для этого необходимо выполнить следующие действия: перейти в раздел "Закупки" в системе электронного документооборота, выбрать поставщика "АкваСервис" из списка approved vendors, заполнить форму заказа с указанием артикулов продукции, согласовать заявку с финансовым отделом',
-      date: '2025-10-19',
-      isRead: true
-    },
-    {
-      id: 5,
-      title: 'Срочно купить 3л воды',
-      message: 'Срочно оформить заказ у поставщика "АкваСервис" на 200 единиц продукции. Для этого необходимо выполнить следующие действия: перейти в раздел "Закупки" в системе электронного документооборота, выбрать поставщика "АкваСервис" из списка approved vendors, заполнить форму заказа с указанием артикулов продукции, согласовать заявку с финансовым отделом',
-      date: '2025-10-19',
-      isRead: true
-    },
-    {
-      id: 6,
-      title: 'Срочно купить 3л воды',
-      message: 'Срочно оформить заказ у поставщика "АкваСервис" на 200 единиц продукции. Для этого необходимо выполнить следующие действия: перейти в раздел "Закупки" в системе электронного документооборота, выбрать поставщика "АкваСервис" из списка approved vendors, заполнить форму заказа с указанием артикулов продукции, согласовать заявку с финансовым отделом',
-      date: '2025-10-19',
-      isRead: true
-    }
-  ]);
-
+export class NotificationsComponent implements OnInit {
+  notifications = signal<Notification[]>([]);
+  isLoading = signal<boolean>(false);
   filterType = signal<string>('all');
 
   filterOptions: DropdownOption[] = [
@@ -75,7 +25,7 @@ export class NotificationsComponent {
   filteredNotifications = computed(() => {
     const all = this.notifications();
     const filter = this.filterType();
-    
+
     if (filter === 'all') {
       return all;
     } else if (filter === 'unread') {
@@ -86,26 +36,98 @@ export class NotificationsComponent {
     return all;
   });
 
+  unreadCount = computed(() => {
+    return this.notifications().filter(n => !n.isRead).length;
+  });
+
+  constructor(private notificationsService: NotificationsService) { }
+
+  ngOnInit(): void {
+    this.loadNotifications();
+  }
+
+  loadNotifications(): void {
+    this.isLoading.set(true);
+    this.notificationsService.getNotifications().subscribe({
+      next: (notifications) => {
+        this.notifications.set(notifications);
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Ошибка загрузки уведомлений:', error);
+        this.isLoading.set(false);
+      }
+    });
+  }
+
   onFilterChange(value: string): void {
     this.filterType.set(value);
   }
 
+  markAsRead(notification: Notification): void {
+    if (!notification.isRead) {
+      this.notificationsService.markAsRead(notification.id).subscribe({
+        next: () => {
+          this.notifications.update(notifications =>
+            notifications.map(n =>
+              n.id === notification.id ? { ...n, isRead: true } : n
+            )
+          );
+        }
+      });
+    }
+  }
+
   deleteNotification(id: number): void {
-    this.notifications.update(notifications => 
-      notifications.filter(n => n.id !== id)
-    );
+    this.notificationsService.deleteNotification(id).subscribe({
+      next: () => {
+        this.notifications.update(notifications =>
+          notifications.filter(n => n.id !== id)
+        );
+      }
+    });
   }
 
   clearAll(): void {
-    this.notifications.set([]);
+    this.notificationsService.clearAllNotifications().subscribe({
+      next: () => {
+        this.notifications.set([]);
+      }
+    });
   }
 
   formatDate(dateString: string): string {
     const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}.${month}.${year}`;
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffHours < 1) {
+      return 'Только что';
+    } else if (diffHours < 24) {
+      return `${diffHours} ч. назад`;
+    } else if (diffDays < 7) {
+      return `${diffDays} дн. назад`;
+    } else {
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}.${month}.${year}`;
+    }
+  }
+
+  getTypeIcon(type: Notification['type']): string {
+    switch (type) {
+      case 'info': return 'ℹ️';
+      case 'warning': return '⚠️';
+      case 'success': return '✅';
+      case 'error': return '❌';
+      default: return 'ℹ️';
+    }
+  }
+
+  getTypeClass(type: Notification['type']): string {
+    return `notification-type-${type}`;
   }
 }
-

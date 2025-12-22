@@ -1,43 +1,56 @@
 <div class="main__container">
-  <h1 class="main__title">Уведомления</h1>
-
-  <div class="actions">
-    <app-custom-dropdown
-      [options]="filterOptions"
-      [selectedValue]="filterType()"
-      [width]="'299px'"
-      [height]="'44px'"
-      [menuLeft]="'73px'"
-      [menuTop]="'52px'"
-      [menuWidth]="'212px'"
-      (valueChange)="onFilterChange($event)">
-    </app-custom-dropdown>
-    
-    <button class="clear-all" type="button" (click)="clearAll()">Очистить всё</button>
+  <div class="page-header">
+    <h1 class="main__title">Уведомления</h1>
+    <span class="unread-badge" *ngIf="unreadCount() > 0">{{ unreadCount() }} новых</span>
   </div>
 
-  <div class="notifications">
-    <article 
-      class="notification-card" 
-      [class.unread]="!notification.isRead"
-      *ngFor="let notification of filteredNotifications()">
-      <div class="notification-card__title">{{ notification.title }}</div>
-      <p class="notification-card__text" [class.unread]="!notification.isRead">
-        {{ notification.message }}
-      </p>
-      <time class="notification-card__date" [attr.datetime]="notification.date">
-        {{ formatDate(notification.date) }}
-      </time>
-      <button 
-        class="notification-card__close" 
-        aria-label="Закрыть уведомление"
-        (click)="deleteNotification(notification.id)">
+  <div class="actions">
+    <app-custom-dropdown [options]="filterOptions" [selectedValue]="filterType()" [width]="'299px'" [height]="'44px'"
+      [menuLeft]="'73px'" [menuTop]="'52px'" [menuWidth]="'212px'" (valueChange)="onFilterChange($event)">
+    </app-custom-dropdown>
+
+    <button class="clear-all" type="button" (click)="clearAll()" [disabled]="notifications().length === 0">
+      Очистить всё
+    </button>
+  </div>
+
+  <div class="notifications" *ngIf="!isLoading(); else loadingTemplate">
+    <article class="notification-card" [class.unread]="!notification.isRead" [ngClass]="getTypeClass(notification.type)"
+      *ngFor="let notification of filteredNotifications()" (click)="markAsRead(notification)">
+
+      <div class="notification-card__icon">{{ getTypeIcon(notification.type) }}</div>
+
+      <div class="notification-card__content">
+        <div class="notification-card__header">
+          <div class="notification-card__title">{{ notification.title }}</div>
+          <span class="notification-card__type-badge" [class]="'badge-' + notification.type">
+            {{ notification.type === 'info' ? 'Инфо' :
+            notification.type === 'warning' ? 'Внимание' :
+            notification.type === 'success' ? 'Успех' : 'Ошибка' }}
+          </span>
+        </div>
+        <p class="notification-card__text" [class.unread]="!notification.isRead">
+          {{ notification.message }}
+        </p>
+        <time class="notification-card__date" [attr.datetime]="notification.timestamp">
+          {{ formatDate(notification.timestamp) }}
+        </time>
+      </div>
+
+      <button class="notification-card__close" aria-label="Закрыть уведомление"
+        (click)="deleteNotification(notification.id); $event.stopPropagation()">
       </button>
     </article>
 
     <div *ngIf="filteredNotifications().length === 0" class="empty-state">
+      <div class="empty-state__icon">🔔</div>
       <p>Нет уведомлений</p>
     </div>
   </div>
-</div>
 
+  <ng-template #loadingTemplate>
+    <div class="loading-state">
+      <p>Загрузка уведомлений...</p>
+    </div>
+  </ng-template>
+</div>

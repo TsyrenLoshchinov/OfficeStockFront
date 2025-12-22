@@ -11,15 +11,59 @@
       <div class="table-header">
         <div class="header-name">Наименование</div>
         <div class="header-frequency">Периодичность</div>
-        <div class="header-action">Удалить всё</div>
+        <div class="header-quantity">Кол-во</div>
+        <div class="header-status">Статус</div>
+        <div class="header-action">Действия</div>
       </div>
 
       <div class="rules-list-wrapper">
         <div class="rules-list" *ngIf="!isLoading(); else loadingTemplate">
-          <div class="rule-item" *ngFor="let rule of rules()">
-            <div class="rule-name">{{ rule.itemName }}</div>
-            <div class="rule-frequency">{{ formatFrequency(rule) }}</div>
-            <button class="delete-btn" (click)="deleteRule(rule.id)" type="button">Удалить</button>
+          <div class="rule-item" *ngFor="let rule of rules()" [class.inactive]="!rule.isActive">
+            <!-- View mode -->
+            <ng-container *ngIf="editingRuleId() !== rule.id">
+              <div class="rule-name">{{ rule.productName }}</div>
+              <div class="rule-frequency">{{ formatFrequency(rule) }}</div>
+              <div class="rule-quantity">{{ formatQuantity(rule) }}</div>
+              <div class="rule-status">
+                <label class="toggle-switch">
+                  <input type="checkbox" [checked]="rule.isActive" (change)="toggleRuleActive(rule)">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="rule-actions">
+                <button class="edit-btn" (click)="startEdit(rule)" type="button">Изменить</button>
+                <button class="delete-btn" (click)="deleteRule(rule.id)" type="button">Удалить</button>
+              </div>
+            </ng-container>
+
+            <!-- Edit mode -->
+            <ng-container *ngIf="editingRuleId() === rule.id">
+              <div class="rule-name">{{ rule.productName }}</div>
+              <div class="rule-frequency edit-mode">
+                <input 
+                  type="number" 
+                  class="edit-input"
+                  [value]="editIntervalDays()"
+                  (input)="onIntervalChange(+$any($event.target).value)"
+                  min="1"
+                  max="365"
+                > дней
+              </div>
+              <div class="rule-quantity edit-mode">
+                <input 
+                  type="number" 
+                  class="edit-input"
+                  [value]="editQuantityPerWriteoff()"
+                  (input)="onQuantityChange(+$any($event.target).value)"
+                  min="1"
+                > шт.
+              </div>
+              <div class="rule-status">-</div>
+              <div class="rule-actions edit-actions">
+                <button class="save-btn" (click)="saveEdit(rule)" type="button">Сохранить</button>
+                <button class="cancel-btn" (click)="cancelEdit()" type="button">Отмена</button>
+              </div>
+            </ng-container>
           </div>
 
           <div *ngIf="rules().length === 0" class="empty-state">
@@ -35,6 +79,9 @@
       </div>
 
       <div class="modal-footer">
+        <button class="delete-all-btn" *ngIf="rules().length > 0" (click)="deleteAllRules()" type="button">
+          Удалить все
+        </button>
         <button class="add-button" (click)="onAddClick()" type="button">
           Добавить
         </button>
@@ -42,4 +89,3 @@
     </div>
   </div>
 </div>
-

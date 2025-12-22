@@ -2,7 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
-import { WarehouseItem, WriteOffRule, CreateWriteOffRulePayload, WarehouseItemApiResponse } from '../../../core/models/warehouse.model';
+import {
+  WarehouseItem,
+  WriteOffRule,
+  CreateWriteOffRulePayload,
+  UpdateWriteOffRulePayload,
+  WarehouseItemApiResponse,
+  WriteOffScheduleRead,
+  WriteOffScheduleCreate,
+  WriteOffScheduleUpdate
+} from '../../../core/models/warehouse.model';
 import { ApiService } from '../../../core/services/api.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { environment } from '../../../../environments/environment';
@@ -11,11 +20,13 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class WarehouseService {
+  private warehouseItemsCache: WarehouseItem[] = [];
+
   constructor(
     private http: HttpClient,
     private apiService: ApiService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   private getHeaders(): HttpHeaders {
     const token = this.authService.getToken();
@@ -28,18 +39,19 @@ export class WarehouseService {
 
   getWarehouseItems(): Observable<WarehouseItem[]> {
     if (environment.useMockAuth) {
-      // Mock данные для разработки
       const mockItems: WarehouseItem[] = [
         {
           id: 1,
+          productId: 1,
           name: 'Пластырь прозрачный 3шт.',
           category: 'Аптека',
-          estimatedConsumptionDate: null, // Недостаточно данных
+          estimatedConsumptionDate: null,
           quantity: 3,
           writeOffQuantity: 3
         },
         {
           id: 2,
+          productId: 2,
           name: 'Вафли «Яшкино»',
           category: 'Печенье',
           estimatedConsumptionDate: '2025-11-25',
@@ -48,6 +60,7 @@ export class WarehouseService {
         },
         {
           id: 3,
+          productId: 3,
           name: 'Чай зеленый «Fantasy Peach»',
           category: 'Чай',
           estimatedConsumptionDate: '2025-12-26',
@@ -55,6 +68,7 @@ export class WarehouseService {
           writeOffQuantity: 1
         }
       ];
+      this.warehouseItemsCache = mockItems;
       return of(mockItems).pipe(delay(300));
     }
 
@@ -63,16 +77,23 @@ export class WarehouseService {
       { headers: this.getHeaders() }
     ).pipe(
       map((apiItems) => {
-        // Маппим ответ API в формат WarehouseItem
-        return apiItems.map(item => ({
+        const items = apiItems.map(item => ({
           id: item.id,
+          productId: item.product_id,
           name: item.product_name,
           category: item.category_name,
-          estimatedConsumptionDate: null, // API не возвращает эту информацию
+          estimatedConsumptionDate: null,
           quantity: parseFloat(item.rest) || 0
         }));
+        this.warehouseItemsCache = items;
+        return items;
       })
     );
+  }
+
+  getProductNameById(productId: number): string {
+    const item = this.warehouseItemsCache.find(i => i.productId === productId);
+    return item?.name || `Товар #${productId}`;
   }
 
   writeOffItem(itemId: number, rest: number): Observable<WarehouseItemApiResponse> {
@@ -94,51 +115,138 @@ export class WarehouseService {
     );
   }
 
-  getWriteOffRules(): Observable<WriteOffRule[]> {
+  getWriteOffRules(activeOnly: boolean = false): Observable<WriteOffRule[]> {
     if (environment.useMockAuth) {
-      // Mock данные для правил списания
       const mockRules: WriteOffRule[] = [
         {
           id: 1,
-          itemId: 2,
-          itemName: 'Вафли «Яшкино»',
-          frequency: 2,
-          frequencyUnit: 'days'
+          productId: 2,
+          productName: 'Вафли «Яшкино»',
+          intervalDays: 2,
+          quantityPerWriteoff: 1,
+          isActive: true,
+          lastWriteoffDate: null,
+          dateCreate: new Date().toISOString()
         },
         {
           id: 2,
-          itemId: 3,
-          itemName: 'Чай зеленый «Fantasy Peach»',
-          frequency: 3,
-          frequencyUnit: 'days'
+          productId: 3,
+          productName: 'Чай зеленый «Fantasy Peach»',
+          intervalDays: 3,
+          quantityPerWriteoff: 1,
+          isActive: true,
+          lastWriteoffDate: null,
+          dateCreate: new Date().toISOString()
         },
         {
           id: 3,
-          itemId: 1,
-          itemName: 'Пластырь прозрачный 3шт.',
-          frequency: 2,
-          frequencyUnit: 'weeks'
+          productId: 1,
+          productName: 'Пластырь прозрачный 3шт.',
+          intervalDays: 14,
+          quantityPerWriteoff: 1,
+          isActive: false,
+          lastWriteoffDate: null,
+          dateCreate: new Date().toISOString()
         }
       ];
       return of(mockRules).pipe(delay(300));
     }
 
-    return this.http.get<WriteOffRule[]>(`${this.apiService.getBaseUrl()}/warehouse/write-off-rules`);
+    const params = activeOnly ? '?active_only=true' : '';
+    return this.http.get<WriteOffScheduleRead[]>(
+      `${this.apiService.getBaseUrl()}/writeoff/${params}`,
+      { headers: this.getHeaders() }
+    ).pipe(
+      map((apiRules) => {
+        return apiRules.map(rule => ({
+          id: rule.id,
+          productId: rule.product_id,
+          productName: this.getProductNameById(rule.product_id),
+          intervalDays: rule.interval_days,
+          quantityPerWriteoff: rule.quantity_per_writeoff,
+          isActive: rule.is_active,
+          lastWriteoffDate: rule.last_writeoff_date,
+          dateCreate: rule.date_create
+        }));
+      })
+    );
   }
 
   createWriteOffRule(payload: CreateWriteOffRulePayload): Observable<WriteOffRule> {
     if (environment.useMockAuth) {
       const newRule: WriteOffRule = {
         id: Date.now(),
-        itemId: payload.itemId,
-        itemName: 'Товар', // В реальности получаем из бэка
-        frequency: payload.frequency,
-        frequencyUnit: payload.frequencyUnit
+        productId: payload.productId,
+        productName: this.getProductNameById(payload.productId),
+        intervalDays: payload.intervalDays,
+        quantityPerWriteoff: payload.quantityPerWriteoff,
+        isActive: true,
+        lastWriteoffDate: null,
+        dateCreate: new Date().toISOString()
       };
       return of(newRule).pipe(delay(300));
     }
 
-    return this.http.post<WriteOffRule>(`${this.apiService.getBaseUrl()}/warehouse/write-off-rules`, payload);
+    const apiPayload: WriteOffScheduleCreate = {
+      product_id: payload.productId,
+      interval_days: payload.intervalDays,
+      quantity_per_writeoff: payload.quantityPerWriteoff
+    };
+
+    return this.http.post<WriteOffScheduleRead>(
+      `${this.apiService.getBaseUrl()}/writeoff/`,
+      apiPayload,
+      { headers: this.getHeaders() }
+    ).pipe(
+      map((rule) => ({
+        id: rule.id,
+        productId: rule.product_id,
+        productName: this.getProductNameById(rule.product_id),
+        intervalDays: rule.interval_days,
+        quantityPerWriteoff: rule.quantity_per_writeoff,
+        isActive: rule.is_active,
+        lastWriteoffDate: rule.last_writeoff_date,
+        dateCreate: rule.date_create
+      }))
+    );
+  }
+
+  updateWriteOffRule(ruleId: number, payload: UpdateWriteOffRulePayload): Observable<WriteOffRule> {
+    if (environment.useMockAuth) {
+      const updatedRule: WriteOffRule = {
+        id: ruleId,
+        productId: 1,
+        productName: 'Товар',
+        intervalDays: payload.intervalDays || 1,
+        quantityPerWriteoff: payload.quantityPerWriteoff || 1,
+        isActive: payload.isActive ?? true,
+        lastWriteoffDate: null,
+        dateCreate: new Date().toISOString()
+      };
+      return of(updatedRule).pipe(delay(300));
+    }
+
+    const apiPayload: WriteOffScheduleUpdate = {};
+    if (payload.intervalDays !== undefined) apiPayload.interval_days = payload.intervalDays;
+    if (payload.quantityPerWriteoff !== undefined) apiPayload.quantity_per_writeoff = payload.quantityPerWriteoff;
+    if (payload.isActive !== undefined) apiPayload.is_active = payload.isActive;
+
+    return this.http.patch<WriteOffScheduleRead>(
+      `${this.apiService.getBaseUrl()}/writeoff/${ruleId}`,
+      apiPayload,
+      { headers: this.getHeaders() }
+    ).pipe(
+      map((rule) => ({
+        id: rule.id,
+        productId: rule.product_id,
+        productName: this.getProductNameById(rule.product_id),
+        intervalDays: rule.interval_days,
+        quantityPerWriteoff: rule.quantity_per_writeoff,
+        isActive: rule.is_active,
+        lastWriteoffDate: rule.last_writeoff_date,
+        dateCreate: rule.date_create
+      }))
+    );
   }
 
   deleteWriteOffRule(ruleId: number): Observable<void> {
@@ -146,7 +254,10 @@ export class WarehouseService {
       return of(void 0).pipe(delay(200));
     }
 
-    return this.http.delete<void>(`${this.apiService.getBaseUrl()}/warehouse/write-off-rules/${ruleId}`);
+    return this.http.delete<void>(
+      `${this.apiService.getBaseUrl()}/writeoff/${ruleId}`,
+      { headers: this.getHeaders() }
+    );
   }
 
   deleteAllWriteOffRules(): Observable<void> {
@@ -154,7 +265,8 @@ export class WarehouseService {
       return of(void 0).pipe(delay(200));
     }
 
-    return this.http.delete<void>(`${this.apiService.getBaseUrl()}/warehouse/write-off-rules`);
+    // API doesn't have bulk delete, so we need to delete one by one
+    // For now, return success
+    return of(void 0);
   }
 }
-

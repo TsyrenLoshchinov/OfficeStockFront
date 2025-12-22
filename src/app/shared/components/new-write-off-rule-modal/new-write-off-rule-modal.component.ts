@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, signal } fro
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WarehouseService } from '../../../features/warehouse/services/warehouse.service';
-import { WarehouseItem, CreateWriteOffRulePayload } from '../../../core/models/warehouse.model';
+import { WarehouseItem, CreateWriteOffRulePayload, WriteOffRule } from '../../../core/models/warehouse.model';
 import { ModalContainerDirective } from '../../directives/modal-container.directive';
 import { ModalStateService } from '../../../core/services/modal-state.service';
 
@@ -15,13 +15,16 @@ import { ModalStateService } from '../../../core/services/modal-state.service';
 })
 export class NewWriteOffRuleModalComponent implements OnInit, OnDestroy {
   @Input() warehouseItems: WarehouseItem[] = [];
+  @Input() editMode = false;
+  @Input() editingRule: WriteOffRule | null = null;
   @Output() ruleCreated = new EventEmitter<void>();
   @Output() closed = new EventEmitter<void>();
 
   searchQuery = signal<string>('');
   filteredItems = signal<WarehouseItem[]>([]);
   selectedItem = signal<WarehouseItem | null>(null);
-  frequency = signal<number>(3);
+  intervalDays = signal<number>(3);
+  quantityPerWriteoff = signal<number>(1);
   showDropdown = signal<boolean>(false);
   isSubmitting = signal<boolean>(false);
   isVisible = true;
@@ -30,11 +33,23 @@ export class NewWriteOffRuleModalComponent implements OnInit, OnDestroy {
   constructor(
     private warehouseService: WarehouseService,
     private modalStateService: ModalStateService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.modalStateService.openModal();
     this.filteredItems.set(this.warehouseItems);
+
+    // If in edit mode, pre-fill the values
+    if (this.editMode && this.editingRule) {
+      this.intervalDays.set(this.editingRule.intervalDays);
+      this.quantityPerWriteoff.set(this.editingRule.quantityPerWriteoff);
+
+      const item = this.warehouseItems.find(i => i.productId === this.editingRule!.productId);
+      if (item) {
+        this.selectedItem.set(item);
+        this.searchQuery.set(item.name);
+      }
+    }
   }
 
   ngOnDestroy(): void {
@@ -44,7 +59,7 @@ export class NewWriteOffRuleModalComponent implements OnInit, OnDestroy {
   onSearchChange(value: string): void {
     this.searchQuery.set(value);
     this.showDropdown.set(true);
-    
+
     const query = value.toLowerCase().trim();
     if (!query) {
       this.filteredItems.set(this.warehouseItems);
@@ -64,37 +79,61 @@ export class NewWriteOffRuleModalComponent implements OnInit, OnDestroy {
     this.isItemTouched.set(true);
   }
 
-  onFrequencyChange(value: number): void {
+  onIntervalChange(value: number): void {
     if (value >= 1 && value <= 365) {
-      this.frequency.set(value);
+      this.intervalDays.set(value);
     } else if (value > 365) {
-      this.frequency.set(365);
+      this.intervalDays.set(365);
     } else if (value < 1) {
-      this.frequency.set(1);
+      this.intervalDays.set(1);
     }
   }
 
-  incrementFrequency(): void {
-    this.frequency.update(f => f + 1);
+  onQuantityChange(value: number): void {
+    if (value >= 1 && value <= 1000) {
+      this.quantityPerWriteoff.set(value);
+    } else if (value > 1000) {
+      this.quantityPerWriteoff.set(1000);
+    } else if (value < 1) {
+      this.quantityPerWriteoff.set(1);
+    }
   }
 
-  decrementFrequency(): void {
-    if (this.frequency() > 1) {
-      this.frequency.update(f => f - 1);
+  incrementInterval(): void {
+    if (this.intervalDays() < 365) {
+      this.intervalDays.update(d => d + 1);
+    }
+  }
+
+  decrementInterval(): void {
+    if (this.intervalDays() > 1) {
+      this.intervalDays.update(d => d - 1);
+    }
+  }
+
+  incrementQuantity(): void {
+    if (this.quantityPerWriteoff() < 1000) {
+      this.quantityPerWriteoff.update(q => q + 1);
+    }
+  }
+
+  decrementQuantity(): void {
+    if (this.quantityPerWriteoff() > 1) {
+      this.quantityPerWriteoff.update(q => q - 1);
     }
   }
 
   createRule(): void {
     this.isItemTouched.set(true);
-    if (!this.selectedItem() || this.frequency() < 1 || this.frequency() > 365 || this.isSubmitting()) {
+    if (!this.selectedItem() || this.intervalDays() < 1 || this.intervalDays() > 365 || this.isSubmitting()) {
       return;
     }
 
     this.isSubmitting.set(true);
     const payload: CreateWriteOffRulePayload = {
-      itemId: this.selectedItem()!.id,
-      frequency: this.frequency(),
-      frequencyUnit: 'days'
+      productId: this.selectedItem()!.productId,
+      intervalDays: this.intervalDays(),
+      quantityPerWriteoff: this.quantityPerWriteoff()
     };
 
     this.warehouseService.createWriteOffRule(payload).subscribe({
@@ -130,7 +169,8 @@ export class NewWriteOffRuleModalComponent implements OnInit, OnDestroy {
   }
 
   isConfirmButtonDisabled(): boolean {
-    return !this.selectedItem() || this.frequency() < 1 || this.frequency() > 365 || this.isSubmitting();
+    return !this.selectedItem() || this.intervalDays() < 1 || this.intervalDays() > 365 ||
+      this.quantityPerWriteoff() < 1 || this.isSubmitting();
   }
 
   getItemError(): string {
@@ -143,15 +183,36 @@ export class NewWriteOffRuleModalComponent implements OnInit, OnDestroy {
     return !!this.getItemError();
   }
 
-  getFrequencyError(): string {
-    const freq = this.frequency();
-    if (freq < 1) return 'Минимальное значение: 1 день';
-    if (freq > 365) return 'Максимальное значение: 365 дней';
+  getIntervalError(): string {
+    const interval = this.intervalDays();
+    if (interval < 1) return 'Минимальное значение: 1 день';
+    if (interval > 365) return 'Максимальное значение: 365 дней';
     return '';
   }
 
-  hasFrequencyError(): boolean {
-    return !!this.getFrequencyError();
+  hasIntervalError(): boolean {
+    return !!this.getIntervalError();
+  }
+
+  getQuantityError(): string {
+    const qty = this.quantityPerWriteoff();
+    if (qty < 1) return 'Минимальное значение: 1';
+    if (qty > 1000) return 'Максимальное значение: 1000';
+    return '';
+  }
+
+  hasQuantityError(): boolean {
+    return !!this.getQuantityError();
+  }
+
+  getModalTitle(): string {
+    return this.editMode ? 'Редактирование правила' : 'Новое правило списания';
+  }
+
+  getButtonText(): string {
+    if (this.isSubmitting()) {
+      return this.editMode ? 'Сохранение...' : 'Создание...';
+    }
+    return 'Подтвердить';
   }
 }
-

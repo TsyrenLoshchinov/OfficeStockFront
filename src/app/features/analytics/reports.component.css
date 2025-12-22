@@ -396,3 +396,130 @@
   border-radius: 3px;
 }
 
+/* Saved Reports Styles */
+.saved-reports-container {
+  width: 100%;
+}
+
+.saved-reports-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.saved-report-card {
+  background: #FFFFFF;
+  border: 1px solid #DBDCE4;
+  border-radius: 10px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.saved-report-card:hover {
+  border-color: #C22918;
+  box-shadow: 0 4px 12px rgba(194, 41, 24, 0.1);
+}
+
+.saved-report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.saved-report-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: #9A0E10;
+  flex: 1;
+}
+
+.status-badge {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.status-completed {
+  background: rgba(52, 168, 83, 0.15);
+  color: #34A853;
+}
+
+.status-pending {
+  background: rgba(251, 188, 5, 0.15);
+  color: #F9A825;
+}
+
+.status-failed {
+  background: rgba(234, 67, 53, 0.15);
+  color: #EA4335;
+}
+
+.saved-report-description {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #535353;
+  margin: 0 0 16px 0;
+}
+
+.saved-report-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.saved-report-date {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  color: #989898;
+}
+
+.download-report-btn {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #9A0E10;
+  background: transparent;
+  border: 1px solid #9A0E10;
+  padding: 8px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.download-report-btn:hover:not(:disabled) {
+  background: rgba(194, 41, 24, 0.1);
+  color: #C22918;
+  border-color: #C22918;
+}
+
+.download-report-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  border-color: #989898;
+  color: #989898;
+}
+
+.empty-state,
+.loading-state {
+  padding: 60px 40px;
+  text-align: center;
+  color: #989898;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 17px;
+}
+
+.empty-state p,
+.loading-state p {
+  margin: 0;
+}

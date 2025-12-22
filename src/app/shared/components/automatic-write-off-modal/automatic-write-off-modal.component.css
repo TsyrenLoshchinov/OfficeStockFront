@@ -29,7 +29,7 @@
 .modal-container {
   box-sizing: border-box;
   position: relative;
-  width: 570px;
+  width: 720px;
   min-height: 399px;
   max-height: 80vh;
   background: #FFFFFF;
@@ -81,39 +81,32 @@
 
 .table-header {
   display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 20px;
+  grid-template-columns: 1fr 100px 70px 60px 150px;
+  gap: 10px;
   padding-bottom: 10px;
   margin-bottom: 0;
   border-bottom: 0.5px solid #989898;
 }
 
-.header-name {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 300;
-  font-size: 14px;
-  line-height: 22px;
-  color: #535353;
-}
-
-.header-frequency {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 300;
-  font-size: 14px;
-  line-height: 22px;
-  color: #535353;
-  text-align: center;
-  min-width: 120px;
-}
-
+.header-name,
+.header-frequency,
+.header-quantity,
+.header-status,
 .header-action {
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
   font-size: 14px;
   line-height: 22px;
   color: #535353;
-  text-align: right;
-  min-width: 100px;
+}
+
+.header-frequency,
+.header-quantity {
+  text-align: center;
+}
+
+.header-action {
+  text-align: center;
 }
 
 .rules-list-wrapper {
@@ -135,11 +128,15 @@
   box-sizing: border-box;
   min-height: 47px;
   display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 20px;
+  grid-template-columns: 1fr 100px 70px 60px 150px;
+  gap: 10px;
   align-items: center;
   padding: 12px 0;
   border-bottom: 0.5px solid #989898;
+}
+
+.rule-item.inactive {
+  opacity: 0.5;
 }
 
 .rule-item:last-child {
@@ -156,33 +153,147 @@
   overflow-wrap: break-word;
 }
 
-.rule-frequency {
+.rule-frequency,
+.rule-quantity {
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
   font-size: 14px;
   line-height: 22px;
   color: #C22918;
   text-align: center;
-  min-width: 120px;
 }
 
-.delete-btn {
+.rule-status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rule-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.edit-btn,
+.delete-btn,
+.save-btn,
+.cancel-btn {
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
-  font-size: 14px;
-  line-height: 22px;
-  color: #535353;
+  font-size: 12px;
+  line-height: 18px;
   background: none;
   border: none;
   cursor: pointer;
-  text-align: right;
   transition: color 0.3s;
-  min-width: 100px;
-  padding: 0;
+  padding: 4px 8px;
+}
+
+.edit-btn {
+  color: #535353;
+}
+
+.edit-btn:hover {
+  color: #C22918;
+}
+
+.delete-btn {
+  color: #989898;
 }
 
 .delete-btn:hover {
   color: #C22918;
+}
+
+.save-btn {
+  color: #28a745;
+}
+
+.save-btn:hover {
+  color: #1e7e34;
+}
+
+.cancel-btn {
+  color: #989898;
+}
+
+.cancel-btn:hover {
+  color: #535353;
+}
+
+/* Toggle switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 20px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked+.toggle-slider {
+  background-color: #C22918;
+}
+
+input:checked+.toggle-slider:before {
+  transform: translateX(20px);
+}
+
+/* Edit mode */
+.edit-mode {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+}
+
+.edit-input {
+  width: 50px;
+  padding: 4px 6px;
+  border: 1px solid #C22918;
+  border-radius: 4px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  text-align: center;
+}
+
+.edit-input:focus {
+  outline: none;
+  border-color: #9A0E10;
+}
+
+.edit-actions {
+  flex-direction: column;
+  gap: 4px;
 }
 
 .rules-list-wrapper::-webkit-scrollbar {
@@ -213,6 +324,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 20px;
   margin-top: 20px;
   padding-top: 20px;
 }
@@ -243,3 +355,23 @@
   cursor: not-allowed;
 }
 
+.delete-all-btn {
+  width: 140px;
+  height: 57px;
+  background: transparent;
+  border: 1px solid #989898;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 50px;
+  color: #989898;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.delete-all-btn:hover {
+  border-color: #C22918;
+  color: #C22918;
+  background: rgba(194, 41, 24, 0.05);
+}

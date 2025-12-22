@@ -6,6 +6,8 @@ import { WarehouseItem } from '../../core/models/warehouse.model';
 import { CategoriesService } from '../categories/services/categories.service';
 import { ModalContainerDirective } from '../../shared/directives/modal-container.directive';
 import { ModalStateService } from '../../core/services/modal-state.service';
+import { ReportsApiService } from './services/reports.service';
+import { Report } from '../../core/models/report.model';
 
 interface BalanceItem {
   name: string;
@@ -43,9 +45,13 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('barChart') barChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('donutChart') donutChartRef!: ElementRef<HTMLCanvasElement>;
 
-  activeTab = signal<'balances' | 'expenses' | 'suppliers'>('balances');
+  activeTab = signal<'balances' | 'expenses' | 'suppliers' | 'saved'>('balances');
   showVisualization = signal(false);
-  
+
+  // Saved reports from API
+  savedReports = signal<Report[]>([]);
+  isLoadingReports = signal<boolean>(false);
+
   warehouseItems = signal<WarehouseItem[]>([]);
   selectedItems = signal<number[]>([]);
   selectedCategories = signal<string[]>([]);
@@ -97,13 +103,14 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private warehouseService: WarehouseService,
     private categoriesService: CategoriesService,
-    private modalStateService: ModalStateService
+    private modalStateService: ModalStateService,
+    private reportsApiService: ReportsApiService
   ) {
     // Устанавливаем даты по умолчанию (текущий месяц)
     const today = new Date();
     const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
     const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-    
+
     this.dateFrom.set(this.formatDateForInput(firstDay));
     this.dateTo.set(this.formatDateForInput(lastDay));
   }
@@ -111,6 +118,21 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.loadWarehouseItems();
     this.loadCategories();
+    this.loadSavedReports();
+  }
+
+  loadSavedReports(): void {
+    this.isLoadingReports.set(true);
+    this.reportsApiService.getReports().subscribe({
+      next: (reports) => {
+        this.savedReports.set(reports);
+        this.isLoadingReports.set(false);
+      },
+      error: (error) => {
+        console.error('Ошибка загрузки отчетов:', error);
+        this.isLoadingReports.set(false);
+      }
+    });
   }
 
   availableCategories = computed(() => {
@@ -151,11 +173,13 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  setActiveTab(tab: 'balances' | 'expenses' | 'suppliers'): void {
+  setActiveTab(tab: 'balances' | 'expenses' | 'suppliers' | 'saved'): void {
     this.activeTab.set(tab);
     // Обновляем открытые секции фильтров в зависимости от вкладки
     if (tab === 'balances') {
       this.openFilterSections.set(new Set(['categories', 'products', 'period']));
+    } else if (tab === 'saved') {
+      this.openFilterSections.set(new Set());
     } else {
       this.openFilterSections.set(new Set(['period']));
     }
@@ -510,5 +534,34 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  // Report helper methods
+  getReportStatusClass(status: Report['status']): string {
+    return `status-${status}`;
+  }
+
+  getReportStatusLabel(status: Report['status']): string {
+    switch (status) {
+      case 'completed': return 'Готов';
+      case 'pending': return 'В обработке';
+      case 'failed': return 'Ошибка';
+      default: return status;
+    }
+  }
+
+  formatReportDate(dateString: string): string {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${day}.${month}.${year} ${hours}:${minutes}`;
+  }
+
+  downloadSavedReport(report: Report): void {
+    console.log(`Скачивание отчета: ${report.title}`);
+    alert(`Скачивание отчета "${report.title}" будет реализовано позже`);
   }
 }
