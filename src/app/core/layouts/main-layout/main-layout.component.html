@@ -7,7 +7,17 @@
       </div>
     </div>
 
-    <app-sidebar></app-sidebar>
+    <div class="mobile-header">
+      <button class="mobile-menu-btn" (click)="sidebar.toggleSidebar()" aria-label="Открыть меню">
+        <img src="assets/icons/burgerDefault.svg" alt="Меню">
+      </button>
+      <div class="mobile-logo">
+        <img src="assets/icons/logoMenu.png" alt="Logo" height="30">
+        <span>OfficeStock</span>
+      </div>
+    </div>
+
+    <app-sidebar #sidebar></app-sidebar>
 
     <div class="app-content" [class.app-content--sidebar-open]="isSidebarOpen()">
       <app-header></app-header>
@@ -17,9 +27,8 @@
     </div>
 
     <div class="app__overlay" [attr.data-visible]="false"></div>
-    
+
     <!-- Контейнер для модальных окон на уровне layout -->
     <div id="modal-container"></div>
   </div>
 </div>
-

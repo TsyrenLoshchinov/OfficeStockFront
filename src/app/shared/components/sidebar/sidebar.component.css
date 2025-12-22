@@ -247,3 +247,65 @@
 .sidebar__nav-title {
     display: block;
 }
+
+/* Mobile Sidebar Styles */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 300px !important;
+        /* Fixed width on mobile when open/closed base */
+        transform: translateX(-100%);
+        /* Hidden by default */
+        box-shadow: none;
+        background: #FFFFFF;
+        /* Ensure background is white */
+        z-index: 2000;
+        /* Above mobile header */
+        border-right: none;
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar[data-open="true"] {
+        transform: translateX(0);
+        box-shadow: 6px 0 12px rgba(0, 0, 0, 0.2);
+        width: 336px !important;
+        /* Full width of left-bar + panel */
+    }
+
+    /* Adjust overlay to cover everything */
+    .sidebar-overlay {
+        left: 0;
+        z-index: 1001;
+        /* Above mobile header */
+    }
+
+    /* Hide the left-bar's menu button on mobile since we have the top header button */
+    .menu-button {
+        display: none;
+    }
+
+    /* Adjust left-bar to look okay without the big menu button */
+    .left-bar {
+        padding-top: 20px;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    .sidebar__logo-collapsed {
+        display: block;
+        /* Always show logo */
+        opacity: 1;
+        transform: none;
+        margin-bottom: auto;
+        /* Push exit icon to bottom */
+    }
+
+    /* Ensure panel is visible when sidebar is open */
+    .sidebar__panel {
+        opacity: 1;
+        pointer-events: all;
+        transform: none;
+    }
+
+    /* If sidebar is closed (default), ensure panel is hidden/doesn't intercept clicks? 
+       Actually with translateX(-100%), it's offscreen. */
+}

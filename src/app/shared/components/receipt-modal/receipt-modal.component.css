@@ -313,3 +313,48 @@
   margin-bottom: 10px;
   font-family: 'Inter', sans-serif;
 }
+
+@media (max-width: 850px) {
+  .conteiner {
+    width: 95vw;
+    min-width: unset;
+    padding: 15px;
+  }
+
+  .table-row {
+    grid-template-columns: 150px 100px 80px 60px 80px;
+    /* Fixed widths for scrolling */
+    gap: 8px;
+    min-width: 500px;
+    /* Ensure row has min width to trigger scroll */
+  }
+
+  .productList {
+    overflow-x: auto;
+    /* Enable horizontal scroll */
+  }
+
+  .grid-name {
+    white-space: normal;
+  }
+}
+
+@media (max-width: 480px) {
+  .title h1 {
+    font-size: 18px;
+  }
+
+  .checkName h2 {
+    font-size: 12px;
+  }
+
+  .button {
+    width: 140px;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .productList {
+    max-height: 250px;
+  }
+}
