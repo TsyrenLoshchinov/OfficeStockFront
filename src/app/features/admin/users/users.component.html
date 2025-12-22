@@ -199,11 +199,7 @@
           [readonly]="editForm.get('generatePassword')?.value">
         <label class="input-field__label">Пароль</label>
         <div class="input-field__line"></div>
-        <button type="button" class="input-field__toggle-password" (click)="togglePasswordVisibility('edit')"
-          *ngIf="!editForm.get('generatePassword')?.value" aria-label="Показать/скрыть пароль">
-          <span *ngIf="showPasswordEdit()">👁️</span>
-          <span *ngIf="!showPasswordEdit()">👁️‍🗨️</span>
-        </button>
+
         <div *ngIf="isFieldInvalid('password', 'edit')" class="input-field__error">
           {{ getFieldError('password', 'edit') }}
         </div>

@@ -2,7 +2,8 @@
 .sidebar-overlay {
     position: fixed;
     top: 0;
-    left: 91px; /* Начинается справа от сайдбара */
+    left: 91px;
+    /* Начинается справа от сайдбара */
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
@@ -61,7 +62,7 @@
     width: 91px;
     height: 211px;
     border: none;
-    background: transparent;
+    background: transparent !important;
     border-bottom: 1px solid #DBDCE4;
     display: flex;
     flex-direction: column;
@@ -246,4 +247,3 @@
 .sidebar__nav-title {
     display: block;
 }
-

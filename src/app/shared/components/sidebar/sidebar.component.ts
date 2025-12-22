@@ -31,7 +31,7 @@ export class SidebarComponent implements OnInit {
     { label: 'Чеки', route: '/app/receipts', roles: ['hr-manager', 'admin'] },
     { label: 'Категории', route: '/app/categories', roles: ['hr-manager', 'economist', 'admin'] },
     { label: 'Склад', route: '/app/warehouse', roles: ['hr-manager', 'economist', 'admin'] },
-    { label: 'Отчёты', route: '/app/reports', roles: ['director', 'admin'] },
+    { label: 'Отчёты', route: '/app/reports', roles: ['director', 'admin', 'hr-manager', 'economist'] },
     { label: 'Администрирование', route: '/app/admin/users', roles: ['admin'] }
   ];
 
@@ -41,7 +41,7 @@ export class SidebarComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private modalStateService: ModalStateService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.currentRole = this.authService.getRole();

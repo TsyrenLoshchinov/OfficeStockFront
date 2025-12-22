@@ -9,9 +9,6 @@
       [menuLeft]="'73px'" [menuTop]="'52px'" [menuWidth]="'212px'" (valueChange)="onFilterChange($event)">
     </app-custom-dropdown>
 
-    <button class="clear-all" type="button" (click)="clearAll()" [disabled]="notifications().length === 0">
-      Очистить всё
-    </button>
   </div>
 
   <div class="notifications" *ngIf="!isLoading(); else loadingTemplate">

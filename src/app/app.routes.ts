@@ -8,7 +8,7 @@ export const routes: Routes = [
     path: 'auth/login',
     loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent)
   },
-  
+
   // Защищенные маршруты с layout
   {
     path: 'app',
@@ -29,7 +29,7 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['hr-manager', 'admin'] }
       },
-      
+
       // Analytics (Экономист, Директор)
       {
         path: 'analytics',
@@ -37,15 +37,15 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['economist', 'director', 'admin'] }
       },
-      
-      // Reports (Директор)
+
+      // Reports (Директор, Админ, HR, Экономист - открываем доступ всем для отладки)
       {
         path: 'reports',
         loadComponent: () => import('./features/analytics/reports.component').then(m => m.ReportsComponent),
         canActivate: [roleGuard],
-        data: { roles: ['director', 'admin'] }
+        data: { roles: ['director', 'admin', 'hr-manager', 'economist'] }
       },
-      
+
       // Warehouse (HR, Экономист, Админ)
       {
         path: 'warehouse',
@@ -53,7 +53,7 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['hr-manager', 'economist', 'admin'] }
       },
-      
+
       // Categories (HR, Экономист, Админ)
       {
         path: 'categories',
@@ -61,7 +61,7 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['hr-manager', 'economist', 'admin'] }
       },
-      
+
       // Notifications (Все роли)
       {
         path: 'notifications',
@@ -69,7 +69,7 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['hr-manager', 'economist', 'director', 'admin'] }
       },
-      
+
       // Profile (Все роли)
       {
         path: 'profile',
@@ -77,7 +77,7 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['hr-manager', 'economist', 'director', 'admin'] }
       },
-      
+
       // Admin (Только админ)
       {
         path: 'admin/users',
@@ -85,17 +85,17 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['admin'] }
       },
-      
+
     ]
   },
-  
+
   // Root redirect
   {
     path: '',
     redirectTo: '/auth/login',
     pathMatch: 'full'
   },
-  
+
   // 404
   {
     path: '**',

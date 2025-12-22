@@ -33,7 +33,7 @@ export class ReceiptModalComponent implements OnInit, OnDestroy {
   @Output() confirmed = new EventEmitter<void>();
 
   editedReceipt: Receipt;
-  availableCategories: string[] = ['Не определёно']; // Начальное значение
+  availableCategories: string[] = ['Не определено']; // Начальное значение
   isSubmitting = false;
   errorMessage = '';
   isVisible = true;
@@ -43,7 +43,7 @@ export class ReceiptModalComponent implements OnInit, OnDestroy {
   showConfirmationChangesModal = false;
   showAddCategoryModal = false;
   showConfirmationAddModal = false;
-  
+
   currentItemIndex = -1;
   currentItemCategory = '';
   selectedNewCategory = '';
@@ -75,16 +75,16 @@ export class ReceiptModalComponent implements OnInit, OnDestroy {
       fiscal_sign: this.receiptData.fiscal_sign,
       order_name: this.receiptData.order_name
     };
-    
+
     // Загружаем категории из сервиса
     this.categoriesService.getCategories().subscribe({
       next: (categories) => {
-        this.availableCategories = ['Не определёно', ...categories.map(c => c.name)];
+        this.availableCategories = ['Не определено', ...categories.map(c => c.name)];
       },
       error: (error) => {
         console.error('Ошибка загрузки категорий:', error);
         // Оставляем дефолтные категории при ошибке
-        this.availableCategories = ['Аптека', 'Чай', 'Офисные принадлежности', 'Продукты', 'Не определёно'];
+        this.availableCategories = ['Аптека', 'Чай', 'Офисные принадлежности', 'Продукты', 'Не определено'];
       }
     });
   }
@@ -113,7 +113,7 @@ export class ReceiptModalComponent implements OnInit, OnDestroy {
   openChangeCategoryModal(itemIndex: number): void {
     if (this.isReadOnly) return;
     this.currentItemIndex = itemIndex;
-    this.currentItemCategory = this.editedReceipt.items[itemIndex].category || 'Не определёно';
+    this.currentItemCategory = this.editedReceipt.items[itemIndex].category || 'Не определено';
     this.showChangeCategoryModal = true;
   }
 

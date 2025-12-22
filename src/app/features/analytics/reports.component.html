@@ -82,7 +82,10 @@
       <p>Общая сумма расходов за этот период: <span class="summary-amount">{{ totalSuppliersExpenses().toFixed(2)
           }}</span></p>
     </div>
-    <button class="download-button" (click)="downloadReport('suppliers')">Скачать отчёт</button>
+    <div class="button-group">
+      <button class="visualize-button" (click)="openVisualization()">Визуализировать</button>
+      <button class="download-button" (click)="downloadReport('suppliers')">Скачать отчёт</button>
+    </div>
   </div>
 </div>
 
@@ -106,12 +109,10 @@
       <h3 class="chart-title">Отношение расходов по категориям</h3>
       <div class="donut-chart-wrapper">
         <canvas #donutChart id="donutChart"></canvas>
-        <div class="donut-center">
-          <span class="donut-center-value">{{ totalExpenses().toFixed(0) }}</span>
-        </div>
+
       </div>
       <div class="chart-legend">
-        <div class="legend-item" *ngFor="let category of categoryData()">
+        <div class="legend-item" *ngFor="let category of chartData()">
           <span class="legend-color" [style.background-color]="category.color"></span>
           <span class="legend-label">{{ category.name }}</span>
         </div>

@@ -1,4 +1,5 @@
-<div class="modal-overlay" *ngIf="isVisible" (click)="onOverlayClick($event)" (keydown.escape)="close()" appModalContainer>
+<div class="modal-overlay" *ngIf="isVisible" (click)="onOverlayClick($event)" (keydown.escape)="close()"
+  appModalContainer>
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="conteiner">
       <div class="checkName">
@@ -26,34 +27,22 @@
         </div>
 
         <div class="table-row" *ngFor="let item of editedReceipt.items; let i = index">
-          <input 
-            *ngIf="!isReadOnly"
-            type="text" 
-            class="grid-name grid-name-input" 
-            [(ngModel)]="item.name"
+          <input *ngIf="!isReadOnly" type="text" class="grid-name grid-name-input" [(ngModel)]="item.name"
             (blur)="recalculateTotal()">
           <div *ngIf="isReadOnly" class="grid-name">{{ item.name }}</div>
-          
-          <button
-            *ngIf="!isReadOnly"
-            type="button"
-            class="grid-category grid-category-button"
+
+          <button *ngIf="!isReadOnly" type="button" class="grid-category grid-category-button"
             (click)="openChangeCategoryModal(i)">
-            {{ item.category || 'Не определёно' }}
+            {{ item.category || 'Не определено' }}
           </button>
-          <div *ngIf="isReadOnly" class="grid-category">{{ item.category || 'Не определёно' }}</div>
-          
+          <div *ngIf="isReadOnly" class="grid-category">{{ item.category || 'Не определено' }}</div>
+
           <div class="grid-price">{{ item.price.toFixed(2) }}</div>
-          
-          <input 
-            *ngIf="!isReadOnly"
-            type="number" 
-            class="grid-count grid-count-input" 
-            [(ngModel)]="item.quantity"
-            min="1"
-            (blur)="recalculateTotal()">
+
+          <input *ngIf="!isReadOnly" type="number" class="grid-count grid-count-input" [(ngModel)]="item.quantity"
+            min="1" (blur)="recalculateTotal()">
           <div *ngIf="isReadOnly" class="grid-count">{{ item.quantity }}</div>
-          
+
           <div class="grid-total">{{ (item.price * item.quantity).toFixed(2) }}</div>
         </div>
       </div>
@@ -73,37 +62,24 @@
   </div>
 
   <!-- Модальное окно выбора категории -->
-  <app-change-category-modal
-    *ngIf="showChangeCategoryModal"
-    [currentCategory]="currentItemCategory"
-    [itemIndex]="currentItemIndex"
-    (categorySelected)="onCategorySelected($event)"
-    (addCategoryRequested)="onAddCategoryRequested()"
-    (closed)="closeChangeCategoryModal()">
+  <app-change-category-modal *ngIf="showChangeCategoryModal" [currentCategory]="currentItemCategory"
+    [itemIndex]="currentItemIndex" (categorySelected)="onCategorySelected($event)"
+    (addCategoryRequested)="onAddCategoryRequested()" (closed)="closeChangeCategoryModal()">
   </app-change-category-modal>
 
   <!-- Модальное окно подтверждения изменения категории -->
-  <app-confirmation-changes-modal
-    *ngIf="showConfirmationChangesModal"
-    [oldCategory]="currentItemCategory"
-    [newCategory]="selectedNewCategory"
-    (confirmed)="onConfirmationChangesConfirmed()"
+  <app-confirmation-changes-modal *ngIf="showConfirmationChangesModal" [oldCategory]="currentItemCategory"
+    [newCategory]="selectedNewCategory" (confirmed)="onConfirmationChangesConfirmed()"
     (closed)="closeConfirmationChangesModal()">
   </app-confirmation-changes-modal>
 
   <!-- Модальное окно добавления категории -->
-  <app-add-category-modal
-    *ngIf="showAddCategoryModal"
-    (categoryAdded)="onCategoryAdded($event)"
+  <app-add-category-modal *ngIf="showAddCategoryModal" (categoryAdded)="onCategoryAdded($event)"
     (closed)="closeAddCategoryModal()">
   </app-add-category-modal>
 
   <!-- Модальное окно подтверждения добавления категории -->
-  <app-confirmation-add-modal
-    *ngIf="showConfirmationAddModal"
-    [categoryName]="newCategoryToAdd"
-    (confirmed)="onConfirmationAddConfirmed()"
-    (closed)="closeConfirmationAddModal()">
+  <app-confirmation-add-modal *ngIf="showConfirmationAddModal" [categoryName]="newCategoryToAdd"
+    (confirmed)="onConfirmationAddConfirmed()" (closed)="closeConfirmationAddModal()">
   </app-confirmation-add-modal>
 </div>
-

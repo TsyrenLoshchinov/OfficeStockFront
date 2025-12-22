@@ -81,7 +81,7 @@ export class WarehouseService {
           id: item.id,
           productId: item.product_id,
           name: item.product_name,
-          category: item.category_name,
+          category: item.category_name || 'Не определено',
           estimatedConsumptionDate: null,
           quantity: parseFloat(item.rest) || 0
         }));
