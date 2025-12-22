@@ -2,7 +2,7 @@
   <div class="main__container">
     <h1 class="main__title">Склад</h1>
 
-    <div class="actions">
+    <div class="actions" *ngIf="canWriteOff">
       <button class="configure-btn" type="button" (click)="openAutomaticWriteOffModal()">
         Настроить автоматическое списание
       </button>
@@ -14,7 +14,7 @@
         <div class="header-category">Категория</div>
         <div class="header-date">Предполагаемая дата расходования запаса</div>
         <div class="header-quantity">Количество</div>
-        <div class="header-action"></div>
+        <div class="header-action" *ngIf="canWriteOff"></div>
       </div>
 
       <div class="table-row" *ngFor="let item of items()">
@@ -22,34 +22,26 @@
         <div class="cell-category">{{ item.category }}</div>
         <div class="cell-date">{{ formatDate(item.estimatedConsumptionDate) }}</div>
         <div class="cell-quantity">
-          <ng-container *ngIf="editingItemId() !== item.id; else editQuantity">
+          <ng-container *ngIf="!canWriteOff || editingItemId() !== item.id; else editQuantity">
             <span class="quantity-value">{{ item.quantity }}</span>
           </ng-container>
           <ng-template #editQuantity>
             <div class="quantity-input-wrapper">
               <button class="quantity-btn quantity-btn--decrease" (click)="decreaseQuantity()" type="button">-</button>
-              <input 
-                type="number" 
-                class="quantity-input" 
-                [(ngModel)]="editingQuantity"
-                (keydown.enter)="saveQuantity(item)"
-                min="0"
-                [max]="item.quantity">
-              <button class="quantity-btn quantity-btn--increase" (click)="increaseQuantity(item.quantity)" type="button">+</button>
+              <input type="number" class="quantity-input" [(ngModel)]="editingQuantity"
+                (keydown.enter)="saveQuantity(item)" min="0" [max]="item.quantity">
+              <button class="quantity-btn quantity-btn--increase" (click)="increaseQuantity(item.quantity)"
+                type="button">+</button>
               <button class="quantity-save-btn" (click)="saveQuantity(item)" type="button" aria-label="Сохранить">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M20 6L9 17l-5-5"/>
+                  <path d="M20 6L9 17l-5-5" />
                 </svg>
               </button>
             </div>
           </ng-template>
         </div>
-        <div class="cell-action">
-          <button 
-            class="write-off-btn" 
-            (click)="startWriteOff(item)" 
-            type="button"
-            *ngIf="editingItemId() !== item.id">
+        <div class="cell-action" *ngIf="canWriteOff">
+          <button class="write-off-btn" (click)="startWriteOff(item)" type="button" *ngIf="editingItemId() !== item.id">
             Списать
           </button>
         </div>
@@ -68,18 +60,12 @@
   </div>
 
   <!-- Модальное окно автоматического списания -->
-  <app-automatic-write-off-modal
-    *ngIf="showAutomaticWriteOffModal()"
-    (addRuleRequested)="openNewRuleModal()"
+  <app-automatic-write-off-modal *ngIf="showAutomaticWriteOffModal()" (addRuleRequested)="openNewRuleModal()"
     (closed)="closeAutomaticWriteOffModal()">
   </app-automatic-write-off-modal>
 
   <!-- Модальное окно нового правила списания -->
-  <app-new-write-off-rule-modal
-    *ngIf="showNewRuleModal()"
-    [warehouseItems]="items()"
-    (ruleCreated)="onNewRuleCreated()"
+  <app-new-write-off-rule-modal *ngIf="showNewRuleModal()" [warehouseItems]="items()" (ruleCreated)="onNewRuleCreated()"
     (closed)="closeNewRuleModal()">
   </app-new-write-off-rule-modal>
 </main>
-

@@ -171,8 +171,11 @@ export class ReceiptModalComponent implements OnInit, OnDestroy {
 
   closeChangeCategoryModal(): void {
     this.showChangeCategoryModal = false;
-    this.currentItemIndex = -1;
-    this.currentItemCategory = '';
+    // Не сбрасываем индексы, если мы переходим к подтверждению изменения
+    if (!this.showConfirmationChangesModal) {
+      this.currentItemIndex = -1;
+      this.currentItemCategory = '';
+    }
   }
 
   closeConfirmationChangesModal(): void {
@@ -228,7 +231,8 @@ export class ReceiptModalComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         this.isSubmitting = false;
-        this.errorMessage = error.error?.message || 'Ошибка при подтверждении чека. Попробуйте еще раз.';
+        this.errorMessage = error.error?.message || error.error?.detail || 'Ошибка при подтверждении чека. Попробуйте еще раз.';
+        console.error('Confirm receipt error:', error);
       }
     });
   }

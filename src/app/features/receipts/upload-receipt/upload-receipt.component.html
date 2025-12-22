@@ -1,11 +1,7 @@
 <div class="add-receipt">
-    <input 
-        type="file" 
-        id="file-input" 
-        accept=".jpg,.jpeg,.png,.pdf" 
-        style="display: none;"
+    <input type="file" id="file-input" accept=".jpg,.jpeg,.png,.pdf" style="display: none;"
         (change)="onFileSelected($event)">
-    
+
     <!-- Состояние 1: Default (нет файла) -->
     <div *ngIf="!selectedFile && !isUploading" class="receipt-window receipt-default">
         <button class="download-button btn-default" (click)="onButtonClick()">
@@ -44,6 +40,17 @@
     <!-- Состояние 3: Download Process (загрузка в процессе) -->
     <div *ngIf="isUploading" class="receipt-window receipt-process">
         <div class="image-placeholder process-image"></div>
+
+        <!-- Контейнер прогресс-бара (ПОДНЯТ ВЫШЕ КНОПКИ) -->
+        <div class="process-frame-6">
+            <div class="progress-label">Загрузка чека</div>
+            <div class="progress-container">
+                <div class="progress-line" [style.width.%]="uploadProgress"></div>
+            </div>
+            <span class="progress-text">{{ uploadProgress }}%</span>
+        </div>
+
+        <!-- Кнопка под прогресс-баром -->
         <button class="download-button btn-process" disabled>
             <div class="frame-4 frame-4-process">
                 <div class="frame-5 frame-5-process">
@@ -51,11 +58,7 @@
                 </div>
             </div>
         </button>
-        <div class="frame-6 process-frame-6">
-            <div class="progress-line" [style.width.%]="uploadProgress"></div>
-            <span class="progress-text">{{ uploadProgress }}%</span>
-        </div>
+
         <button class="text-button process-text-button" (click)="cancelUpload()"><span>Отмена</span></button>
     </div>
 </div>
-

@@ -1,6 +1,7 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChequesService } from '../services/cheques.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Cheque } from '../../../core/models/cheque.model';
 import { ReceiptModalComponent } from '../../../shared/components/receipt-modal/receipt-modal.component';
 import { Receipt } from '../../../core/models/receipt.model';
@@ -19,6 +20,7 @@ export class ChequesListComponent implements OnInit {
   isLoading = signal<boolean>(false);
   selectedCheque: Receipt | null = null;
   showModal = signal<boolean>(false);
+  canDelete = false;
 
   sortOptions: DropdownOption[] = [
     { value: 'newest', label: 'Сначала новые' },
@@ -39,10 +41,13 @@ export class ChequesListComponent implements OnInit {
   });
 
   constructor(
-    private chequesService: ChequesService
+    private chequesService: ChequesService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
+    const role = this.authService.getRole();
+    this.canDelete = role === 'admin';
     this.loadCheques();
   }
 

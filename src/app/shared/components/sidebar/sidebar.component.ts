@@ -25,13 +25,13 @@ export class SidebarComponent implements OnInit {
   hasOpenModal = this.modalStateService.hasOpenModal;
 
   menuItems: MenuItem[] = [
-    { label: 'Главная', route: '/app', roles: ['hr-manager'] },
+    { label: 'Главная', route: '/app', roles: ['hr-manager', 'admin'] },
     { label: 'Профиль', route: '/app/profile', roles: ['hr-manager', 'economist', 'director', 'admin'] },
-    { label: 'Уведомления', route: '/app/notifications', roles: ['hr-manager', 'economist', 'director', 'admin'] },
+    { label: 'Уведомления', route: '/app/notifications', roles: ['hr-manager', 'admin'] },
     { label: 'Чеки', route: '/app/receipts', roles: ['hr-manager', 'admin'] },
-    { label: 'Категории', route: '/app/categories', roles: ['hr-manager', 'economist', 'admin'] },
-    { label: 'Склад', route: '/app/warehouse', roles: ['hr-manager', 'economist', 'admin'] },
-    { label: 'Отчёты', route: '/app/reports', roles: ['director', 'admin', 'hr-manager', 'economist'] },
+    { label: 'Категории', route: '/app/categories', roles: ['hr-manager', 'admin'] },
+    { label: 'Склад', route: '/app/warehouse', roles: ['hr-manager', 'economist', 'director', 'admin'] },
+    { label: 'Отчёты', route: '/app/reports', roles: ['economist', 'admin'] },
     { label: 'Администрирование', route: '/app/admin/users', roles: ['admin'] }
   ];
 

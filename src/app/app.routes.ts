@@ -15,12 +15,12 @@ export const routes: Routes = [
     loadComponent: () => import('./core/layouts/main-layout/main-layout.component').then(m => m.MainLayoutComponent),
     canActivate: [authGuard],
     children: [
-      // Главная страница - Загрузка чека (HR-менеджер)
+      // Главная страница - Загрузка чека (HR-менеджер, Admin)
       {
         path: '',
         loadComponent: () => import('./features/receipts/receipts-page/receipts-page.component').then(m => m.ReceiptsPageComponent),
         canActivate: [roleGuard],
-        data: { roles: ['hr-manager'] }
+        data: { roles: ['hr-manager', 'admin'] }
       },
       // Receipts List - Список чеков (HR-менеджер, Админ)
       {
@@ -30,44 +30,52 @@ export const routes: Routes = [
         data: { roles: ['hr-manager', 'admin'] }
       },
 
-      // Analytics (Экономист, Директор)
+      // Analytics (Экономист, Admin - Analytics page actually looks redundant if Reports is main, but user asked for "Reports" for Economist. 
+      // User said "economist: profile, warehouse, reports".
+      // There is 'analytics' route and 'reports' route. 
+      // The user specifically said "отчеты" (reports) for economist, not "аналитика" (analytics).
+      // I will give access to reports for economist.
+      // But usually 'analytics' was for economist. I'll stick to user instructions: Reports for Economist.
+      // What about Analytics route? User didn't mention it. I'll leave it accessible to Admin only to be safe? 
+      // Or maybe Economist meant Analytics? "отчеты" usually translates to "Reports".
+      // Let's assume Analytics is legacy or secondary, and stick to Reports for Economist.)
       {
         path: 'analytics',
         loadComponent: () => import('./features/analytics/analytics.component').then(m => m.AnalyticsComponent),
         canActivate: [roleGuard],
-        data: { roles: ['economist', 'director', 'admin'] }
+        data: { roles: ['admin'] } // Hiding from economist unless asked
       },
 
-      // Reports (Директор, Админ, HR, Экономист - открываем доступ всем для отладки)
+      // Reports (Директор, Админ, Экономист)
       {
         path: 'reports',
         loadComponent: () => import('./features/analytics/reports.component').then(m => m.ReportsComponent),
         canActivate: [roleGuard],
-        data: { roles: ['director', 'admin', 'hr-manager', 'economist'] }
+        data: { roles: ['admin', 'economist'] }
       },
 
-      // Warehouse (HR, Экономист, Админ)
+      // Warehouse (Все роли, но разный доступ)
       {
         path: 'warehouse',
         loadComponent: () => import('./features/warehouse/warehouse.component').then(m => m.WarehouseComponent),
         canActivate: [roleGuard],
-        data: { roles: ['hr-manager', 'economist', 'admin'] }
+        data: { roles: ['hr-manager', 'economist', 'director', 'admin'] }
       },
 
-      // Categories (HR, Экономист, Админ)
+      // Categories (HR, Админ)
       {
         path: 'categories',
         loadComponent: () => import('./features/categories/categories.component').then(m => m.CategoriesComponent),
         canActivate: [roleGuard],
-        data: { roles: ['hr-manager', 'economist', 'admin'] }
+        data: { roles: ['hr-manager', 'admin'] }
       },
 
-      // Notifications (Все роли)
+      // Notifications (HR, Админ)
       {
         path: 'notifications',
         loadComponent: () => import('./features/notifications/notifications.component').then(m => m.NotificationsComponent),
         canActivate: [roleGuard],
-        data: { roles: ['hr-manager', 'economist', 'director', 'admin'] }
+        data: { roles: ['hr-manager', 'admin'] }
       },
 
       // Profile (Все роли)

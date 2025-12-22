@@ -96,11 +96,11 @@ export class WarehouseService {
     return item?.name || `Товар #${productId}`;
   }
 
-  writeOffItem(itemId: number, rest: number): Observable<WarehouseItemApiResponse> {
+  writeOffItem(productId: number, rest: number): Observable<WarehouseItemApiResponse> {
     if (environment.useMockAuth) {
       return of({
-        id: itemId,
-        product_id: itemId,
+        id: productId, // Mock assumption
+        product_id: productId,
         product_name: 'Товар',
         category_name: 'Категория',
         rest: rest.toString(),
@@ -108,8 +108,10 @@ export class WarehouseService {
       } as WarehouseItemApiResponse).pipe(delay(200));
     }
 
+    // Согласно Swagger: PATCH /api/v1/warehouse/products/{product_id}
+    // Body: { "rest": ... }
     return this.http.patch<WarehouseItemApiResponse>(
-      `${this.apiService.getBaseUrl()}/warehouse/products/${itemId}`,
+      `${this.apiService.getBaseUrl()}/warehouse/products/${productId}`,
       { rest },
       { headers: this.getHeaders() }
     );

@@ -2,6 +2,7 @@ import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WarehouseService } from './services/warehouse.service';
+import { AuthService } from '../../core/services/auth.service';
 import { WarehouseItem } from '../../core/models/warehouse.model';
 import { AutomaticWriteOffModalComponent } from '../../shared/components/automatic-write-off-modal/automatic-write-off-modal.component';
 import { NewWriteOffRuleModalComponent } from '../../shared/components/new-write-off-rule-modal/new-write-off-rule-modal.component';
@@ -20,10 +21,17 @@ export class WarehouseComponent implements OnInit {
   showNewRuleModal = signal<boolean>(false);
   editingItemId = signal<number | null>(null);
   editingQuantity: number = 0;
+  canWriteOff = false;
 
-  constructor(private warehouseService: WarehouseService) {}
+  constructor(
+    private warehouseService: WarehouseService,
+    private authService: AuthService
+  ) { }
 
   ngOnInit(): void {
+    const role = this.authService.getRole();
+    // Only Admin and HR can write off items
+    this.canWriteOff = role === 'admin' || role === 'hr-manager';
     this.loadItems();
   }
 
@@ -85,8 +93,9 @@ export class WarehouseComponent implements OnInit {
 
     // Отправляем новое значение rest (остаток) вместо количества для списания
     const newRest = this.editingQuantity;
-    
-    this.warehouseService.writeOffItem(item.id, newRest).subscribe({
+
+    // Передаем productId для URL согласно документации
+    this.warehouseService.writeOffItem(item.productId, newRest).subscribe({
       next: (updatedItem) => {
         // Обновляем список после списания
         this.loadItems();

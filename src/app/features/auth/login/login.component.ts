@@ -60,10 +60,10 @@ export class LoginComponent {
         this.router.navigate(['/app']); // Главная - страница загрузки чека
         break;
       case 'economist':
-        this.router.navigate(['/app/analytics']);
+        this.router.navigate(['/app/reports']);
         break;
       case 'director':
-        this.router.navigate(['/app/reports']);
+        this.router.navigate(['/app/warehouse']);
         break;
       case 'admin':
         this.router.navigate(['/app/admin/users']);

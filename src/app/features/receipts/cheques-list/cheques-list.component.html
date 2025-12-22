@@ -5,7 +5,7 @@
     <div class="actions">
       <app-custom-dropdown [options]="sortOptions" [selectedValue]="sortOrder()" (valueChange)="onSortChange($event)">
       </app-custom-dropdown>
-      <button class="clear-all" type="button" (click)="clearAll()">Очистить всё</button>
+      <button class="clear-all" type="button" (click)="clearAll()" *ngIf="canDelete">Очистить всё</button>
     </div>
 
     <div class="checks" *ngIf="!isLoading(); else loadingTemplate">
@@ -18,7 +18,7 @@
           </div>
         </div>
         <div class="RightsBts">
-          <button class="cross" aria-label="Закрыть чек" (click)="deleteCheque(cheque.id)"></button>
+          <button class="cross" aria-label="Закрыть чек" (click)="deleteCheque(cheque.id)" *ngIf="canDelete"></button>
           <button class="more-btn" (click)="viewDetails(cheque.id)">Подробнее</button>
         </div>
       </div>

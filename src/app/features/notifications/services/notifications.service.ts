@@ -1,97 +1,120 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { delay, map, catchError } from 'rxjs/operators';
-import { Notification, NotificationApiResponse, mapNotificationFromApi } from '../../../core/models/notification.model';
-import { AuthService } from '../../../core/services/auth.service';
-import { environment } from '../../../../environments/environment';
-import { WarehouseService } from '../../warehouse/services/warehouse.service';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Notification, NotificationSchema, mapNotificationFromSchema } from '../../../core/models/notification.model';
+import { ApiService } from '../../../core/services/api.service';
 
 @Injectable({
     providedIn: 'root'
 })
-@Injectable({
-    providedIn: 'root'
-})
-export class NotificationsService {
-    private readonly READ_KEY = 'notifications_read';
-    private readonly DELETED_KEY = 'notifications_deleted';
+export class NotificationsService implements OnDestroy {
+    private readonly STORAGE_KEY = 'user_notifications';
+    private socket: WebSocket | null = null;
+    private notificationsSubject = new BehaviorSubject<Notification[]>([]);
 
-    constructor(
-        private warehouseService: WarehouseService
-    ) { }
+    public notifications$ = this.notificationsSubject.asObservable();
 
-    getNotifications(): Observable<Notification[]> {
-        return this.warehouseService.getWarehouseItems().pipe(
-            map(items => {
-                const notifications: Notification[] = [];
-                const readIds = this.getStoredIds(this.READ_KEY);
-                const deletedIds = this.getStoredIds(this.DELETED_KEY);
-
-                // Generate Low Stock Notifications
-                items.forEach(item => {
-                    if (item.quantity < 5) {
-                        const notifId = 1000 + item.id; // Offset ID to avoid collisions if we add more sources
-
-                        if (deletedIds.includes(notifId)) return;
-
-                        notifications.push({
-                            id: notifId,
-                            title: 'Низкий уровень запасов',
-                            message: `На складе осталось мало товара "${item.name}" (${item.quantity} шт.). Рекомендуется пополнить запасы.`,
-                            timestamp: new Date().toISOString(), // In real app, maybe track when it became low? For now, "now".
-                            isRead: readIds.includes(notifId),
-                            type: 'warning'
-                        });
-                    }
-                });
-
-                // We can add other sources here later (e.g. from Receipts)
-
-                return notifications.sort((a, b) => {
-                    // Sort by read status (unread first), then by ID or mock timestamp
-                    if (a.isRead === b.isRead) return 0;
-                    return a.isRead ? 1 : -1;
-                });
-            }),
-            catchError(error => {
-                console.error('Error generating notifications:', error);
-                return of([]);
-            })
-        );
+    constructor(private apiService: ApiService) {
+        this.loadFromStorage();
+        this.connect();
     }
 
-    markAsRead(notificationId: number): Observable<void> {
-        const readIds = this.getStoredIds(this.READ_KEY);
-        if (!readIds.includes(notificationId)) {
-            readIds.push(notificationId);
-            localStorage.setItem(this.READ_KEY, JSON.stringify(readIds));
+    private loadFromStorage(): void {
+        try {
+            const data = localStorage.getItem(this.STORAGE_KEY);
+            if (data) {
+                const notifications: Notification[] = JSON.parse(data);
+                this.notificationsSubject.next(notifications);
+            }
+        } catch (e) {
+            console.error('Failed to load notifications from storage', e);
         }
+    }
+
+    private saveToStorage(notifications: Notification[]): void {
+        try {
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(notifications));
+        } catch (e) {
+            console.error('Failed to save notifications to storage', e);
+        }
+    }
+
+    private connect(): void {
+        // Build WS URL from ApiService base URL
+        // ApiService usually returns 'https://domain/api/v1'. We need 'wss://domain/api/v1/notifications/ws'
+        const httpUrl = this.apiService.getBaseUrl();
+        const wsUrl = httpUrl.replace(/^http/, 'ws') + '/notifications/ws';
+
+        console.log('Connecting to Notification WebSocket:', wsUrl);
+
+        this.socket = new WebSocket(wsUrl);
+
+        this.socket.onopen = () => {
+            console.log('WebSocket connection established');
+        };
+
+        this.socket.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data) as NotificationSchema;
+                this.handleNotification(data);
+            } catch (e) {
+                console.error('Error parsing WebSocket message:', e);
+            }
+        };
+
+        this.socket.onclose = (event) => {
+            console.log('WebSocket connection closed', event);
+            // Simple reconnect logic
+            setTimeout(() => this.connect(), 5000);
+        };
+
+        this.socket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+            this.socket?.close();
+        };
+    }
+
+    private handleNotification(schema: NotificationSchema): void {
+        const newNotification = mapNotificationFromSchema(schema);
+        const current = this.notificationsSubject.value;
+        const updated = [newNotification, ...current];
+
+        // Limit storage to say 50 items
+        if (updated.length > 50) {
+            updated.length = 50;
+        }
+
+        this.notificationsSubject.next(updated);
+        this.saveToStorage(updated);
+    }
+
+    getNotifications(): Observable<Notification[]> {
+        return this.notifications$;
+    }
+
+    markAsRead(id: number): Observable<void> {
+        const current = this.notificationsSubject.value;
+        const updated = current.map(n => n.id === id ? { ...n, isRead: true } : n);
+        this.notificationsSubject.next(updated);
+        this.saveToStorage(updated);
         return of(void 0);
     }
 
-    deleteNotification(notificationId: number): Observable<void> {
-        const deletedIds = this.getStoredIds(this.DELETED_KEY);
-        if (!deletedIds.includes(notificationId)) {
-            deletedIds.push(notificationId);
-            localStorage.setItem(this.DELETED_KEY, JSON.stringify(deletedIds));
-        }
+    deleteNotification(id: number): Observable<void> {
+        const current = this.notificationsSubject.value;
+        const updated = current.filter(n => n.id !== id);
+        this.notificationsSubject.next(updated);
+        this.saveToStorage(updated);
         return of(void 0);
     }
 
     clearAllNotifications(): Observable<void> {
-        // In this local-gen architecture, 'clear' might mean 'mark all current as deleted'
-        // But that's expensive/complex to correct if stock changes. 
-        // Let's just ignore for now or implement if needed.
+        this.notificationsSubject.next([]);
+        this.saveToStorage([]);
         return of(void 0);
     }
 
-    private getStoredIds(key: string): number[] {
-        try {
-            const data = localStorage.getItem(key);
-            return data ? JSON.parse(data) : [];
-        } catch {
-            return [];
-        }
+    ngOnDestroy(): void {
+        this.socket?.close();
     }
 }
