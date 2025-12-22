@@ -14,7 +14,7 @@ export class ReceiptsService {
     private http: HttpClient,
     private apiService: ApiService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   private getHeaders(): HttpHeaders {
     const token = this.authService.getToken();
@@ -28,13 +28,13 @@ export class ReceiptsService {
   uploadReceipt(file: File): Observable<ReceiptUploadResponse> {
     const formData = new FormData();
     formData.append('file', file, file.name);
-    
+
     const token = this.authService.getToken();
     const headers = new HttpHeaders({
       ...(token ? { 'Authorization': `Bearer ${token}` } : {})
       // Не устанавливаем Content-Type для FormData - браузер сделает это автоматически с boundary
     });
-    
+
     return this.http.post<ReceiptUploadApiResponse>(
       `${this.apiService.getBaseUrl()}/receipts/upload`,
       formData,
@@ -99,7 +99,8 @@ export class ReceiptsService {
           fiscal_number: receipt.fiscal_number,
           fiscal_document: receipt.fiscal_document,
           fiscal_sign: receipt.fiscal_sign,
-          order_name: receipt.order_name,
+          // Сохраняем имя файла как order_name, если оно не пришло с бэкенда (или приоритетно используем оригинальное имя файла)
+          order_name: file.name,
           // Сохраняем флаги и сообщения
           is_duplicate: false,
           success: true,

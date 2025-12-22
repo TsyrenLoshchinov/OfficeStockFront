@@ -80,7 +80,7 @@
 .basicInformation h5 {
   font-family: 'Inter', sans-serif;
   font-weight: 600;
-  font-size: 9px;
+  font-size: 12px;
   color: #9A0E10;
 }
 
@@ -111,7 +111,7 @@
 .productList h5 {
   font-family: 'Inter', sans-serif;
   font-weight: 600;
-  font-size: 9px;
+  font-size: 12px;
   color: #9A0E10;
 }
 
@@ -161,7 +161,7 @@
   background: none;
   font-family: 'Inter', sans-serif;
   font-weight: 300;
-  font-size: 8px;
+  font-size: 12px;
   transition: all 0.6s;
 }
 

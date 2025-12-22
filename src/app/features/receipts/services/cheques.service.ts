@@ -65,7 +65,7 @@ export class ChequesService {
       id: receipt.id ?? 0,
       number: receipt.fiscal_document || receipt.id?.toString() || 'Без номера',
       date: receipt.date_buy || '',
-      fileName: `receipt_${receipt.id || 'unknown'}.jpg`,
+      fileName: receipt.order_name || `receipt_${receipt.id || 'unknown'}.jpg`,
       uploadedAt: receipt.date_create || receipt.date_buy || '',
       organization: receipt.name_supplier || 'Не указано',
       totalAmount: receipt.sum || 0,
