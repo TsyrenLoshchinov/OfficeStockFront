@@ -20,6 +20,13 @@
     <!-- Состояние 2: Receipt Added (файл загружен) -->
     <div *ngIf="selectedFile && !isUploading" class="receipt-window receipt-added">
         <div class="image-placeholder"></div>
+
+        <!-- Сообщение теперь над кнопкой согласно скриншоту -->
+        <div class="frame-6">
+            <span class="success-text" *ngIf="!errorMessage">Файл {{ fileInfo?.name }} успешно загружен</span>
+            <span class="error-text" *ngIf="errorMessage">{{ errorMessage }}</span>
+        </div>
+
         <button class="download-button btn-added" (click)="onButtonClick()">
             <div class="frame-4">
                 <div class="frame-5">
@@ -27,12 +34,9 @@
                 </div>
             </div>
         </button>
-        <div class="frame-6">
-            <span class="success-text" *ngIf="!errorMessage">Файл {{ fileInfo?.name }} успешно загружен</span>
-            <span class="error-text" *ngIf="errorMessage">{{ errorMessage }}</span>
-        </div>
+
         <div class="action-buttons">
-            <button class="text-button" (click)="retryUpload()" *ngIf="errorMessage"><span>Повторить</span></button>
+            <!-- Кнопка Повторить удалена по просьбе пользователя -->
             <button class="text-button" (click)="cancelUpload()"><span>Отмена</span></button>
         </div>
     </div>
@@ -41,16 +45,15 @@
     <div *ngIf="isUploading" class="receipt-window receipt-process">
         <div class="image-placeholder process-image"></div>
 
-        <!-- Контейнер прогресс-бара (ПОДНЯТ ВЫШЕ КНОПКИ) -->
+        <!-- Контейнер прогресс-бара ТЕПЕРЬ СВЕРХУ -->
         <div class="process-frame-6">
-            <div class="progress-label">Загрузка чека</div>
-            <div class="progress-container">
-                <div class="progress-line" [style.width.%]="uploadProgress"></div>
+            <div class="progress-track">
+                <div class="progress-fill" [style.width.%]="uploadProgress"></div>
             </div>
             <span class="progress-text">{{ uploadProgress }}%</span>
         </div>
 
-        <!-- Кнопка под прогресс-баром -->
+        <!-- Кнопка ПОД прогресс-баром -->
         <button class="download-button btn-process" disabled>
             <div class="frame-4 frame-4-process">
                 <div class="frame-5 frame-5-process">
@@ -59,6 +62,7 @@
             </div>
         </button>
 
+        <!-- Кнопка Отмена теперь с большим отступом внизу -->
         <button class="text-button process-text-button" (click)="cancelUpload()"><span>Отмена</span></button>
     </div>
 </div>

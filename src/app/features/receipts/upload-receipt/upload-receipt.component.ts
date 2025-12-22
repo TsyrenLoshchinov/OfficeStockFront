@@ -12,18 +12,21 @@ import { ReceiptUploadResponse } from '../../../core/models/receipt.model';
 })
 export class UploadReceiptComponent {
   @Output() receiptUploaded = new EventEmitter<ReceiptUploadResponse>();
-  
+
   selectedFile: File | null = null;
   isUploading = false;
   uploadProgress = 0;
   errorMessage = '';
   fileInfo: { name: string; size: string; type: string } | null = null;
 
-  constructor(private receiptsService: ReceiptsService) {}
+  constructor(
+    private receiptsService: ReceiptsService
+  ) { }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
+      this.errorMessage = ''; // Очищаем ошибку при выборе нового файла
       const file = input.files[0];
       this.validateAndSelectFile(file);
     }
@@ -38,7 +41,7 @@ export class UploadReceiptComponent {
     // Проверка формата файла
     const allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf'];
     const fileExtension = file.name.split('.').pop()?.toLowerCase();
-    
+
     if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
       this.errorMessage = 'Недопустимый формат файла. Разрешены только: JPG, JPEG, PNG, PDF';
       return;
@@ -85,23 +88,20 @@ export class UploadReceiptComponent {
         this.uploadProgress = 100;
         setTimeout(() => {
           this.isUploading = false;
-          
-          // Если чек является дубликатом или не удалось обработать, сбрасываем состояние файла
-          if (response.is_duplicate || response.success === false) {
-            this.selectedFile = null;
-            this.fileInfo = null;
-            const fileInput = document.getElementById('file-input') as HTMLInputElement;
-            if (fileInput) {
-              fileInput.value = '';
-            }
-          } else {
-            // После успешной загрузки отправляем событие, модалка откроется поверх компонента
-            // Сбрасываем состояние компонента, чтобы модалка могла открыться
-            const file = this.selectedFile;
-            this.selectedFile = null;
-            this.fileInfo = null;
+
+          if (response.is_duplicate) {
+            this.errorMessage = 'Данный чек уже существует в системе';
+            this.clearState(); // Немедленно возвращаемся в дефолтное состояние при дубликате
+          } else if (response.success === false) {
+            this.errorMessage = response.message || 'Ошибка обработки чека';
           }
-          
+
+          if (response.is_duplicate || response.success === false) {
+            // Состояние ошибки уже установлено
+          } else {
+            this.clearState();
+          }
+
           this.receiptUploaded.emit(response);
         }, 500);
       },
@@ -109,24 +109,26 @@ export class UploadReceiptComponent {
         clearInterval(progressInterval);
         this.isUploading = false;
         this.uploadProgress = 0;
-        // Очищаем выбранный файл при ошибке, чтобы пользователь мог выбрать другой
         const errorMsg = error.error?.message || error.error?.detail || error.message || 'Ошибка при загрузке файла. Попробуйте еще раз.';
         this.errorMessage = errorMsg;
-        // Не очищаем selectedFile сразу, чтобы пользователь мог увидеть ошибку и попробовать снова
       }
     });
   }
 
-  cancelUpload(): void {
+  private clearState(): void {
     this.selectedFile = null;
-    this.isUploading = false;
-    this.uploadProgress = 0;
     this.fileInfo = null;
-    this.errorMessage = '';
     const fileInput = document.getElementById('file-input') as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
     }
+  }
+
+  cancelUpload(): void {
+    this.clearState();
+    this.isUploading = false;
+    this.uploadProgress = 0;
+    this.errorMessage = '';
   }
 
   retryUpload(): void {

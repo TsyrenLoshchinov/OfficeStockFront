@@ -173,7 +173,7 @@ export class UsersComponent implements OnInit {
       firstName: formValue.firstName,
       lastName: formValue.lastName,
       middleName: formValue.middleName || undefined,
-      email: formValue.email,
+      email: formValue.email.toLowerCase(),
       role: formValue.role,
       password: formValue.generatePassword ? formValue.password : formValue.password
     };
@@ -231,7 +231,7 @@ export class UsersComponent implements OnInit {
       firstName: formValue.firstName,
       lastName: formValue.lastName,
       middleName: formValue.middleName || undefined,
-      email: formValue.email,
+      email: formValue.email.toLowerCase(),
       role: formValue.role
     };
 

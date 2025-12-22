@@ -10,7 +10,8 @@
     box-sizing: border-box;
     position: relative;
     width: 956px;
-    height: 261px;
+    height: 320px;
+    /* Еще немного увеличили высоту */
     background: rgba(221, 141, 118, 0.5);
     background-image:
         repeating-linear-gradient(to right, #9A0E10 0px, #9A0E10 10px, transparent 10px, transparent 20px),
@@ -31,27 +32,30 @@
         right,
         center;
     background-repeat: repeat-x, repeat-x, repeat-y, repeat-y, no-repeat;
+
+    /* Flexbox для порядка и центрирования */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    /* Увеличили отступы для "воздуха" между большой кнопкой и отменой */
+    padding: 20px;
 }
 
 .receipt-default .download-button {
-    position: absolute;
     width: 450px;
     height: 62px;
-    left: 253px;
-    top: 69px;
     background: linear-gradient(90deg, #C22918 -79%, #D1614D 54.61%, #C22918 189.67%);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border: none;
     cursor: pointer;
     isolation: isolate;
+    position: relative;
 }
 
 .receipt-default .format-text {
-    position: absolute;
     width: 478px;
-    height: 116px;
-    left: calc(50% - 478px/2);
-    top: 145px;
     font-family: 'Montserrat', sans-serif;
     font-style: normal;
     font-weight: 400;
@@ -66,26 +70,25 @@
 }
 
 .receipt-added .image-placeholder {
-    position: absolute;
     width: 67px;
     height: 124px;
-    left: calc(50% - 67px/2 + 0.5px);
-    top: 20px;
     background: #FFFFFF;
     border: 1px solid rgba(255, 255, 255, 0.3);
+    margin-top: -10px;
 }
 
 .receipt-added .download-button {
-    position: absolute;
-    width: 244px;
-    height: 41px;
-    left: calc(50% - 244px/2);
-    top: calc(50% - 41px/2 + 71px);
+    width: 350px;
+    /* Еще больше увеличили красный блок */
+    height: 65px;
+    /* Еще больше увеличили высоту */
     background: linear-gradient(90deg, #C22918 -79%, #D1614D 54.61%, #C22918 189.67%);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border: none;
     cursor: pointer;
     isolation: isolate;
+    position: relative;
+    border-radius: 6px;
 }
 
 .receipt-added .frame-6 {
@@ -93,83 +96,55 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 10px;
-    gap: 10px;
-    position: absolute;
-    width: 551px;
-    height: 24px;
-    left: calc(50% - 551px/2 + 0.5px);
-    top: calc(50% - 24px/2 + 29.5px);
+    width: 100%;
 }
 
 .receipt-added .success-text {
-    width: 300px;
-    height: 23px;
     font-family: 'Montserrat', sans-serif;
-    font-style: normal;
     font-weight: 300;
-    font-size: 12px;
-    line-height: 22px;
-    display: flex;
-    align-items: center;
-    text-align: center;
+    font-size: 14px;
     color: #DBDCE4;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+    text-align: center;
+}
+
+.receipt-added .action-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
 }
 
 .receipt-added .text-button {
-    position: absolute;
-    width: 175px;
-    height: 31px;
-    left: calc(50% - 175px/2 + 0.5px);
-    top: 222px;
     background: transparent;
     border: none;
     cursor: pointer;
+    padding: 5px 10px;
 }
 
 .receipt-added .text-button span {
-    position: absolute;
-    left: 0%;
-    right: 0%;
-    top: 0%;
-    bottom: 0%;
     font-family: 'Inter', sans-serif;
-    font-style: normal;
     font-weight: 300;
     font-size: 14px;
-    line-height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    text-transform: capitalize;
     color: #DBDCE4;
 }
 
 .receipt-process .image-placeholder {
-    position: absolute;
     width: 67px;
     height: 124px;
-    left: calc(50% - 67px/2 - 4.5px);
-    top: 14px;
     background: #FFFFFF;
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .receipt-process .download-button {
-    position: absolute;
     width: 244px;
     height: 41px;
-    left: calc(50% - 244px/2);
-    top: calc(50% - 41px/2 + 71px);
     background: linear-gradient(90deg, rgba(194, 41, 24, 0.6) -79%, rgba(209, 97, 77, 0.6) 54.61%, rgba(194, 41, 24, 0.6) 189.67%);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border: none;
     cursor: not-allowed;
     isolation: isolate;
+    position: relative;
 }
 
 .receipt-process .frame-4-process {
@@ -189,42 +164,37 @@
     color: rgba(255, 255, 255, 0.6);
 }
 
+.receipt-process .progress-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #FFFFFF;
+}
+
 .receipt-process .process-frame-6 {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 10px;
-    gap: 15px;
-    position: absolute;
-    width: 300px;
+    gap: 5px;
+    /* Уменьшили отступ */
+    width: 100%;
     height: 24px;
-    left: calc(50% - 150px);
-    top: calc(50% + 65px);
 }
 
-.receipt-process .progress-line {
-    width: 150px;
-    height: 3px;
+.receipt-process .progress-track {
+    width: 244px;
+    height: 10px;
     background: rgba(255, 255, 255, 0.3);
-    border-radius: 2px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    transition: width 0.3s ease;
+    border-radius: 5px;
     position: relative;
     overflow: hidden;
 }
 
-.receipt-process .progress-line::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
+.receipt-process .progress-fill {
     height: 100%;
-    background: #FFFFFF;
-    border-radius: 2px;
-    width: var(--progress, 0%);
+    background: #00FF00;
+    /* Ярко-зеленая полоска */
+    border-radius: 5px;
     transition: width 0.3s ease;
 }
 
@@ -246,31 +216,18 @@
 }
 
 .receipt-process .process-text-button {
-    position: absolute;
-    width: 175px;
-    left: calc(50% - 175px/2 + 0.5px);
-    top: calc(50% + 100px);
     background: transparent;
     border: none;
     cursor: pointer;
+    padding: 5px 10px;
+    margin-top: 0;
+    /* Еще больше отпускаем вниз под красную кнопку */
 }
 
 .receipt-process .process-text-button span {
-    position: absolute;
-    left: 0%;
-    right: 0%;
-    top: 0%;
-    bottom: 0%;
     font-family: 'Inter', sans-serif;
-    font-style: normal;
     font-weight: 300;
     font-size: 14px;
-    line-height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    text-transform: capitalize;
     color: #DBDCE4;
 }
 
@@ -279,32 +236,19 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 10px;
     gap: 10px;
-    isolation: isolate;
-    position: absolute;
-    width: 226px;
-    height: 43px;
-    left: calc(50% - 226px/2);
-    top: calc(50% - 43px/2);
-}
-
-.receipt-default .frame-4 {
-    top: calc(50% - 43px/2 - 0.5px);
+    width: 100%;
+    height: 100%;
 }
 
 .frame-5 {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    padding: 0px;
     gap: 10px;
-    position: absolute;
-    width: 207px;
-    height: 23px;
-    left: calc(50% - 207px/2 + 0.5px);
-    top: calc(50% - 23px/2);
+    width: 100%;
+    height: 100%;
     flex: none;
     order: 0;
     flex-grow: 0;
@@ -312,8 +256,9 @@
 }
 
 .btn-text {
-    margin: 0 auto;
-    width: 151px;
+    width: auto;
+    text-align: center;
+    /* Авто-ширина для центрирования */
     height: 23px;
     font-family: 'Montserrat', sans-serif;
     font-style: normal;
@@ -322,11 +267,10 @@
     line-height: 22px;
     display: flex;
     align-items: center;
+    justify-content: center;
+    /* Центрируем текст внутри span */
     text-align: center;
     color: #FFFFFF;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
 }
 
 .receipt-added .btn-text {
@@ -334,31 +278,24 @@
 }
 
 .error-message {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
     color: #C22918;
     font-size: 14px;
     font-family: 'Montserrat', sans-serif;
     text-align: center;
+    width: 100%;
 }
 
 .receipt-added .error-text {
     width: 100%;
-    height: 23px;
     font-family: 'Montserrat', sans-serif;
-    font-style: normal;
     font-weight: 300;
-    font-size: 12px;
-    line-height: 22px;
+    font-size: 14px;
     display: flex;
     align-items: center;
+    justify-content: center;
+    /* Центрируем по горизонтали */
     text-align: center;
     color: #C22918;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
 }
 
 .receipt-added .action-buttons {

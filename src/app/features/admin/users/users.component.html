@@ -13,7 +13,6 @@
 
   <div class="employees-table">
     <div class="employees-table__header">
-      <div class="employees-table__cell employees-table__cell--id">Id</div>
       <div class="employees-table__cell employees-table__cell--name">ФИО</div>
       <div class="employees-table__cell employees-table__cell--email">Почта</div>
       <div class="employees-table__cell employees-table__cell--role">Роль</div>
@@ -22,9 +21,8 @@
 
     <div class="employees-table__body">
       <div class="employee-row" *ngFor="let employee of employees()">
-        <div class="employee-row__cell employee-row__cell--id">{{ employee.id }}</div>
         <div class="employee-row__cell employee-row__cell--name">{{ getFullName(employee) }}</div>
-        <div class="employee-row__cell employee-row__cell--email">{{ employee.email }}</div>
+        <div class="employee-row__cell employee-row__cell--email">{{ employee.email | lowercase }}</div>
         <div class="employee-row__cell employee-row__cell--role">{{ getRoleLabel(employee.role) }}</div>
         <div class="employee-row__cell employee-row__cell--actions">
           <button class="action-button" type="button" (click)="openEditModal(employee)">Изменить</button>
@@ -92,7 +90,6 @@
           <option value="hr-manager">HR-менеджер</option>
           <option value="economist">Экономист</option>
           <option value="director">Директор</option>
-          <option value="admin">Администратор</option>
         </select>
         <label class="input-field__label">Роль*</label>
         <div class="input-field__line"></div>
@@ -184,7 +181,6 @@
           <option value="hr-manager">HR-менеджер</option>
           <option value="economist">Экономист</option>
           <option value="director">Директор</option>
-          <option value="admin">Администратор</option>
         </select>
         <label class="input-field__label">Роль*</label>
         <div class="input-field__line"></div>
