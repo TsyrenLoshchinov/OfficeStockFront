@@ -147,18 +147,7 @@
     position: relative;
 }
 
-.receipt-process .frame-4-process {
-    width: 166px;
-    left: calc(50% - 166px/2);
-    top: calc(50% - 43px/2 + 1px);
-}
 
-.receipt-process .frame-5-process {
-    width: 146px;
-    height: 23px;
-    left: 10px;
-    top: 10px;
-}
 
 .receipt-process .btn-text-process {
     color: rgba(255, 255, 255, 0.6);
@@ -183,18 +172,21 @@
 
 .receipt-process .progress-track {
     width: 244px;
-    height: 10px;
+    height: 5px;
+    /* Уменьшили толщину в 2 раза */
     background: rgba(255, 255, 255, 0.3);
-    border-radius: 5px;
+    border-radius: 0;
+    /* Убрали скругление */
     position: relative;
     overflow: hidden;
 }
 
 .receipt-process .progress-fill {
     height: 100%;
-    background: #00FF00;
-    /* Ярко-зеленая полоска */
-    border-radius: 5px;
+    background: #333333;
+    /* Темно-серый цвет по просьбе пользователя */
+    border-radius: 0;
+    /* Убрали скругление */
     transition: width 0.3s ease;
 }
 

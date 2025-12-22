@@ -19,14 +19,6 @@
 
     <!-- Состояние 2: Receipt Added (файл загружен) -->
     <div *ngIf="selectedFile && !isUploading" class="receipt-window receipt-added">
-        <div class="image-placeholder"></div>
-
-        <!-- Сообщение теперь над кнопкой согласно скриншоту -->
-        <div class="frame-6">
-            <span class="success-text" *ngIf="!errorMessage">Файл {{ fileInfo?.name }} успешно загружен</span>
-            <span class="error-text" *ngIf="errorMessage">{{ errorMessage }}</span>
-        </div>
-
         <button class="download-button btn-added" (click)="onButtonClick()">
             <div class="frame-4">
                 <div class="frame-5">
@@ -34,6 +26,12 @@
                 </div>
             </div>
         </button>
+
+        <!-- Сообщение теперь над кнопкой согласно скриншоту -->
+        <div class="frame-6">
+            <span class="success-text" *ngIf="!errorMessage">Файл {{ fileInfo?.name }} успешно загружен</span>
+            <span class="error-text" *ngIf="errorMessage">{{ errorMessage }}</span>
+        </div>
 
         <div class="action-buttons">
             <!-- Кнопка Повторить удалена по просьбе пользователя -->
