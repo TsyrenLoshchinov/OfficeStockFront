@@ -73,7 +73,7 @@ export class WarehouseService {
     }
 
     return this.http.get<WarehouseItemApiResponse[]>(
-      `${this.apiService.getBaseUrl()}/warehouse/products/`,
+      `${this.apiService.getBaseUrl()}/warehouse/products`,
       { headers: this.getHeaders() }
     ).pipe(
       map((apiItems) => {
